@@ -1,0 +1,228 @@
+<html>
+    <head>
+        <style type=text/css>
+            .post {float:left;width:100%;padding: 10px; border-bottom: 1px solid #777777; font-family: "lucida grande",tahoma,verdana,arial,sans-serif; font-size:11px}
+            #posts {width: 800px; margin:auto}
+            .comment{background-color: #EDEFF4;
+                border-bottom: 1px solid #E5EAF1;
+                margin-top: 2px;
+                float:left;
+                width:100%;
+                padding: 5px 5px 4px;}
+            .full_name {
+                color: #3B5998;
+                text-decoration: none;
+                font-weight: bold;
+                }
+        </style>
+    </head>
+    <body>
+        <div id="fb-root"></div>
+        <script type="text/javascript">
+            function get_style(element, styleText){
+                if (!element){return{}}                function clean(st){
+                    if (st.indexOf('-') != -1){
+                        st = st.substr(0, st.indexOf('-')) + st[st.indexOf('-') + 1].toUpperCase() + st.substr(st.indexOf('-') + 2)
+                        }
+                    return st
+                    }
+                if(element.style.getAttribute)
+                var s = element.style.getAttribute("cssText")? element.style.getAttribute("cssText").split(';') : '';
+                else
+                var s = element.getAttribute("style")? element.getAttribute("style").split(';') : '';                var t = {}
+                for (var i = 0 ; i < s.length ; i ++){                    if (s[i].indexOf(':') != -1)
+                    t[clean(s[i].split(':')[0])] = s[i].split(':')[1];
+                    }
+                return t
+                }
+            function add_class(element, class_name){
+                element.className += " " + class_name;
+                }
+            function remove_class(element, class_name){
+                element.className = element.className.replace(class_name,'')
+                }
+            function set_style(element, styleText){
+                if (!element){return}
+                function clean(st){
+                    var reExample = new RegExp("([A-Z])(?![A-Z])");
+                    return st.replace(reExample, "-$1").toLowerCase();
+                    }
+                var cur = get_style(element);
+                for (var i in styleText){
+                    cur[i] = styleText[i];
+                    }
+                var styleText = '';
+                for (var i in cur){
+                    styleText = styleText + clean(i) + ':' + cur[i] + ';';
+                    }
+                if(element.style.setAttribute)
+                element.style.setAttribute("cssText", styleText );
+                else
+                element.setAttribute("style", styleText );
+                }
+            
+            
+            function addEvent(obj,type,fn) {
+                if (obj.addEventListener) {
+                    obj.addEventListener(type,fn,false);
+                    return true;
+                    } else if (obj.attachEvent) {
+                    obj['e'+type+fn] = fn;
+                    obj[type+fn] = function() { obj['e'+type+fn]( window.event );}
+                    var r = obj.attachEvent('on'+type, obj[type+fn]);
+                    return r;
+                    } else {
+                    obj['on'+type] = fn;
+                    return true;
+                    }
+                }
+            function fb_tools(args){
+                	var tmp_this = this;
+                this.fb_login = function(){
+                    FB.login(function(response) {
+                        tmp_this.fb_check_permission(response);
+                        }
+                    , {perms:args.perms})
+                    }
+                addEvent(document.getElementById(args.connect_button),'click',this.fb_login)
+                this.fb_check_permission = function(response){
+                    if (response.perms){
+                        var perm_ok = true;
+                        for (var i = 0; i < args.perms.split(',').length; i++){
+                            if (response.perms.indexOf(args.perms.split(',')[i].replace(/\ /g, "")) == -1){perm_ok = false}
+                            }
+                        }else{var perm_ok = false}
+                    if (perm_ok){
+                        set_style(document.getElementById(args.connect_button), {display : 'none'});
+                        args.init();
+                        return
+                        }
+                    set_style(document.getElementById(args.connect_button), {display : 'inline-block'});
+                    }
+                }
+            
+            function load_posts(args){
+                FB.api('/me/groups', {}, function(response) {
+                    var groups = ''
+                    for (var i = 0 ; i < response.data.length; i++){
+                        groups = groups + (groups.length == 0? String(response.data[i].id): (',' + String(response.data[i].id)))
+                        }
+                    if (args.gid.length && !/[^\d]/.test(args.gid)){
+                        var posts = FB.Data.query('SELECT message,updated_time,created_time,actor_id,action_links,attachment,comments,likes,tagged_ids FROM stream WHERE source_id='+args.gid,'');
+                        var users = FB.Data.query('SELECT uid, name FROM user WHERE uid in (select actor_id from {0}) OR uid in (select comments from {0})', posts);
+                        FB.Data.waitOn([posts, users], function() {
+                            args.onload(posts.value, users.value);
+                            });
+                        return
+                        }
+                    var group = FB.Data.query('select gid from group where gid IN ('+groups+') AND email="'+args.gid+'@groups.facebook.com"','');
+
+                   var posts = FB.Data.query('SELECT post_id, message,updated_time,created_time,actor_id,action_links,attachment,comments,likes,tagged_ids FROM stream WHERE source_id IN (select gid from {0})',group);
+
+var comments = FB.Data.query('SELECT fromid from comment where post_id in (select post_id from {0})', posts);                    
+var users = FB.Data.query('SELECT uid, name FROM user WHERE uid in (select actor_id from {0}) OR uid in (select fromid from {1})', posts, comments);
+                    FB.Data.waitOn([group, posts, comments, users], function() {
+                        args.onload(posts.value, users.value);
+                        });
+                    });
+                }
+            function display_posts(posts, users){
+                user_list = {}
+                for (var i = 0; i < users.length; i++){
+                    user_list[users[i].uid] = users[i].name;
+                    }
+                while (document.getElementById('posts').firstChild){document.getElementById('posts').removeChild(document.getElementById('posts').firstChild)}
+                for (var i = 0; i < posts.length; i++){
+                    var container = document.createElement('div');
+                    var msg = document.createElement('div');
+                    set_style(msg, {paddingLeft: '60px', height : '60px', backgroundImage : 'url("' + document.location.protocol +"//graph.facebook.com/" + posts[i].actor_id + '/picture")', backgroundRepeat : 'no-repeat'});
+                    container.appendChild(msg);
+                    add_class(container, 'post');
+                    
+                    var div = document.createElement('div');
+                    
+                    var full_name = document.createElement('a');
+                    full_name.href="http://www.facebook.com/profile.php?id=" + posts[i].actor_id;
+                    full_name.target = "_blank";
+                    add_class(full_name, 'full_name');
+                    full_name.innerHTML = user_list[posts[i].actor_id];
+                    div.appendChild(full_name);
+                    
+                    var msg_txt = document.createElement('div');
+                    set_style(msg_txt, {width: '100%', padding : '10px'});
+                    msg_txt.innerHTML = posts[i].message.replace(/\n/g, "<br/>");
+                    div.appendChild(msg_txt);
+                    msg.appendChild(div);
+                    
+                    for (var j = 0; j < posts[i].comments.comment_list.length; j++){
+                        var comment = document.createElement('div');
+                        var img = document.createElement('div');
+                        img.innerHTML = '<a href="javascript:void(0)" style="margin-right:8px; width:32px;height:32px; float:left"><img style="width:32px; height:32px;border:none;" src="'+document.location.protocol +"//graph.facebook.com/" + posts[i].comments.comment_list[j].fromid + '/picture" /></a>'
+                        comment.appendChild(img.firstChild);
+
+                    var full_name = document.createElement('a');
+                    full_name.href="http://www.facebook.com/profile.php?id=" + posts[i].actor_id;
+                    full_name.target = "_blank";
+                    add_class(full_name, 'full_name');
+                    full_name.innerHTML = user_list[posts[i].comments.comment_list[j].fromid];
+comment.appendChild(full_name);
+
+                        var comment_text = document.createElement('div');
+                        comment_text.innerHTML = posts[i].comments.comment_list[j].text.replace(/\n/g, "<br/>");
+                        set_style(comment_text, {display: 'block', float : 'left', width : '90%'});
+                        comment.appendChild(comment_text);
+                        add_class(comment, 'comment');
+                        div.appendChild(comment);
+                        }
+                    
+                    document.getElementById('posts').appendChild(container);
+                    }
+                }
+            function init(){
+                load_posts({gid : document.location.pathname.split('/').length > 1? document.location.pathname.split('/')[1] : '', onload : function(posts, users){
+                        display_posts(posts, users);
+                        }});
+                }
+            
+            window.fbAsyncInit = function() {
+                FB.init({
+                    appId  : '246575252046549',
+                    status : true, // check login status
+                    cookie : true, // enable cookies to allow the server to access the session
+                    xfbml  : true  // parse XFBML
+                    })
+                FBtools = new fb_tools({connect_button: 'fb_connect_button', init : init, perms:'read_stream, user_groups'})
+                FB.Event.subscribe("auth.login", function(response) {
+                    FBtools.fb_check_permission(response);
+                    });
+                FB.getLoginStatus(function(response) {
+                    FBtools.fb_check_permission(response);
+                    if (response.session) {
+                        // logged in and connected user, someone you know
+                        } else {
+                        // no user session available, someone you dont know
+                        }
+                    });
+                };
+            
+            (function() {
+                var e = document.createElement('script');
+                e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+                e.async = true;
+                document.getElementById('fb-root').appendChild(e);
+                }());
+            
+        </script>
+        <a id="fb_connect_button" class="fb_button fb_button_medium" style="display:none"><span class="fb_button_text">Connect with Facebook</span></a>
+        <div id="posts">
+        </div>
+    </body>
+</html>
+
+
+
+
+
+
+
+
