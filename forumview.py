@@ -190,19 +190,19 @@ def get_labels(env, start_response, args):
             return _json_error(env, start_response, ERROR_CODES.BAD_PARAMTER)
         if _can_access(int(gid), user):
             shared = 'global'
-            if ('personal' in args) and (str(args['personal']) == '1'):
-                if 'uid' in args:
-                    try:
-                        uid = str(int(args['uid']))
-                        if uid != str(user['uid']):
-                            shared = 'shared'
-                    except:
-                        raise
-                        return _json_error(env, start_response, ERROR_CODES.BAD_PARAMTER)
-                else:
-                    uid = str(user['uid'])
-                    shared = 'personal'
+            if 'uid' in args:
+                try:
+                    uid = str(int(args['uid']))
+                    if uid != str(user['uid']):
+                        shared = 'shared'
+                    else:
+                        shared = 'personal'
+                except:
+                    raise
+                    return _json_error(env, start_response, ERROR_CODES.BAD_PARAMTER)
                 gid = str(gid) + ':' + str(user['uid'])
+            else:
+                uid = str(user['uid'])
             try:
                 sdb = SimpleDBWRTY(AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, retry_limit = RETRY_LIMIT)
                 labels = sdb.get_attributes(AWS_SDB_DOMAIN, gid)
