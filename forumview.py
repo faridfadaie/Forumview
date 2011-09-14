@@ -66,7 +66,10 @@ def _is_group_admin(gid, user):
 
 def _can_access(gid, user):
     graph = facebook.GraphAPI(user["access_token"])
-    obj = graph.get_object("%s" %gid)
+    try:
+        obj = graph.get_object("%s" %gid)
+    except:
+        return False
     if obj.has_key('id'):
         return True
     return False
@@ -144,21 +147,29 @@ def create_label(env, start_response, args):
                 gid = str(int(args['gid']))
             except:
                 return _json_error(env, start_response, ERROR_CODES.BAD_PARAMTER)
-            if _is_group_admin(gid, user):
-                sdb = SimpleDBWRTY(AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, retry_limit = RETRY_LIMIT)
-                try:
-                    if not str(args['parent']) == '0':
-                        parent = sdb.get_attributes(AWS_SDB_DOMAIN, gid, [args['parent']])
-                        if not parent.has_key(args['parent']) or parent[args['parent']] is None:
-                            return _json_error(env, start_response, ERROR_CODES.BAD_PARAMTER)
-                    label_id = hashlib.sha1(str(args['name']) + str(time.time())).hexdigest()
-                    sdb.put_attributes(AWS_SDB_DOMAIN, gid, [(label_id, base64.b64encode(args['name']), True), (label_id, base64.b64encode(args['nick']), True), (label_id, args['parent'], True)])
-                except:
-                    raise
-                    start_response('503 Service Unavailable',[])
-                    return ['Temporarily not available']
-            else:
+            if not _can_access(gid, user):
                 return _json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_PERMISSION)
+            if _is_group_admin(gid, user):
+                shared = 'global'
+            elif ('personal' not in args) or (str(args['personal']) != '1'):
+                return _json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_PERMISSION)
+            if ('personal' in args) and (str(args['personal']) == '1'):
+                gid = str(gid) + ':' + str(user['uid'])
+                shared = 'personal'
+                if ('shared' in args) and (str(args['shared']) == '1'):
+                    shared = 'shared'
+            sdb = SimpleDBWRTY(AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, retry_limit = RETRY_LIMIT)
+            try:
+                if not str(args['parent']) == '0':
+                    parent = sdb.get_attributes(AWS_SDB_DOMAIN, gid, [args['parent']])
+                    if not parent.has_key(args['parent']) or parent[args['parent']] is None:
+                        return _json_error(env, start_response, ERROR_CODES.BAD_PARAMTER)
+                label_id = hashlib.sha1(str(args['name']) + str(time.time())).hexdigest()
+                sdb.put_attributes(AWS_SDB_DOMAIN, gid, [(label_id, shared, True), (label_id, base64.b64encode(args['name']), True), (label_id, base64.b64encode(args['nick']), True), (label_id, args['parent'], True)])
+            except:
+                raise
+                start_response('503 Service Unavailable',[])
+                return ['Temporarily not available']
             return _json_ok(env, start_response, label_id)
         return _json_error(env, start_response, ERROR_CODES.BAD_PARAMTER)
     return _json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_SESSION)
@@ -175,14 +186,30 @@ def get_labels(env, start_response, args):
         try:
             gid = str(int(args['gid']))
         except:
+            raise
             return _json_error(env, start_response, ERROR_CODES.BAD_PARAMTER)
-        if _can_access(gid, user):
+        if _can_access(int(gid), user):
+            shared = 'global'
+            if ('personal' in args) and (str(args['personal']) == '1'):
+                if 'uid' in args:
+                    try:
+                        uid = str(int(args['uid']))
+                        if uid != str(user['uid']):
+                            shared = 'shared'
+                    except:
+                        raise
+                        return _json_error(env, start_response, ERROR_CODES.BAD_PARAMTER)
+                else:
+                    uid = str(user['uid'])
+                    shared = 'personal'
+                gid = str(gid) + ':' + str(user['uid'])
             try:
                 sdb = SimpleDBWRTY(AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, retry_limit = RETRY_LIMIT)
                 labels = sdb.get_attributes(AWS_SDB_DOMAIN, gid)
                 easy_labels = {}
                 for i in labels:
-                    easy_labels[i] = {'parent' : labels[i][0], 'name' : base64.b64decode(labels[i][1]), 'nick': base64.b64decode(labels[i][2])}
+                    if ((shared == 'shared') and (labels[i][3] == 'shared')) or ((shared == 'personal') and (labels[i][3] in ['shared', 'personal'])) or (shared == 'global'):
+                        easy_labels[i] = {'parent' : labels[i][0], 'name' : base64.b64decode(labels[i][1]), 'nick': base64.b64decode(labels[i][2]), 'shared' : labels[i][3]}
                 return _json_ok(env, start_response, easy_labels)
             except:
                 raise
