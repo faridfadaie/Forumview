@@ -4,7 +4,7 @@ import gevent.pywsgi
 import time, logging, sys, json, hashlib, base64, urllib2
 from simpledb import SimpleDB, SimpleDBError, AttributeEncoder
 
-allowed_functions = ['get_posts', '/get_posts', '/assign_label', 'assign_label', '/create_label', 'create_label', '/get_labels', 'get_labels']
+allowed_functions = ['get_post_labels', 'get_post_labels', 'get_posts', '/get_posts', '/assign_label', 'assign_label', '/create_label', 'create_label', '/get_labels', 'get_labels']
 page_names = ['load_group.html']
 page_contents = {}
 LISTEN_IP = '0.0.0.0'
@@ -164,8 +164,10 @@ def create_label(env, start_response, args):
                 return _json_error(env, start_response, ERROR_CODES.BAD_PARAMTER)
             if not _can_access(gid, user):
                 return _json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_PERMISSION)
+            layer_id = str(user['uid'])
             if _is_group_admin(gid, user):
                 shared = 'global'
+                layer_id = '0'
             elif ('personal' not in args) or (str(args['personal']) != '1'):
                 return _json_error(env, start_response, ERROR_CODES.NO_PERMISSION)
             if ('personal' in args) and (str(args['personal']) == '1'):
@@ -183,7 +185,7 @@ def create_label(env, start_response, args):
                 sdb.put_attributes(AWS_SDB_LABELS_DOMAIN, gid, [(label_id, 'OBJ:' + gid.split(':')[0], True), 
                                                                 (label_id, 'SHR:' + shared, True), (label_id, 'NAME:' + base64.b64encode(args['name']), True), 
                                                                 (label_id, 'NIK:' + base64.b64encode(args['nick']), True), (label_id, 'PAR:' + args['parent'], True), 
-                                                                (label_id, 'DESC:' + base64.b64encode(args['desc']), True), (label_id, 'CRT:' + str(user['uid']), True)])
+                                                                (label_id, 'DESC:' + base64.b64encode(args['desc']), True), (label_id, 'CRT:' + layer_id, True)])
             except:
                 raise
                 start_response('503 Service Unavailable',[])
@@ -216,9 +218,7 @@ def _decode_post(ps):
             sticky = j.strip('STICKY:')
         if j.find('SHR:') == 0:
             shared_status = j.strip('SHR:')
-        if j.find('PST:') == 0:
-            post_id = j.strip('PST:')
-    return sticky, shared_status, post_id
+    return sticky, shared_status
 
 
 def get_labels(env, start_response, args):
@@ -310,12 +310,13 @@ def assign_label(env, start_response, args):
                 sticky = '0'
             if shared_status == 'global':
                 itm = args['post_id']
+                creator_status = '0'
             else:
                 itm = args['post_id'] + ':' + creator_status
             sdb.put_attributes(AWS_SDB_POST_DOMAIN, itm, [('C_TIME', time.mktime(time.strptime(str(created_time), "%Y-%m-%dT%H:%M:%S+0000")), True),
                                                           ('U_TIME', time.mktime(time.strptime(str(updated_time), "%Y-%m-%dT%H:%M:%S+0000")), True),
                                                           (args['label_id'], 'STICKY:%s' %sticky, True), (args['label_id'], 'SHR:%s' %shared_status, True),
-                                                          (args['label_id'], 'PST:%s' %args['post_id'], True)])
+                                                          ('post_id', '%s' %args['post_id'].split(':')[0], True), ('layer_id', '%s' %creator_status, True)])
             return _json_ok(env, start_response, {})
         except:
             raise
@@ -330,7 +331,7 @@ def get_posts(env, start_response, args):
     #    return ['Unsupported']
     user = _validate_fb(env)
     if user:
-        if ('label_id' not in args) and ('up_to' not in args) and ('count' not in args):
+        if ('label_id' not in args) or ('up_to' not in args) or ('count' not in args):
             return _json_error(env, start_response, ERROR_CODES.BAD_PARAMTER)
         try:
            up_to = int(args['up_to'])
@@ -359,14 +360,51 @@ def get_posts(env, start_response, args):
             return ['Temporarily not available']
         post_list = []
         for i in posts:
-            sticky, shared_status, post_id = _decode_post(i.values()[0])
-            post_list.append({'post_id' : post_id, 'shared' : shared_status, 'sticky' : sticky})
+            sticky, shared_status = _decode_post(i[args['label_id']])
+            post_list.append({'created' : i['C_TIME'], 'updated': i['U_TIME'], 'post_id' : i['post_id'], 'shared' : shared_status, 'sticky' : sticky, 'layer_id' : i['layer_id']})
         return _json_ok(env, start_response, post_list)
 
 
     return _json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_SESSION)
     
- 
+
+def get_post_labels(env, start_response, args):
+    method = env['REQUEST_METHOD']
+    #if method != 'GET':
+    #    start_response('501 Not Implemented', [])
+    #    return ['Unsupported']
+    user = _validate_fb(env)
+    if not user:
+        return _json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_SESSION)
+    if ('layer_id' not in args) or ('gid' not in args) or ('post_list' not in args):
+        return _json_error(env, start_response, ERROR_CODES.BAD_PARAMTER)
+    post_list = ''
+    for i in args['post_list'].split(','):
+        post_list = post_list + ",'" + i + "'"
+    post_list = post_list.strip(',')
+    if not _can_access(args['gid'], user):
+        return _json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_PERMISSION)
+    sdb = SimpleDBWRTY(AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, retry_limit = RETRY_LIMIT)
+    if args['layer_id'] == 'global':
+        shared = ['SHR:global']
+        layer_id = '0'
+    else:
+        if str(args['layer_id']) == str(user['uid']):
+            shared = ['SHR:personal', 'SHR:shared']
+        else:
+            shared = ['SHR:shared']
+        layer_id = str(args['layer_id'])
+    labels = sdb.select(AWS_SDB_POST_DOMAIN, "select * from %s where post_id in (%s) and layer_id='%s'" %(AWS_SDB_POST_DOMAIN, post_list, layer_id)) 
+    mapping = {}
+    for i in labels:
+        label_list = []
+        for j in i:
+            if type(i[j])==list:
+                if ((len(shared) == 1) and (shared[0] in i[j])) or ((len(shared) == 2) and (shared[0] in i[j]) or (shared[1] in i[j])):
+                    label_list.append(j)
+        mapping[i['post_id']] = label_list
+    return _json_ok(env, start_response, mapping)
+        
 def request_handler(env, start_response):
     method = env['REQUEST_METHOD']
     path = env['PATH_INFO']
