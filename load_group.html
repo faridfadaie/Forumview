@@ -1,5 +1,14 @@
+<!DOCTYPE html>
 <html>
     <head>
+        <meta charset="utf-8" />
+        <title>Forumview &mdash; Demo</title>
+        <link rel="stylesheet" type="text/css" href="http://www.tayfeh.com/resources/css/reset.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="http://www.tayfeh.com/resources/css/text.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="http://www.tayfeh.com/resources/css/960.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="http://www.tayfeh.com/resources/css/layout.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="http://www.tayfeh.com/resources/css/nav.css" media="screen" />
+        
         <style type=text/css>
             .post {float:left;width:100%;padding: 10px 0px 10px 10px; border-bottom: 1px solid #777777; font-family: "lucida grande",tahoma,verdana,arial,sans-serif; font-size:11px}
             #posts {width: 90%; margin:auto}
@@ -32,398 +41,500 @@
                 display: inline-block;
                 }
             .like_text {color: #3B5998;padding-left:10px; text-decoration:none}
-            			.dislike_text {color: #973B3B;padding-left:10px; text-decoration:none}
+            .dislike_text {color: #973B3B;padding-left:10px; text-decoration:none}
         </style>
-    </head>
-    <body>
-        <div id="fb-root"></div>
-        <script type="text/javascript">
-            function get_style(element, styleText){
-                if (!element){return{}}                function clean(st){
-                    if (st.indexOf('-') != -1){
-                        st = st.substr(0, st.indexOf('-')) + st[st.indexOf('-') + 1].toUpperCase() + st.substr(st.indexOf('-') + 2)
-                        }
-                    return st
-                    }
-                if(element.style.getAttribute)
-                var s = element.style.getAttribute("cssText")? element.style.getAttribute("cssText").split(';') : '';
-                else
-                var s = element.getAttribute("style")? element.getAttribute("style").split(';') : '';                var t = {}
-                for (var i = 0 ; i < s.length ; i ++){                    if (s[i].indexOf(':') != -1)
-                    t[clean(s[i].split(':')[0])] = s[i].split(':')[1];
-                    }
-                return t
-                }
-            function add_class(element, class_name){
-                element.className += " " + class_name;
-                }
-            function remove_class(element, class_name){
-                element.className = element.className.replace(class_name,'')
-                }
-            function set_style(element, styleText){
-                if (!element){return}
-                function clean(st){
-                    var reExample = new RegExp("([A-Z])(?![A-Z])");
-                    return st.replace(reExample, "-$1").toLowerCase();
-                    }
-                var cur = get_style(element);
-                for (var i in styleText){
-                    cur[i] = styleText[i];
-                    }
-                var styleText = '';
-                for (var i in cur){
-                    styleText = styleText + clean(i) + ':' + cur[i] + ';';
-                    }
-                if(element.style.setAttribute)
-                element.style.setAttribute("cssText", styleText );
-                else
-                element.setAttribute("style", styleText );
-                }
-            
-            
-            function addEvent(obj,type,fn) {
-                if (obj.addEventListener) {
-                    obj.addEventListener(type,fn,false);
-                    return true;
-                    } else if (obj.attachEvent) {
-                    obj['e'+type+fn] = fn;
-                    obj[type+fn] = function() { obj['e'+type+fn]( window.event );}
-                    var r = obj.attachEvent('on'+type, obj[type+fn]);
-                    return r;
-                    } else {
-                    obj['on'+type] = fn;
-                    return true;
-                    }
-                }
-            
-            function aprox_time(t){
-                var weekday=new Array(7);
-                weekday[0]="Sunday";
-                weekday[1]="Monday";
-                weekday[2]="Tuesday";
-                weekday[3]="Wednesday";
-                weekday[4]="Thursday";
-                weekday[5]="Friday";
-                weekday[6]="Saturday";
-                var month=new Array(12);
-                month[0]="Jan";
-                month[1]="Feb";
-                month[2]="Mar";
-                month[3]="Apr";
-                month[4]="May";
-                month[5]="Jun";
-                month[6]="Jul";
-                month[7]="Aug";
-                month[8]="Sep";
-                month[9]="Oct";
-                month[10]="Nov";
-                month[11]="Dec";
-                var d = new Date();
-                var w = (d.getTime() - t.getTime())/60000;
-                return w < 1? 'Less than a minute ago':
-                w<3? 'A couple of minutes ago':
-                w < 60? (String(w).split('.')[0] + ' minutes ago') :
-                w < 120? 'about an hour ago' :
-                ((t.toDateString() == d.toDateString()) || (w < 60*8))?String(w/60).split('.')[0] + ' hours ago':
-                ((w < 2880) && ((t.getDay() == d.getDay() - 1) || ((t.getDay() == 6) && (d.getDay() == 0) )))? 'Yesterday':
-                (w < d.getDay() * 24 * 60)? weekday[t.getDay()]:
-                (d.getFullYear() == t.getFullYear())? month[t.getMonth()] + ' ' + t.getDate():
-                t.toLocaleDateString();
-                }
-            function create_post_comment(post_obj, data, user_list){
-                var comment = document.createElement('div');
-                comment.uid = data.id;
-                comment.updated_time = data.time;
-                var img = document.createElement('div');
-                img.innerHTML = '<a href="javascript:void(0)" style="margin-right:8px; width:32px;height:32px; float:left"><img style="width:32px; height:32px;border:none;" src="'+document.location.protocol +"//graph.facebook.com/" + data.fromid + '/picture" /></a>'
-                comment.appendChild(img.firstChild);
-                
-                var full_name = document.createElement('a');
-                full_name.href="http://www.facebook.com/profile.php?id=" + data.fromid;
-                full_name.target = "_blank";
-                add_class(full_name, 'full_name');
-                full_name.innerHTML = user_list[data.fromid];
-                comment.appendChild(full_name);
-                
-                var comment_text = document.createElement('div');
-                comment_text.innerHTML = data.text.replace(/\n/g, "<br/>");
-                set_style(comment_text, {display: 'block', float : 'left', width : '95%'});
-                comment.appendChild(comment_text);
-                
-                var like_container = document.createElement('div');
-                set_style(like_container, {width: '100%', float: 'left', padding : '5px 0px 0px 38px'});
-                
-                var time_date = document.createElement('span');
-                var created = new Date();
-                set_style(time_date, {color : 'gray'});
-                created.setTime(data.time*1000);
-                time_date.innerHTML = aprox_time(created);
-comment.time_date = time_date;
-                like_container.appendChild(time_date);
-                
-                var like_it = document.createElement('a');
-                like_it.innerHTML = data.user_likes? 'Unlike' : 'Like';
-                set_style(like_it, {paddingRight: '18px'});
-                like_it.href = "javascript:void(0)";
-                add_class(like_it, 'like_text');
-                like_container.appendChild(like_it);
-                
-                var like_icon = document.createElement('span');
-                add_class(like_icon, 'like');
-                like_container.appendChild(like_icon);
-                var how_many_like = document.createElement('a');
-                how_many_like.href="javascript:void(0)";
-                add_class(how_many_like, 'like_text');
-                how_many_like.innerHTML = data.likes + ' people';
-                like_container.appendChild(how_many_like);
-                if (data.likes == 0){
-                    set_style(how_many_like, {display : 'none'});
-                    set_style(like_icon, {display : 'none'});
-                    }
-                comment.how_many_like = how_many_like;
-                comment.like_icon = like_icon;
-                comment.like_it = like_it;
-                comment.appendChild(like_container);
-                
-                var dislike_container = document.createElement('div');
-                set_style(dislike_container, {width: '100%', float: 'left', padding : '5px 0px 0px 38px'});
-                
-                var time_date_hide = document.createElement('span');
-                var created = new Date();
-                set_style(time_date_hide, {color : '#EDEFF4'});
-                created.setTime(data.time*1000);
-                time_date_hide.innerHTML = aprox_time(created);
-                dislike_container.appendChild(time_date_hide);
-                
-                var dislike_it = document.createElement('a');
-                // should be from our server, instead of: posts[i].comments.comment_list[j].user_likes?
-                dislike_it.innerHTML = data.user_likes? 'Undislike' : 'Disike';
-                set_style(dislike_it, {paddingRight: '10px'});
-                dislike_it.href = "javascript:void(0)";
-                add_class(dislike_it, 'dislike_text');
-                dislike_container.appendChild(dislike_it);
-                
-                if (!data.user_likes)
-                {
+        
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+        
+        <body>
+                    <div id="fb-root"></div>
+ 
+            <div class="container_12">
+                <div id="container_header" class="grid_12">
+                    <p>
+                        Header Div
+                    </p>
+                </div>
+                <!-- end .grid_12 -->
+                <div class="clear"></div>
+                <div id="container_leftpane" class="grid_2">
                     
-                    var dislike = document.createElement('span');
-                    add_class(dislike, 'dislike');
-                    dislike_container.appendChild(dislike);
-                    var how_many_dislike = document.createElement('a');
-                    how_many_dislike.href="javascript:void(0)";
-                    add_class(how_many_dislike, 'dislike_text');
-                    // form our server, instead of: posts[i].comments.comment_list[j].likes +
-                    how_many_dislike.innerHTML = data.likes + ' people';
-                    dislike_container.appendChild(how_many_dislike);
-                    // from our server, instead of: posts[i].comments.comment_list[j].likes
-                    if (data.likes == 0){
-                        set_style(how_many_dislike, {display : 'none'});
-                        set_style(dislike, {display : 'none'});
-                        }
+                    <div class="box menu">
+                        <h2>
+                            <a href="#" id="toggle-section-menu">Labels</a>
+                        </h2>
+                        <div class="block" id="section-menu">
+                            <ul class="section menu">
+                                <li>
+                                    <a class="menuitem" title="This is a <b>tool</b> tip">Forum 1</a>
+                                    <ul class="submenu">
+                                        <li>
+                                            <a>Board 1-1</a>
+                                        </li>
+                                        <li>
+                                            <a>Board 1-2</a>
+                                        </li>
+                                        <li>
+                                            <a class="active">Board 1-3</a>
+                                        </li>
+                                        <li>
+                                            <a>Board 1-4</a>
+                                        </li>
+                                        <li>
+                                            <a>Board 1-5</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="menuitem">Forum 2</a>
+                                    <ul class="submenu">
+                                        <li>
+                                            <a>Board 2-1</a>
+                                        </li>
+                                        <li>
+                                            <a>Board 2-2</a>
+                                        </li>
+                                        <li>
+                                            <a>Board 2-3</a>
+                                        </li>
+                                        <li>
+                                            <a>Board 2-4</a>
+                                        </li>
+                                        <li>
+                                            <a>Board 2-5</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="menuitem">Forum 3</a>
+                                    <ul class="submenu">
+                                        <li>
+                                            <a>Board 3-1</a>
+                                        </li>
+                                        <li>
+                                            <a>Board 3-2</a>
+                                        </li>
+                                        <li>
+                                            <a>Board 3-3</a>
+                                        </li>
+                                        <li>
+                                            <a>Board 3-4</a>
+                                        </li>
+                                        <li>
+                                            <a>Board 3-5</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="menuitem">Forum 4</a>
+                                    <ul class="submenu">
+                                        <li>
+                                            <a>Board 4-1</a>
+                                        </li>
+                                        <li>
+                                            <a>Board 4-2</a>
+                                        </li>
+                                        <li>
+                                            <a>Board 4-3</a>
+                                        </li>
+                                        <li>
+                                            <a>Board 4-4</a>
+                                        </li>
+                                        <li>
+                                            <a>Board 4-5</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                     
-                    // hide dislike if it has been liked by the user						
-                    if (data.user_likes){
-                        set_style(dislike_it, {display : 'none'});
-                        set_style(how_many_dislike, {display : 'none'});
-                        set_style(dislike, {display : 'none'});
-                        }
-                    // hide like if it has been disliked by the user
-                    // should be added when connected to our server
-                    /*
-                    if (posts[i].comments.comment_list[j].user_dislikes){
-                        set_style(like_it, {display : 'none'});
-                        set_style(how_many_like, {display : 'none'});
-                        set_style(like, {display : 'none'});
-                        }
-                    */
+                </div>
+                <div id="container_rightpane" class="grid_7 suffix_3">
                     
-                    comment.appendChild(dislike_container);
-                    }
-                				
-                add_class(comment, 'comment');
-                comment.update = function(data){
-                var created = new Date();
-                created.setTime(data.time*1000);
-                comment.time_date.innerHTML = aprox_time(created);
-                    comment.like_it.innerHTML = data.user_likes? 'Unlike' : 'Like';
-                    if (data.likes == 0){
-                        set_style(comment.how_many_like, {display : 'none'});
-                        set_style(comment.like_icon, {display : 'none'});
-                        return
-                        }
-                    comment.how_many_like.innerHTML = data.likes + ' people';
-                    set_style(comment.how_many_like, {display : ''});
-                    set_style(comment.like_icon, {display : ''});
-                    }
-                return comment
-                }
-            function fb_tools(args){
-                	var tmp_this = this;
-                this.fb_login = function(){
-                    FB.login(function(response) {
-                        tmp_this.fb_check_permission(response);
-                        }
-                    , {perms:args.perms})
-                    }
-                addEvent(document.getElementById(args.connect_button),'click',this.fb_login)
-                this.fb_check_permission = function(response){
-                    if (response.perms){
-                        var perm_ok = true;
-                        for (var i = 0; i < args.perms.split(',').length; i++){
-                            if (response.perms.indexOf(args.perms.split(',')[i].replace(/\ /g, "")) == -1){perm_ok = false}
+                   <script type="text/javascript">
+                        function get_style(element, styleText){
+                            if (!element){return{}}                function clean(st){
+                                if (st.indexOf('-') != -1){
+                                    st = st.substr(0, st.indexOf('-')) + st[st.indexOf('-') + 1].toUpperCase() + st.substr(st.indexOf('-') + 2)
+                                    }
+                                return st
+                                }
+                            if(element.style.getAttribute)
+                            var s = element.style.getAttribute("cssText")? element.style.getAttribute("cssText").split(';') : '';
+                            else
+                            var s = element.getAttribute("style")? element.getAttribute("style").split(';') : '';                var t = {}
+                            for (var i = 0 ; i < s.length ; i ++){                    if (s[i].indexOf(':') != -1)
+                                t[clean(s[i].split(':')[0])] = s[i].split(':')[1];
+                                }
+                            return t
                             }
-                        }else{var perm_ok = false}
-                    if (perm_ok){
-                        set_style(document.getElementById(args.connect_button), {display : 'none'});
-                        args.init();
-                        return
-                        }
-                    set_style(document.getElementById(args.connect_button), {display : 'inline-block'});
-                    }
-                }
-            
-            function load_posts(args){
-                FB.api('/me/groups', {}, function(response) {
-                    var groups = ''
-                    for (var i = 0 ; i < response.data.length; i++){
-                        groups = groups + (groups.length == 0? String(response.data[i].id): (',' + String(response.data[i].id)))
-                        }
-                    if (args.gid.length && !/[^\d]/.test(args.gid)){
-                        var posts = FB.Data.query('SELECT post_id, message,updated_time,created_time,actor_id,action_links,attachment,comments,likes,tagged_ids FROM stream WHERE source_id='+args.gid,'');
-                        var comments = FB.Data.query('SELECT fromid from comment where post_id in (select post_id from {0})', posts);
-                        var users = FB.Data.query('SELECT uid, name FROM user WHERE uid in (select actor_id from {0}) OR uid in (select fromid from {1})', posts, comments);
-                        FB.Data.waitOn([posts, comments, users], function() {
-                            args.onload(posts.value, users.value);
-                            });
-                        return
-                        }
-                    var group = FB.Data.query('select gid from group where gid IN ('+groups+') AND email="'+args.gid+'@groups.facebook.com"','');
-                    var posts = FB.Data.query('SELECT post_id, message,updated_time,created_time,actor_id,action_links,attachment,comments,likes,tagged_ids FROM stream WHERE source_id IN (select gid from {0})',group);
-                    var comments = FB.Data.query('SELECT fromid from comment where post_id in (select post_id from {0})', posts);
-                    var users = FB.Data.query('SELECT uid, name FROM user WHERE uid in (select actor_id from {0}) OR uid in (select fromid from {1})', posts, comments);
-                    FB.Data.waitOn([group, posts, comments, users], function() {
-                        args.onload(posts.value, users.value);
-                        });
-                    });
-                }
-            function create_post(data, user_list){
-                var container = document.createElement('div');
-                var msg = document.createElement('div');
-                set_style(msg, {paddingLeft: '60px', height : '60px', backgroundImage : 'url("' + document.location.protocol +"//graph.facebook.com/" + data.actor_id + '/picture")', backgroundRepeat : 'no-repeat'});
-                container.appendChild(msg);
-                add_class(container, 'post');
-                
-                var div = document.createElement('div');
-                
-                var full_name = document.createElement('a');
-                full_name.href="http://www.facebook.com/profile.php?id=" + data.actor_id;
-                full_name.target = "_blank";
-                add_class(full_name, 'full_name');
-                full_name.innerHTML = user_list[data.actor_id];
-                div.appendChild(full_name);
-                
-                var msg_txt = document.createElement('div');
-                set_style(msg_txt, {width: '100%', padding : '10px'});
-                msg_txt.innerHTML = data.message.replace(/\n/g, "<br/>");
-                div.appendChild(msg_txt);
-                msg.appendChild(div);
-                div.comments = {}
-                for (var j = 0; j < data.comments.comment_list.length; j++){
-                    var comment = create_post_comment(div, data.comments.comment_list[j], user_list);
-                    div.appendChild(comment);
-                    div.comments[comment.uid] = comment;
-                    }
-                container.update = function(data, user_list){
-                    for (var j = 0; j < data.comments.comment_list.length; j++){
-                        if (data.comments.comment_list[j].id in div.comments){
-                            div.comments[data.comments.comment_list[j].id].update(data.comments.comment_list[j], user_list);
-                            }else{
-                            var comment = create_post_comment(div, data.comments.comment_list[j], user_list);
-                            div.appendChild(comment);
-                            div.comments[comment.uid] = comment;
+                        function add_class(element, class_name){
+                            element.className += " " + class_name;
                             }
-                        }	
-                    }
-                container.updated_time = data.updated_time;
-                return container
-                }
-            function display_posts(posts, users){
-                posts_container = document.getElementById('posts');
-                posts_container.updated_time = 0;
-                if (!window.posts_list){window.posts_list = {};}
-                user_list = {}
-                for (var i = 0; i < users.length; i++){
-                    user_list[users[i].uid] = users[i].name;
-                    }
-                //while (document.getElementById('posts').firstChild){document.getElementById('posts').removeChild(document.getElementById('posts').firstChild)}
-                for (var i = 0; i < posts.length; i++){
-                    if (posts[i].post_id in window.posts_list){
-                        				window.posts_list[posts[i].post_id].update(posts[i], user_list)
-                        			}else{
-                        var post = create_post(posts[i], user_list);
-                        if (posts[i].updated_time > posts_container.updated_time){
-                            posts_container.insertBefore(post, posts_container.firstChild);
-                            posts_container.updated_time = posts[i].updated_time;
-                            }else{
-                            posts_container.appendChild(post);
+                        function remove_class(element, class_name){
+                            element.className = element.className.replace(class_name,'')
                             }
-                        window.posts_list[posts[i].post_id] = post;
-                        }
-                    }
-                }
-            function init(){
-load_posts({gid : document.location.pathname.split('/').length > 1? document.location.pathname.split('/')[1] : '', onload : function(posts, users){display_posts(posts, users);}});
-                setInterval("load_posts({gid : document.location.pathname.split('/').length > 1? document.location.pathname.split('/')[1] : '', onload : function(posts, users){display_posts(posts, users);}});", 10000);
-                }
-            
-            window.fbAsyncInit = function() {
-                FB.init({
-                    appId  : '246575252046549',
-                    status : true, // check login status
-                    cookie : true, // enable cookies to allow the server to access the session
-                    xfbml  : true  // parse XFBML
-                    })
-                FBtools = new fb_tools({connect_button: 'fb_connect_button', init : init, perms:'read_stream, user_groups'})
-                FB.Event.subscribe("auth.login", function(response) {
-                    FBtools.fb_check_permission(response);
-                    });
-                FB.getLoginStatus(function(response) {
-                    FBtools.fb_check_permission(response);
-                    if (response.session) {
-                        // logged in and connected user, someone you know
-                        } else {
-                        // no user session available, someone you dont know
-                        }
-                    });
-                };
-            
-            (function() {
-                var e = document.createElement('script');
-                e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
-                e.async = true;
-                document.getElementById('fb-root').appendChild(e);
-                }());
-            
-        </script>
-        <a id="fb_connect_button" class="fb_button fb_button_medium" style="display:none"><span class="fb_button_text">Connect with Facebook</span></a>
-        <div id="posts">
-        </div>
-    </body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                        function set_style(element, styleText){
+                            if (!element){return}
+                            function clean(st){
+                                var reExample = new RegExp("([A-Z])(?![A-Z])");
+                                return st.replace(reExample, "-$1").toLowerCase();
+                                }
+                            var cur = get_style(element);
+                            for (var i in styleText){
+                                cur[i] = styleText[i];
+                                }
+                            var styleText = '';
+                            for (var i in cur){
+                                styleText = styleText + clean(i) + ':' + cur[i] + ';';
+                                }
+                            if(element.style.setAttribute)
+                            element.style.setAttribute("cssText", styleText );
+                            else
+                            element.setAttribute("style", styleText );
+                            }
+                        
+                        
+                        function addEvent(obj,type,fn) {
+                            if (obj.addEventListener) {
+                                obj.addEventListener(type,fn,false);
+                                return true;
+                                } else if (obj.attachEvent) {
+                                obj['e'+type+fn] = fn;
+                                obj[type+fn] = function() { obj['e'+type+fn]( window.event );}
+                                var r = obj.attachEvent('on'+type, obj[type+fn]);
+                                return r;
+                                } else {
+                                obj['on'+type] = fn;
+                                return true;
+                                }
+                            }
+                        
+                        function aprox_time(t){
+                            var weekday=new Array(7);
+                            weekday[0]="Sunday";
+                            weekday[1]="Monday";
+                            weekday[2]="Tuesday";
+                            weekday[3]="Wednesday";
+                            weekday[4]="Thursday";
+                            weekday[5]="Friday";
+                            weekday[6]="Saturday";
+                            var month=new Array(12);
+                            month[0]="Jan";
+                            month[1]="Feb";
+                            month[2]="Mar";
+                            month[3]="Apr";
+                            month[4]="May";
+                            month[5]="Jun";
+                            month[6]="Jul";
+                            month[7]="Aug";
+                            month[8]="Sep";
+                            month[9]="Oct";
+                            month[10]="Nov";
+                            month[11]="Dec";
+                            var d = new Date();
+                            var w = (d.getTime() - t.getTime())/60000;
+                            return w < 1? 'Less than a minute ago':
+                            w<3? 'A couple of minutes ago':
+                            w < 60? (String(w).split('.')[0] + ' minutes ago') :
+                            w < 120? 'about an hour ago' :
+                            ((t.toDateString() == d.toDateString()) || (w < 60*8))?String(w/60).split('.')[0] + ' hours ago':
+                            ((w < 2880) && ((t.getDay() == d.getDay() - 1) || ((t.getDay() == 6) && (d.getDay() == 0) )))? 'Yesterday':
+                            (w < d.getDay() * 24 * 60)? weekday[t.getDay()]:
+                            (d.getFullYear() == t.getFullYear())? month[t.getMonth()] + ' ' + t.getDate():
+                            t.toLocaleDateString();
+                            }
+                        function create_post_comment(post_obj, data, user_list){
+                            var comment = document.createElement('div');
+                            comment.uid = data.id;
+                            comment.updated_time = data.time;
+                            var img = document.createElement('div');
+                            img.innerHTML = '<a href="javascript:void(0)" style="margin-right:8px; width:32px;height:32px; float:left"><img style="width:32px; height:32px;border:none;" src="'+document.location.protocol +"//graph.facebook.com/" + data.fromid + '/picture" /></a>'
+                            comment.appendChild(img.firstChild);
+                            
+var comment_details = document.createElement('div');
+set_style(comment_details, {float:'right', width : '90%'});
+                            var full_name = document.createElement('a');
+                            full_name.href="http://www.facebook.com/profile.php?id=" + data.fromid;
+                            full_name.target = "_blank";
+                            add_class(full_name, 'full_name');
+                            full_name.innerHTML = user_list[data.fromid];
+                            comment_details.appendChild(full_name);
+                            
+                            var comment_text = document.createElement('div');
+                            comment_text.innerHTML = data.text.replace(/\n/g, "<br/>");
+                            set_style(comment_text, {display: 'block', float : 'left', width : '95%', padding : '5px 0px 5px 0px'});
+                            comment_details.appendChild(comment_text);
+                            
+                            var like_container = document.createElement('div');
+                            set_style(like_container, {width: '100%', float: 'left', padding : '5px 0px 0px 38px'});
+                            
+                            var time_date = document.createElement('span');
+                            var created = new Date();
+                            set_style(time_date, {color : 'gray'});
+                            created.setTime(data.time*1000);
+                            time_date.innerHTML = aprox_time(created);
+                            comment.time_date = time_date;
+                            like_container.appendChild(time_date);
+                            comment.appendChild(comment_details);
+                            var like_it = document.createElement('a');
+                            like_it.innerHTML = data.user_likes? 'Unlike' : 'Like';
+                            set_style(like_it, {paddingRight: '18px'});
+                            like_it.href = "javascript:void(0)";
+                            add_class(like_it, 'like_text');
+                            like_container.appendChild(like_it);
+                            
+                            var like_icon = document.createElement('span');
+                            add_class(like_icon, 'like');
+                            like_container.appendChild(like_icon);
+                            var how_many_like = document.createElement('a');
+                            how_many_like.href="javascript:void(0)";
+                            add_class(how_many_like, 'like_text');
+                            how_many_like.innerHTML = data.likes + ' people';
+                            like_container.appendChild(how_many_like);
+                            if (data.likes == 0){
+                                set_style(how_many_like, {display : 'none'});
+                                set_style(like_icon, {display : 'none'});
+                                }
+                            comment.how_many_like = how_many_like;
+                            comment.like_icon = like_icon;
+                            comment.like_it = like_it;
+                            comment.appendChild(like_container);
+                            
+                            /*
+                            var dislike_container = document.createElement('div');
+                            set_style(dislike_container, {width: '100%', float: 'left', padding : '5px 0px 0px 38px'});
+                            
+                            var time_date_hide = document.createElement('span');
+                            var created = new Date();
+                            set_style(time_date_hide, {color : '#EDEFF4'});
+                            created.setTime(data.time*1000);
+                            time_date_hide.innerHTML = aprox_time(created);
+                            dislike_container.appendChild(time_date_hide);
+                            
+                            var dislike_it = document.createElement('a');
+                            // should be from our server, instead of: posts[i].comments.comment_list[j].user_likes?
+                            dislike_it.innerHTML = data.user_likes? 'Undislike' : 'Disike';
+                            set_style(dislike_it, {paddingRight: '10px'});
+                            dislike_it.href = "javascript:void(0)";
+                            add_class(dislike_it, 'dislike_text');
+                            dislike_container.appendChild(dislike_it);
+                            
+                            
+                            if (!data.user_likes)
+                            {
+                                
+                                var dislike = document.createElement('span');
+                                add_class(dislike, 'dislike');
+                                dislike_container.appendChild(dislike);
+                                var how_many_dislike = document.createElement('a');
+                                how_many_dislike.href="javascript:void(0)";
+                                add_class(how_many_dislike, 'dislike_text');
+                                // form our server, instead of: posts[i].comments.comment_list[j].likes +
+                                how_many_dislike.innerHTML = data.likes + ' people';
+                                dislike_container.appendChild(how_many_dislike);
+                                // from our server, instead of: posts[i].comments.comment_list[j].likes
+                                if (data.likes == 0){
+                                    set_style(how_many_dislike, {display : 'none'});
+                                    set_style(dislike, {display : 'none'});
+                                    }
+                                
+                                // hide dislike if it has been liked by the user
+                                if (data.user_likes){
+                                    set_style(dislike_it, {display : 'none'});
+                                    set_style(how_many_dislike, {display : 'none'});
+                                    set_style(dislike, {display : 'none'});
+                                    }
+                                // hide like if it has been disliked by the user
+                                // should be added when connected to our server
+                                
+                                if (posts[i].comments.comment_list[j].user_dislikes){
+                                    set_style(like_it, {display : 'none'});
+                                    set_style(how_many_like, {display : 'none'});
+                                    set_style(like, {display : 'none'});
+                                    }
+                                
+                                
+                                comment.appendChild(dislike_container);
+                                } */
+                            
+                            add_class(comment, 'comment');
+                            comment.update = function(data){
+                                var created = new Date();
+                                created.setTime(data.time*1000);
+                                comment.time_date.innerHTML = aprox_time(created);
+                                comment.like_it.innerHTML = data.user_likes? 'Unlike' : 'Like';
+                                if (data.likes == 0){
+                                    set_style(comment.how_many_like, {display : 'none'});
+                                    set_style(comment.like_icon, {display : 'none'});
+                                    return
+                                    }
+                                comment.how_many_like.innerHTML = data.likes + ' people';
+                                set_style(comment.how_many_like, {display : ''});
+                                set_style(comment.like_icon, {display : ''});
+                                }
+                            return comment
+                            }
+                        function fb_tools(args){
+                            var tmp_this = this;
+                            this.fb_login = function(){
+                                FB.login(function(response) {
+                                    tmp_this.fb_check_permission(response);
+                                    }
+                                , {perms:args.perms})
+                                }
+                            addEvent(document.getElementById(args.connect_button),'click',this.fb_login)
+                            this.fb_check_permission = function(response){
+                                if (response.perms){
+                                    var perm_ok = true;
+                                    for (var i = 0; i < args.perms.split(',').length; i++){
+                                        if (response.perms.indexOf(args.perms.split(',')[i].replace(/\ /g, "")) == -1){perm_ok = false}
+                                        }
+                                    }else{var perm_ok = false}
+                                if (perm_ok){
+                                    set_style(document.getElementById(args.connect_button), {display : 'none'});
+                                    args.init();
+                                    return
+                                    }
+                                set_style(document.getElementById(args.connect_button), {display : 'inline-block'});
+                                }
+                            }
+                        
+                        function load_posts(args){
+                            FB.api('/me/groups', {}, function(response) {
+                                var groups = ''
+                                for (var i = 0 ; i < response.data.length; i++){
+                                    groups = groups + (groups.length == 0? String(response.data[i].id): (',' + String(response.data[i].id)))
+                                    }
+                                if (args.gid.length && !/[^\d]/.test(args.gid)){
+                                    var posts = FB.Data.query('SELECT post_id, message,updated_time,created_time,actor_id,action_links,attachment,comments,likes,tagged_ids FROM stream WHERE source_id='+args.gid,'');
+                                    var comments = FB.Data.query('SELECT fromid from comment where post_id in (select post_id from {0})', posts);
+                                    var users = FB.Data.query('SELECT uid, name FROM user WHERE uid in (select actor_id from {0}) OR uid in (select fromid from {1})', posts, comments);
+                                    FB.Data.waitOn([posts, comments, users], function() {
+                                        args.onload(posts.value, users.value);
+                                        });
+                                    return
+                                    }
+                                var group = FB.Data.query('select gid from group where gid IN ('+groups+') AND email="'+args.gid+'@groups.facebook.com"','');
+                                var posts = FB.Data.query('SELECT post_id, message,updated_time,created_time,actor_id,action_links,attachment,comments,likes,tagged_ids FROM stream WHERE source_id IN (select gid from {0})',group);
+                                var comments = FB.Data.query('SELECT fromid from comment where post_id in (select post_id from {0})', posts);
+                                var users = FB.Data.query('SELECT uid, name FROM user WHERE uid in (select actor_id from {0}) OR uid in (select fromid from {1})', posts, comments);
+                                FB.Data.waitOn([group, posts, comments, users], function() {
+                                    args.onload(posts.value, users.value);
+                                    });
+                                });
+                            }
+                        function create_post(data, user_list){
+                            var container = document.createElement('div');
+                            var msg = document.createElement('div');
+                            set_style(msg, {paddingLeft: '60px', height : '60px', backgroundImage : 'url("' + document.location.protocol +"//graph.facebook.com/" + data.actor_id + '/picture")', backgroundRepeat : 'no-repeat'});
+                            container.appendChild(msg);
+                            add_class(container, 'post');
+                            
+                            var div = document.createElement('div');
+                            
+                            var full_name = document.createElement('a');
+                            full_name.href="http://www.facebook.com/profile.php?id=" + data.actor_id;
+                            full_name.target = "_blank";
+                            add_class(full_name, 'full_name');
+                            full_name.innerHTML = user_list[data.actor_id];
+                            div.appendChild(full_name);
+                            
+                            var msg_txt = document.createElement('div');
+                            set_style(msg_txt, {float: 'left', width: '100%', padding : '5px 0px 10px 0px'});
+                            msg_txt.innerHTML = data.message.replace(/\n/g, "<br/>");
+                            div.appendChild(msg_txt);
+                            msg.appendChild(div);
+                            div.comments = {}
+                            for (var j = 0; j < data.comments.comment_list.length; j++){
+                                var comment = create_post_comment(div, data.comments.comment_list[j], user_list);
+                                div.appendChild(comment);
+                                div.comments[comment.uid] = comment;
+                                }
+                            container.update = function(data, user_list){
+                                for (var j = 0; j < data.comments.comment_list.length; j++){
+                                    if (data.comments.comment_list[j].id in div.comments){
+                                        div.comments[data.comments.comment_list[j].id].update(data.comments.comment_list[j], user_list);
+                                        }else{
+                                        var comment = create_post_comment(div, data.comments.comment_list[j], user_list);
+                                        div.appendChild(comment);
+                                        div.comments[comment.uid] = comment;
+                                        }
+                                    }
+                                }
+                            container.updated_time = data.updated_time;
+                            return container
+                            }
+                        function display_posts(posts, users){
+                            posts_container = document.getElementById('posts');
+                            posts_container.updated_time = 0;
+                            if (!window.posts_list){window.posts_list = {};}
+                            user_list = {}
+                            for (var i = 0; i < users.length; i++){
+                                user_list[users[i].uid] = users[i].name;
+                                }
+                            //while (document.getElementById('posts').firstChild){document.getElementById('posts').removeChild(document.getElementById('posts').firstChild)}
+                            for (var i = 0; i < posts.length; i++){
+                                if (posts[i].post_id in window.posts_list){
+                                    window.posts_list[posts[i].post_id].update(posts[i], user_list)
+                                    }else{
+                                    var post = create_post(posts[i], user_list);
+                                    if (posts[i].updated_time > posts_container.updated_time){
+                                        posts_container.insertBefore(post, posts_container.firstChild);
+                                        posts_container.updated_time = posts[i].updated_time;
+                                        }else{
+                                        posts_container.appendChild(post);
+                                        }
+                                    window.posts_list[posts[i].post_id] = post;
+                                    }
+                                }
+                            }
+                        function init(){
+                            load_posts({gid : document.location.pathname.split('/').length > 1? document.location.pathname.split('/')[1] : '', onload : function(posts, users){display_posts(posts, users);}});
+                            setInterval("load_posts({gid : document.location.pathname.split('/').length > 1? document.location.pathname.split('/')[1] : '', onload : function(posts, users){display_posts(posts, users);}});", 10000);
+                            }
+                        
+                        window.fbAsyncInit = function() {
+                            FB.init({
+                                appId  : '246575252046549',
+                                status : true, // check login status
+                                cookie : true, // enable cookies to allow the server to access the session
+                                xfbml  : true  // parse XFBML
+                                })
+                            FBtools = new fb_tools({connect_button: 'fb_connect_button', init : init, perms:'read_stream, user_groups'})
+                            FB.Event.subscribe("auth.login", function(response) {
+                                FBtools.fb_check_permission(response);
+                                });
+                            FB.getLoginStatus(function(response) {
+                                FBtools.fb_check_permission(response);
+                                if (response.session) {
+                                    // logged in and connected user, someone you know
+                                    } else {
+                                    // no user session available, someone you dont know
+                                    }
+                                });
+                            };
+                        
+                        (function() {
+                            var e = document.createElement('script');
+                            e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+                            e.async = true;
+                            document.getElementById('fb-root').appendChild(e);
+                            }());
+                        
+                    </script>
+                    <a id="fb_connect_button" class="fb_button fb_button_medium" style="display:none"><span class="fb_button_text">Connect with Facebook</span></a>
+                    <div id="posts"></div>
+                    
+                    
+                </div>
+            </div>
+            <!-- end .container_12 -->
+        </body>
+    </html>
+    
+    
+    
+    
+    
