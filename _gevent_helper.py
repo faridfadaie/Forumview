@@ -1,7 +1,7 @@
 import urllib2
 import json
 
-def _load_args(env):
+def load_args(env):
     method = env['REQUEST_METHOD']
     if method == 'POST':
         post_body = env['wsgi.input'].read()
@@ -19,13 +19,13 @@ def _load_args(env):
                 query = ''
         return data
 
-def _json_error(env, start_response, err, msg = None):
+def json_error(env, start_response, err, msg = None):
     start_response('200 OK',[])
     if msg is None:
         msg = err[2]
     return [json.dumps({'type': 'error', 'code' : err[0], 'reason' : err[1], 'message' : msg})]
 
-def _json_ok(env, start_response, data):
+def json_ok(env, start_response, data):
     start_response('200 OK',[])
     return [json.dumps({'type': 'ok', 'data' : data})]
 
