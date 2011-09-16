@@ -10,6 +10,37 @@
         <link rel="stylesheet" type="text/css" href="http://www.tayfeh.com/resources/css/nav.css" media="screen" />
         
         <style type=text/css>
+
+.button {
+    -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    display: inline-block;
+    font-family: 'Lucida Grande',Arial,Helvetica,sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    height: 19px;
+    outline: medium none;
+    padding: 0.1em 0.5em;
+    text-align: center;
+    text-decoration: none;
+}
+.button:hover {
+    text-decoration: none;
+}
+.button:active {
+    position: relative;
+    top: 1px;
+}
+.gray {
+    background: -moz-linear-gradient(center top , #EEEEEE, #BBBBBB) repeat scroll 0 0 transparent;
+    border: 1px solid #888888;
+    color: #333333;
+}
+.gray:active {
+    background: -moz-linear-gradient(center top , #BBBBBB, #EEEEEE) repeat scroll 0 0 transparent;
+    color: #333333;
+}
+
             .post {float:left;width:100%;padding: 10px 0px 10px 10px; border-bottom: 1px solid #777777; font-family: "lucida grande",tahoma,verdana,arial,sans-serif; font-size:11px}
             #posts {width: 90%; margin:auto}
             .comment{background-color: #EDEFF4;
@@ -47,8 +78,8 @@
         <script src="http://code.jquery.com/jquery-latest.js"></script>
         
         <body>
-                    <div id="fb-root"></div>
- 
+            <div id="fb-root"></div>
+            
             <div class="container_12">
                 <div id="container_header" class="grid_12">
                     <p>
@@ -152,7 +183,8 @@
                 </div>
                 <div id="container_rightpane" class="grid_7 suffix_3">
                     
-                   <script type="text/javascript">
+                    <script type="text/javascript">
+                        view_post = 'xxxxx';
                         function get_style(element, styleText){
                             if (!element){return{}}                function clean(st){
                                 if (st.indexOf('-') != -1){
@@ -253,8 +285,8 @@
                             img.innerHTML = '<a href="javascript:void(0)" style="margin-right:8px; width:32px;height:32px; float:left"><img style="width:32px; height:32px;border:none;" src="'+document.location.protocol +"//graph.facebook.com/" + data.fromid + '/picture" /></a>'
                             comment.appendChild(img.firstChild);
                             
-var comment_details = document.createElement('div');
-set_style(comment_details, {float:'right', width : '90%'});
+                            var comment_details = document.createElement('div');
+                            set_style(comment_details, {float:'right', width : '90%'});
                             var full_name = document.createElement('a');
                             full_name.href="http://www.facebook.com/profile.php?id=" + data.fromid;
                             full_name.target = "_blank";
@@ -407,25 +439,33 @@ set_style(comment_details, {float:'right', width : '90%'});
                                 for (var i = 0 ; i < response.data.length; i++){
                                     groups = groups + (groups.length == 0? String(response.data[i].id): (',' + String(response.data[i].id)))
                                     }
-                                if (args.gid.length && !/[^\d]/.test(args.gid)){
-                                    var posts = FB.Data.query('SELECT post_id, message,updated_time,created_time,actor_id,action_links,attachment,comments,likes,tagged_ids FROM stream WHERE source_id='+args.gid,'');
+                                if (args.post_id){
+                                    var posts = FB.Data.query('SELECT post_id, message,updated_time,created_time,actor_id,action_links,attachment,comments,likes,tagged_ids FROM stream WHERE post_id="{0}"', args.post_id);
                                     var comments = FB.Data.query('SELECT fromid from comment where post_id in (select post_id from {0})', posts);
                                     var users = FB.Data.query('SELECT uid, name FROM user WHERE uid in (select actor_id from {0}) OR uid in (select fromid from {1})', posts, comments);
-                                    FB.Data.waitOn([posts, comments, users], function() {
-                                        args.onload(posts.value, users.value);
-                                        });
-                                    return
+                                    wait_on = [posts, comments, users]
                                     }
-                                var group = FB.Data.query('select gid from group where gid IN ('+groups+') AND email="'+args.gid+'@groups.facebook.com"','');
-                                var posts = FB.Data.query('SELECT post_id, message,updated_time,created_time,actor_id,action_links,attachment,comments,likes,tagged_ids FROM stream WHERE source_id IN (select gid from {0})',group);
-                                var comments = FB.Data.query('SELECT fromid from comment where post_id in (select post_id from {0})', posts);
-                                var users = FB.Data.query('SELECT uid, name FROM user WHERE uid in (select actor_id from {0}) OR uid in (select fromid from {1})', posts, comments);
-                                FB.Data.waitOn([group, posts, comments, users], function() {
+                                else{
+                                    if (args.gid.length && !/[^\d]/.test(args.gid)){
+                                        var posts = FB.Data.query('SELECT post_id, message,updated_time,created_time,actor_id,action_links,attachment,likes,tagged_ids FROM stream WHERE source_id='+args.gid,'');
+                                        var users = FB.Data.query('SELECT uid, name FROM user WHERE uid in (select actor_id from {0})', posts);
+                                        wait_on = [posts, users]
+                                        }
+                                    else
+                                    {
+                                        var group = FB.Data.query('select gid from group where gid IN ('+groups+') AND email="'+args.gid+'@groups.facebook.com"','');
+                                        var posts = FB.Data.query('SELECT post_id, message,updated_time,created_time,actor_id,action_links,attachment,likes,tagged_ids FROM stream WHERE source_id IN (select gid from {0})',group);
+                                        var users = FB.Data.query('SELECT uid, name FROM user WHERE uid in (select actor_id from {0})', posts);
+                                        wait_on = [group, posts, users]
+                                        }
+                                    }
+                                FB.Data.waitOn(wait_on, function() {
                                     args.onload(posts.value, users.value);
                                     });
+                                return
                                 });
                             }
-                        function create_post(data, user_list){
+                        function create_post(data, user_list, onclick){
                             var container = document.createElement('div');
                             var msg = document.createElement('div');
                             set_style(msg, {paddingLeft: '60px', height : '60px', backgroundImage : 'url("' + document.location.protocol +"//graph.facebook.com/" + data.actor_id + '/picture")', backgroundRepeat : 'no-repeat'});
@@ -442,17 +482,23 @@ set_style(comment_details, {float:'right', width : '90%'});
                             div.appendChild(full_name);
                             
                             var msg_txt = document.createElement('div');
-                            set_style(msg_txt, {float: 'left', width: '100%', padding : '5px 0px 10px 0px'});
+                            set_style(msg_txt, {cursor:(onclick ? 'pointer' : 'auto'), float: 'left', width: '100%', padding : '5px 0px 10px 0px'});
+addEvent(msg_txt, 'click', function(){
+if (onclick)
+onclick(data.post_id);
+});
                             msg_txt.innerHTML = data.message.replace(/\n/g, "<br/>");
                             div.appendChild(msg_txt);
                             msg.appendChild(div);
                             div.comments = {}
+                            if (data.comments)
                             for (var j = 0; j < data.comments.comment_list.length; j++){
                                 var comment = create_post_comment(div, data.comments.comment_list[j], user_list);
                                 div.appendChild(comment);
                                 div.comments[comment.uid] = comment;
                                 }
                             container.update = function(data, user_list){
+                                if (data.comments)
                                 for (var j = 0; j < data.comments.comment_list.length; j++){
                                     if (data.comments.comment_list[j].id in div.comments){
                                         div.comments[data.comments.comment_list[j].id].update(data.comments.comment_list[j], user_list);
@@ -466,33 +512,40 @@ set_style(comment_details, {float:'right', width : '90%'});
                             container.updated_time = data.updated_time;
                             return container
                             }
-                        function display_posts(posts, users){
-                            posts_container = document.getElementById('posts');
-                            posts_container.updated_time = 0;
-                            if (!window.posts_list){window.posts_list = {};}
-                            user_list = {}
-                            for (var i = 0; i < users.length; i++){
-                                user_list[users[i].uid] = users[i].name;
-                                }
-                            //while (document.getElementById('posts').firstChild){document.getElementById('posts').removeChild(document.getElementById('posts').firstChild)}
-                            for (var i = 0; i < posts.length; i++){
-                                if (posts[i].post_id in window.posts_list){
-                                    window.posts_list[posts[i].post_id].update(posts[i], user_list)
-                                    }else{
-                                    var post = create_post(posts[i], user_list);
-                                    if (posts[i].updated_time > posts_container.updated_time){
-                                        posts_container.insertBefore(post, posts_container.firstChild);
-                                        posts_container.updated_time = posts[i].updated_time;
+                        function display_posts(args){
+                            this.posts_container = args.container;
+                            this.update = function(posts, users){
+                                this.posts_container.updated_time = 0;
+                                if (!this.posts_list){this.posts_list = {};}
+                                user_list = {}
+                                for (var i = 0; i < users.length; i++){
+                                    user_list[users[i].uid] = users[i].name;
+                                    }
+                                for (var i = 0; i < posts.length; i++){
+                                    if (posts[i].post_id in this.posts_list){
+                                        this.posts_list[posts[i].post_id].update(posts[i], user_list)
                                         }else{
-                                        posts_container.appendChild(post);
+                                        var post = create_post(posts[i], user_list, args.onclick);
+                                        if (posts[i].updated_time > this.posts_container.updated_time){
+                                            this.posts_container.insertBefore(post, this.posts_container.firstChild);
+                                            this.posts_container.updated_time = posts[i].updated_time;
+                                            }else{
+                                            this.posts_container.appendChild(post);
+                                            }
+                                        this.posts_list[posts[i].post_id] = post;
                                         }
-                                    window.posts_list[posts[i].post_id] = post;
                                     }
                                 }
                             }
                         function init(){
-                            load_posts({gid : document.location.pathname.split('/').length > 1? document.location.pathname.split('/')[1] : '', onload : function(posts, users){display_posts(posts, users);}});
-                            setInterval("load_posts({gid : document.location.pathname.split('/').length > 1? document.location.pathname.split('/')[1] : '', onload : function(posts, users){display_posts(posts, users);}});", 10000);
+                            post_show = new display_posts({container: document.getElementById('posts'), onclick : function(post_id){
+set_style(document.getElementById('posts'), {display: 'none'});
+set_style(document.getElementById('post_comment_container'), {display: 'block'});
+forum = new display_posts({container: document.getElementById('post_comment')});
+load_posts({post_id : post_id, gid : document.location.pathname.split('/').length > 1? document.location.pathname.split('/')[1] : '', onload : function(posts, users){forum.update(posts, users);}});
+}});
+                            load_posts({gid : document.location.pathname.split('/').length > 1? document.location.pathname.split('/')[1] : '', onload : function(posts, users){post_show.update(posts, users);}});
+                            setInterval("load_posts({gid : document.location.pathname.split('/').length > 1? document.location.pathname.split('/')[1] : '', onload : function(posts, users){post_show.update(posts, users);}});", 10000);
                             }
                         
                         window.fbAsyncInit = function() {
@@ -525,7 +578,14 @@ set_style(comment_details, {float:'right', width : '90%'});
                         
                     </script>
                     <a id="fb_connect_button" class="fb_button fb_button_medium" style="display:none"><span class="fb_button_text">Connect with Facebook</span></a>
-                    <div id="posts"></div>
+<div id="forum_container">                    
+	<div id="posts"></div>
+	<div id="post_comment_container" style="display:none">
+			<a onclick="while (document.getElementById('post_comment').firstChild){document.getElementById('post_comment').removeChild(document.getElementById('post_comment').firstChild)}; set_style(this.parentNode, {display:'none'}); set_style(document.getElementById('posts'),{display: 'block'})" href="javascript:void(0)" style="float: right; padding-right: 5px;" class="button gray"><table style="border:none 0px;"><tbody><tr><td style="border:none 0px;background-color:transparent;color: rgb(0, 0, 0);">Back to posts</td></tr></tbody></table></a>
+<div id="post_comment">		
+</div>
+	</div>
+</div>
                     
                     
                 </div>
@@ -533,6 +593,7 @@ set_style(comment_details, {float:'right', width : '90%'});
             <!-- end .container_12 -->
         </body>
     </html>
+    
     
     
     
