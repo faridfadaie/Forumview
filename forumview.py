@@ -1,6 +1,6 @@
 from gevent.pywsgi import WSGIServer
 import facebook
-from crm import load_enc_conf
+#from crm import load_enc_conf
 from _gevent_helper import *
 import gevent.pywsgi
 import time, logging, sys, hashlib, base64
@@ -12,13 +12,11 @@ page_names = ['load_group.html']
 page_contents = {}
 LISTEN_IP = '0.0.0.0'
 LISTEN_PORT = 20000
-ACTIVATION_LIMIT = 3
-AV_LIMIT = -1
-CODEC_LIMIT = 3
 RETRY_LIMIT = 3
 PROTOCOL = 'http'
 DYN_LOADING = True
-config = load_enc_conf('init.cfg.enc')
+config = {'FACEBOOK_SECRET': 'bba342dc751c88d7522ce822d4d30ab8', 'AWS_ACCESS_KEY': 'AKIAJ36DOHUEJB4QN5WA', 'FACEBOOK_KEY': '246575252046549', 'AWS_SECRET_ACCESS_KEY': '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'}
+#load_enc_conf('init.cfg.enc')
 FACEBOOK_KEY = config['FACEBOOK_KEY']
 FACEBOOK_SECRET = config['FACEBOOK_SECRET'] 
 AWS_ACCESS_KEY = config['AWS_ACCESS_KEY'] 
@@ -133,7 +131,7 @@ def create_label(env, start_response, args):
                 shared = 'global'
                 layer_id = '0'
             elif ('personal' not in args) or (str(args['personal']) != '1'):
-                return json_error(env, start_response, ERROR_CODES.BAR_PARAMTER, 'the personal view should be selected.')
+                return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'the personal view should be selected.')
             if ('personal' in args) and (str(args['personal']) == '1'):
                 gid = str(gid) + ':' + str(user['uid'])
                 shared = 'personal'
@@ -219,7 +217,7 @@ def get_labels(env, start_response, args):
                 labels = sdb.get_attributes(AWS_SDB_LABELS_DOMAIN, gid)
                 easy_labels = {}
                 for i in labels:
-                    shared_status, name_status, nik_status, parent_status, desc_status, creator_status, obj_status = _decode_label(label[i])
+                    shared_status, name_status, nik_status, parent_status, desc_status, creator_status, obj_status = _decode_label(labels[i])
                     if ((shared == 'shared') and (shared_status == 'shared'))\
                     or ((shared == 'personal') and (shared_status in ['shared', 'personal'])) \
                     or (shared == 'global'):
