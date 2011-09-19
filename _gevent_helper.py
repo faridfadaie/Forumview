@@ -4,20 +4,20 @@ import json
 def load_args(env):
     method = env['REQUEST_METHOD']
     if method == 'POST':
-        post_body = env['wsgi.input'].read()
-        return json.loads(post_body)
+        data = {}
+        query = env['wsgi.input'].read()
     else:
         data = {}
         query = env['QUERY_STRING']
-        while query.count('=') != 0:
-            key = query.split('=')[0]
-            value = query.split('%s=' %key)[1].split('&')[0]
-            data[urllib2.unquote(key)] = urllib2.unquote(value)
-            if query.count('&') != 0:
-                query=query.split(key + '=' + value + '&')[1]
-            else:
-                query = ''
-        return data
+    while query.count('=') != 0:
+        key = query.split('=')[0]
+        value = query.split('%s=' %key)[1].split('&')[0]
+        data[urllib2.unquote(key)] = urllib2.unquote(value)
+        if query.count('&') != 0:
+            query=query.split(key + '=' + value + '&')[1]
+        else:
+            query = ''
+    return data
 
 def json_error(env, start_response, err, msg = None):
     start_response('200 OK',[])
