@@ -20,13 +20,13 @@ def load_args(env):
     return data
 
 def json_error(env, start_response, err, msg = None):
-    start_response('200 OK',[])
+    start_response('200 OK',[('Content-Type', 'application/json')])
     if msg is None:
         msg = err[2]
     return [json.dumps({'type': 'error', 'code' : err[0], 'reason' : err[1], 'message' : msg})]
 
 def json_ok(env, start_response, data):
-    start_response('200 OK',[])
+    start_response('200 OK',[('Content-Type', 'application/json')])
     return [json.dumps({'type': 'ok', 'data' : data})]
 
 class ERROR_CODES:
