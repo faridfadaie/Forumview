@@ -883,12 +883,11 @@ this.posts_list={}
                                     window.labeldata = new Array();
 
                                     $.getJSON("get_labels?gid="+source_id, function(data) {
-                                        alert("Database connection is " + data.type);
                                         window.labeldata=data;
                                     });
 
                                     if (window.labeldata.type == 'ok'){
-                                        
+                                        alert("Database connection is " + window.labeldata.type);
                                         if (window.global) {
                                             // create the personal view on the top
                                             var menu_div = document.createElement('div');
