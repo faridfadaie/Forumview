@@ -964,7 +964,7 @@ this.posts_list={}
                                                 if(window.owner){
                                                     // create the creat label button 
                                                     var menu_div = create_label('Add label','creat_label', function(){
-                                                        var s = '<div><h2> New Label </h2><p>Please enter a new label name: </p><input type="text" name="name_label" size="19" maxlength="40" value="" id="name_label" title="Name of the label" /><p>Please enter a nickname for the label: </p><input type="text" name="nick_label" size="19" maxlength="18" value="" id="nick_label" title="Nickname of the label" /><p>Please enter a description for this label: </p><textarea id="description_label" rows="4" cols="33"></textarea><p>Nest label under: <select name="list_labels" id="list_labels">';
+                                                        var s = '<div><h2> New Label </h2><p>Please enter a new label name: </p><input type="text" name="name_label" size="19" maxlength="40" value="" id="name_label" title="Name of the label" /><p>Please enter a nickname for the label: </p><input type="text" name="nick_label" size="19" maxlength="18" value="" id="nick_label" title="Nickname of the label" /><p>Please enter a description for this label: </p><textarea id="description_label" rows="4" cols="33"></textarea><p>Nest label under: <select name="list_labels" id="list_labels"><option value="0">Root</option>';
                                                         window.labels = {}
                                                         for (var i in list){
                                                             if (list[i].parent == '0'){
@@ -1005,7 +1005,7 @@ this.posts_list={}
                                     
                                     $('#Btn_labeldialog_addlabel').click(function () {
                                         
-                                        $.post("create_label",{gid: source_id, name: $("#name_label").val(), nick: $("#name_label").val(), desc: $("#description_label").val(), parent:"0"},
+                                        $.post("create_label",{gid: source_id, name: $("#name_label").val(), nick: $("#name_label").val(), desc: $("#description_label").val(), parent: $("#list_labels").val()},
                                         function(result) {
                                             if (result["type"]=="ok"){
                                                 $("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
