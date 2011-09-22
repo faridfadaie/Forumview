@@ -880,14 +880,14 @@ this.posts_list={}
                                     window.admin = true;
                                     window.global = false;
                                     window.owner = false;
-                                    window.labeldata = new Array();
+                                    //window.labeldata = new Array();
 
                                     $.getJSON("get_labels?gid="+source_id, function(data) {
-                                        window.labeldata=data;
-                                    });
+                                        //window.labeldata=data;
+                                    
 
-                                    if (window.labeldata.type == 'ok'){
-                                        alert("Database connection is " + window.labeldata.type);
+                                    if (data.type == 'ok'){
+                                        alert("Database connection is " + data.type);
                                         if (window.global) {
                                             // create the personal view on the top
                                             var menu_div = document.createElement('div');
@@ -904,7 +904,7 @@ this.posts_list={}
                                             getelementById('lable_container').appendChild(menu_div);
 
                                             // making the menu
-                                            list = window.labeldata.data;
+                                            list = data.data;
                                             window.labels = {}
                                             for (var i in list){
                                                 if (list[i].id in labels){
@@ -938,7 +938,7 @@ this.posts_list={}
                                                 getelementById('lable_container').appendChild(menu_div);
 
                                                 // making the menu
-                                                list = window.labeldata.data;
+                                                list = data.data;
                                                 window.labels = {}
                                                 for (var i in list){
                                                     if (list[i].id in labels){
@@ -962,6 +962,8 @@ this.posts_list={}
                                             
                                         }
                                     }
+                                    
+                                    });
 
                                     //$("#creat_label").click(function() {
                                                                                         
