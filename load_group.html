@@ -251,7 +251,7 @@ Version: 0.1; Sept 19th 2011
                 <div id="container_leftpane" class="grid_3">
                     
                     <div class="box menu">
-                    	<div class="labelcontainers">
+                    	<div id="lable_container" class="labelcontainers">
 	                        <div class="categories">
 	                            Labels
 	                        </div>
@@ -559,6 +559,30 @@ Version: 0.1; Sept 19th 2011
                                 return
                                 });
                             }
+                            function create_label(txt, uid, onclick){
+                            var div = document.createElement('div');
+                            div.uid = uid;
+                            div.innerHTML = txt;
+                            add_class(div, 'labels');
+                            div.add_child = function(t_txt, t_uid, t_onclick){
+                            var child = create_label(t_txt, t_uid, t_onclick);
+                            div.appendChild(child);
+                            }
+                            addEvent(div, 'click', onclick);
+                            return div
+                            }
+                            // if list is the list of all labels received from the server:
+                            // window.labels = {}
+                            // for (var i in list){
+                            // if (list[i].id in labels){
+                            // labels[list[i].id].add_child(list[i].name, list[i].id, function(){alert('click')});
+                            // }
+                            // else{
+                            // var l = create_label(list[i].name, list[i].id, function(){alert('click')})
+                            // labels[list[i].id] = l;
+                            // root.appendChild(l);
+                            //}
+                            //}
                         function create_post(data, user_list, onclick){
                             var container = document.createElement('div');
                             container.post_id = data.post_id;
@@ -805,14 +829,26 @@ Version: 0.1; Sept 19th 2011
 
                                     $("#add_newlabel_menu").click(function() {
 
-                                            
-                                            //$.getJSON("http://ffadaie.dyndns.org:10000/get_labels?gid="+source_id, function(labels) {
-                                            //    alert("Labels: " + labels.type +"|" + labels.code + "|" + labels.reason);
-                                            //});
-                                            
+                                            $.getJSON("get_labels?gid="+source_id, function(data) {
+                                            //alert("Labels: " + labels.type +"|" + labels.code + "|" + labels.reason);
+                                            if (data.type == "ok") {list = data.data;}
+                                            window.labels = {}
+                                            for (var i in list){
+                                                if (list[i].id in labels){
+                                                    labels[list[i].id].add_child(list[i].name, list[i].id, function(){alert('click')});
+                                                }
+                                                else{
+                                                    var l = create_label(list[i].name, list[i].id, function(){alert('click')})
+                                                    labels[list[i].id] = l;
+                                                    getelementById('lable_container').appendChild(l);
+                                                    }
+                                                }
+                                            });
+
+                                                                                        
                                             var s = '<div><h2> New Label </h2><p>Please enter a new label name: </p><input type="text" name="name_label" size="19" maxlength="40" value="" id="name_label" title="Name of the label" /><p>Please enter a nickname for the label: </p><input type="text" name="nick_label" size="19" maxlength="18" value="" id="nick_label" title="Nickname of the label" /><p>Please enter a description for this label: </p><textarea id="description_label" rows="4" cols="33"></textarea><p>Nest label under: <select name="list_labels" id="list_labels"><option value="Label 1">Label 1</option><option value="Label 2">Label 2</option><option value="Lable 3">Lable 3</option></select></p></div>';
                                             
-                                            popup(s); 
+                                            //popup(s); 
                                         });
 
                                     $("a").click(function() {
