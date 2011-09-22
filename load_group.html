@@ -920,7 +920,14 @@ this.posts_list={}
                                              
                                                 // create the creat label button 
                                                 var menu_div = create_label('Add label','creat_label', function(){
-                                                        var s = '<div><h2> New Label </h2><p>Please enter a new label name: </p><input type="text" name="name_label" size="19" maxlength="40" value="" id="name_label" title="Name of the label" /><p>Please enter a nickname for the label: </p><input type="text" name="nick_label" size="19" maxlength="18" value="" id="nick_label" title="Nickname of the label" /><p>Please enter a description for this label: </p><textarea id="description_label" rows="4" cols="33"></textarea><p>Nest label under: <select name="list_labels" id="list_labels"><option value="Label 1">Label 1</option><option value="Label 2">Label 2</option><option value="Lable 3">Lable 3</option></select></p></div>';
+                                                        var s = '<div><h2> New Label </h2><p>Please enter a new label name: </p><input type="text" name="name_label" size="19" maxlength="40" value="" id="name_label" title="Name of the label" /><p>Please enter a nickname for the label: </p><input type="text" name="nick_label" size="19" maxlength="18" value="" id="nick_label" title="Nickname of the label" /><p>Please enter a description for this label: </p><textarea id="description_label" rows="4" cols="33"></textarea><p>Nest label under: <select name="list_labels" id="list_labels">';
+                                                        window.labels = {}
+                                                        for (var i in list){
+                                                            if (list[i].parent == '0'){
+                                                                s += '<option value="'+list[i].name+'">'+list[i].name+'</option>';
+                                                            }
+                                                        }
+                                                        s += '</select></p></div>';
                                                         popup(s); 
                                                 });
                                                 document.getElementById('lable_container').appendChild(menu_div);
@@ -961,7 +968,7 @@ this.posts_list={}
                                                         window.labels = {}
                                                         for (var i in list){
                                                             if (list[i].parent == '0'){
-                                                                s += '<option value="'+list[i].name+'">Label 1</option>';
+                                                                s += '<option value="'+list[i].name+'">'+list[i].name+'</option>';
                                                             }
                                                         }
                                                         s += '</select></p></div>';
