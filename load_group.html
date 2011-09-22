@@ -877,13 +877,13 @@ this.posts_list={}
                             $(document).ready(function(){
                                 
                                 
-                                    window.admin = true;
-                                    window.global = false;
-                                    window.owner = false;
+                                    var window.admin = true;
+                                    var window.global = false;
+                                    var window.owner = false;
 
                                     $.getJSON("get_labels?gid="+source_id, function(data) {
                                         alert("Database connection is " + labels.type);
-                                        window.labeldata=data;
+                                        var window.labeldata=data;
                                     });
 
                                     if (window.labeldata.type == 'ok'){
