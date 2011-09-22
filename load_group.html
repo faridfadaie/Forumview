@@ -12,72 +12,72 @@ Version: 0.1; Sept 19th 2011
         <link rel="stylesheet" type="text/css" href="http://www.tayfeh.com/resources/css/nav.css" media="screen" /> -->
         
         <style type=text/css>
-               body {
-               	    font-family: 'Lucida Grande',Arial,Helvetica,sans-serif;
-            		font-size:11px;
-            		color: #000000;
-					background: #ffffff;
-					border-top: 7px solid #3b5998;
-					font-size: 11px;
-					padding: 0 0 40px;
-				}
-               #dialog-overlay {
- 
+            body {
+                font-family: 'Lucida Grande',Arial,Helvetica,sans-serif;
+                font-size:11px;
+                color: #000000;
+                background: #ffffff;
+                border-top: 7px solid #3b5998;
+                font-size: 11px;
+                padding: 0 0 40px;
+                }
+            #dialog-overlay {
+                
                 /* set it to fill the whil screen */
-                width:100%; 
+                width:100%;
                 height:100%;
-
+                
                 /* transparency for different browsers */
-                filter:alpha(opacity=50); 
-                -moz-opacity:0.5; 
-                -khtml-opacity: 0.5; 
-                opacity: 0.5; 
-                background:#000; 
-
+                filter:alpha(opacity=50);
+                -moz-opacity:0.5;
+                -khtml-opacity: 0.5;
+                opacity: 0.5;
+                background:#000;
+                
                 /* make sure it appear behind the dialog box but above everything else */
-                position:absolute; 
-                top:0; left:0; 
-                z-index:3000; 
-
+                position:absolute;
+                top:0; left:0;
+                z-index:3000;
+                
                 /* hide it by default */
                 display:none;
                 }
-
-
+            
+            
             #dialog-box {
-
+                
                 /* css3 drop shadow */
                 -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
                 -moz-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-
+                
                 /* css3 border radius */
                 -moz-border-radius: 5px;
                 -webkit-border-radius: 5px;
-
+                
                 background:#eee;
                 /* styling of the dialog box, i have a fixed dimension for this demo */
-                width:328px; 
-
+                width:328px;
+                
                 /* make sure it has the highest z-index */
-                position:absolute; 
-                z-index:5000; 
-
+                position:absolute;
+                z-index:5000;
+                
                 /* hide it by default */
                 display:none;
                 }
-
+            
             #dialog-box .dialog-content {
                 /* style the content */
-                text-align:left; 
-                padding:10px; 
+                text-align:left;
+                padding:10px;
                 margin:13px;
-                color:#666; 
+                color:#666;
                 /* font-family:arial; */
-                font-size:13px; 
+                font-size:13px;
                 }
-
+            
             a.buttond {
-
+                
                 /* styles for button */
                 margin:10px auto 0 auto;
                 text-align:center;
@@ -88,44 +88,44 @@ Version: 0.1; Sept 19th 2011
                 text-decoration: none;
                 font-weight: bold;
                 line-height: 1;
-
+                
                 /* button color */
                 background-color: #3b5998;
-
+                
                 /* css3 implementation :) */
                 /* rounded corner */
                 -moz-border-radius: 5px;
                 -webkit-border-radius: 5px;
-
+                
                 /* drop shadow */
                 -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
                 -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-
+                
                 /* text shaow */
                 text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
                 border-bottom: 1px solid rgba(0,0,0,0.25);
                 position: relative;
                 cursor: pointer;
-
+                
                 }
-
+            
             a.buttond:hover {
-                background-color: #1f4189;  
+                background-color: #1f4189;
                 }
-
+            
             /* extra styling */
             #dialog-box .dialog-content p {
-                font-weight:700; 
+                font-weight:700;
                 margin: 15px 0 3px;
                 }
-
-           #dialog-box .dialog-content h2 {
+            
+            #dialog-box .dialog-content h2 {
                 margin: 0 0 3px;
                 }
-
+            
             #dialog-box .dialog-content ul {
-                margin:10px 0 10px 20px; 
-                padding:0; 
+                margin:10px 0 10px 20px;
+                padding:0;
                 height:50px;
                 }
             .button {
@@ -192,46 +192,46 @@ Version: 0.1; Sept 19th 2011
             .dislike_text {color: #973B3B;padding-left:10px; text-decoration:none}
             .clickeditem {font-weight: bold;}
             .labelcontainers {
-            	width: 100%;
-            	padding: 0px 0px 0px 0px;
-            }
+                width: 100%;
+                padding: 0px 0px 0px 0px;
+                }
             .categories{
-            	color: #999999;
-          		font-size: 9px;
-    			font-weight: bold;
-    			margin-top: 12px;
-            	display: block;
-     			line-height: 13px;
-    			min-height: 17px;
-    			padding: 5px 5px 0;
-            	text-transform: uppercase;
-            }
+                color: #999999;
+                font-size: 9px;
+                font-weight: bold;
+                margin-top: 12px;
+                display: block;
+                line-height: 13px;
+                min-height: 17px;
+                padding: 5px 5px 0;
+                text-transform: uppercase;
+                }
             .labels {
-            	font-weight:normal;
-            	background-color: #FFFFFF;
-            	display: block;
-     			line-height: 13px;
-    			min-height: 17px;
-    			padding: 5px 5px 0;
-            	text-transform: capitalize;
-            }
+                font-weight:normal;
+                background-color: #FFFFFF;
+                display: block;
+                line-height: 13px;
+                min-height: 17px;
+                padding: 5px 5px 0;
+                text-transform: capitalize;
+                }
             .labels:hover{
-            	cursor: pointer;
-            	background-color: #eff2f7;
-            }
+                cursor: pointer;
+                background-color: #eff2f7;
+                }
             .selectedlabel{
-            	display: block;
-     			line-height: 13px;
-    			min-height: 17px;
-    			padding: 5px 5px 0;
-            	text-transform: capitalize;
-            	font-weight:bold;
-            	background-color: #d8dfea;
-            }
+                display: block;
+                line-height: 13px;
+                min-height: 17px;
+                padding: 5px 5px 0;
+                text-transform: capitalize;
+                font-weight:bold;
+                background-color: #d8dfea;
+                }
             .selectedlabel:hover{
-            	cursor: pointer;
-            	background-color: #d8dfea;
-            }
+                cursor: pointer;
+                background-color: #d8dfea;
+                }
         </style>
         
         <script src="http://code.jquery.com/jquery-latest.js"></script>
@@ -251,20 +251,20 @@ Version: 0.1; Sept 19th 2011
                 <div id="container_leftpane" class="grid_3">
                     
                     <div class="box menu">
-                    	<div id="lable_container" class="labelcontainers">
-	                        <div class="categories">
-	                            Labels
-	                        </div>
-	                        <div class="selectedlabel">
-	                            <a id="1">Parent Label</a>
-	                        </div>
-	                        <div class="labels">
-	                            <a id="2" style="padding-left: 20px">Child Lable</a>
-	                        </div>
-	                        <div class="labels">
-	                            <a id="add_newlabel_menu">Add New Label...</a>
-	                        </div>
-	                     </div>
+                        <div id="lable_container" class="labelcontainers">
+                            <div class="categories">
+                                Labels
+                            </div>
+                            <div class="selectedlabel">
+                                <a id="1">Parent Label</a>
+                            </div>
+                            <div class="labels">
+                                <a id="2" style="padding-left: 20px">Child Lable</a>
+                            </div>
+                            <div class="labels">
+                                <a id="add_newlabel_menu">Add New Label...</a>
+                            </div>
+                        </div>
                     </div>
                     
                 </div>
@@ -273,7 +273,7 @@ Version: 0.1; Sept 19th 2011
                     <script type="text/javascript">
                         view_post = 'xxxxx';
                         function get_style(element, styleText){
-                            if (!element){return{}}                
+                            if (!element){return{}}
                             function clean(st){
                                 if (st.indexOf('-') != -1){
                                     st = st.substr(0, st.indexOf('-')) + st[st.indexOf('-') + 1].toUpperCase() + st.substr(st.indexOf('-') + 2)
@@ -281,11 +281,11 @@ Version: 0.1; Sept 19th 2011
                                 return st
                                 }
                             if(element.style.getAttribute)
-                                var s = element.style.getAttribute("cssText")? element.style.getAttribute("cssText").split(';') : '';
+                            var s = element.style.getAttribute("cssText")? element.style.getAttribute("cssText").split(';') : '';
                             else
-                                var s = element.getAttribute("style")? element.getAttribute("style").split(';') : '';                
+                            var s = element.getAttribute("style")? element.getAttribute("style").split(';') : '';
                             var t = {}
-                            for (var i = 0 ; i < s.length ; i ++){                    
+                            for (var i = 0 ; i < s.length ; i ++){
                                 if (s[i].indexOf(':') != -1)
                                 t[clean(s[i].split(':')[0])] = s[i].split(':')[1];
                                 }
@@ -312,22 +312,22 @@ Version: 0.1; Sept 19th 2011
                                 styleText = styleText + clean(i) + ':' + cur[i] + ';';
                                 }
                             if(element.style.setAttribute)
-                                element.style.setAttribute("cssText", styleText );
+                            element.style.setAttribute("cssText", styleText );
                             else
-                                element.setAttribute("style", styleText );
+                            element.setAttribute("style", styleText );
                             }
                         
                         function addEvent(obj,type,fn) {
                             if (obj.addEventListener) {
                                 obj.addEventListener(type,fn,false);
                                 return true;
-                                } 
+                                }
                             else if (obj.attachEvent) {
                                 obj['e'+type+fn] = fn;
                                 obj[type+fn] = function() { obj['e'+type+fn]( window.event );}
                                 var r = obj.attachEvent('on'+type, obj[type+fn]);
                                 return r;
-                                } 
+                                }
                             else {
                                 obj['on'+type] = fn;
                                 return true;
@@ -526,6 +526,11 @@ Version: 0.1; Sept 19th 2011
                             }
                         
                         function load_posts(args){
+                            lpp = 20;
+                            var d = new Date();
+                            if (!args.to){
+                                args.to = Math.round(d.getTime() / 1000);
+                                }
                             FB.api('/me/groups', {}, function(response) {
                                 var groups = ''
                                 for (var i = 0 ; i < response.data.length; i++){
@@ -539,49 +544,61 @@ Version: 0.1; Sept 19th 2011
                                     }
                                 else{
                                     if (args.gid.length && !/[^\d]/.test(args.gid)){
-                                        var posts = FB.Data.query('SELECT source_id, post_id, message,updated_time,created_time,actor_id,action_links,attachment,likes,tagged_ids FROM stream WHERE source_id='+args.gid,'');
+                                        if (args.posts_list){
+                                            var posts = FB.Data.query('SELECT source_id, post_id, message,updated_time,created_time,actor_id,action_links,attachment,likes,tagged_ids FROM stream WHERE post_id IN ({0}) ORDER BY updated_time DESC',args.posts_list);
+                                            }
+                                        else{
+                                            var posts = FB.Data.query('SELECT source_id, post_id, message,updated_time,created_time,actor_id,action_links,attachment,likes,tagged_ids FROM stream WHERE updated_time<{2} and source_id={0} ORDER BY updated_time DESC LIMIT {1}',args.gid, lpp, args.to);
+                                            }
                                         var users = FB.Data.query('SELECT uid, name FROM user WHERE uid in (select actor_id from {0})', posts);
                                         wait_on = [posts, users]
                                         }
                                     else
                                     {
                                         var group = FB.Data.query('select gid from group where gid IN ('+groups+') AND email="'+args.gid+'@groups.facebook.com"','');
-                                        var posts = FB.Data.query('SELECT source_id, post_id, message,updated_time,created_time,actor_id,action_links,attachment,likes,tagged_ids FROM stream WHERE source_id IN (select gid from {0})',group);
+                                        if (args.posts_list){
+                                            var posts = FB.Data.query('SELECT source_id, post_id, message,updated_time,created_time,actor_id,action_links,attachment,likes,tagged_ids FROM stream WHERE post_id IN ({0}) ORDER BY updated_time DESC',args.posts_list);
+                                            }
+                                        else{
+                                            var posts = FB.Data.query('SELECT source_id, post_id, message,updated_time,created_time,actor_id,action_links,attachment,likes,tagged_ids FROM stream WHERE source_id IN (select gid from {0}) and updated_time<{2} ORDER BY updated_time DESC LIMIT {1}',group, lpp, args.to);
+                                            }
                                         var users = FB.Data.query('SELECT uid, name FROM user WHERE uid in (select actor_id from {0})', posts);
                                         wait_on = [group, posts, users]
                                         }
                                     }
                                 FB.Data.waitOn(wait_on, function() {
-                                    if (posts.value.length > 0) {window.source_id = posts.value[0].source_id;}else{window.source_id=null; alert('Not a valid object.'); return}
+                                    if (posts.value.length > 0) {window.source_id = posts.value[0].source_id;}else{window.source_id=null; alert('Not available.'); switch_posts_to_page(window.last_fine_post_page); return}
                                     if ((window.obj_load) && (!window.load_obj_initialized)){window.obj_load(window.source_id); window.load_obj_initialized = true;}
-                                    args.onload(posts.value, users.value);
+                                    if (posts.value.length > 0){var from_time = posts.value[posts.value.length-1].updated_time; var to_time = posts.value[0].updated_time}else{var updated_time = null; var to_time = null}
+                                    args.onload(posts.value, users.value, from_time, to_time);
                                     });
                                 return
                                 });
                             }
-                            function create_label(txt, uid, onclick){
+                        
+                        function create_label(txt, uid, onclick){
                             var div = document.createElement('div');
                             div.uid = uid;
                             div.innerHTML = txt;
                             add_class(div, 'labels');
                             div.add_child = function(t_txt, t_uid, t_onclick){
-                            var child = create_label(t_txt, t_uid, t_onclick);
-                            div.appendChild(child);
-                            }
+                                var child = create_label(t_txt, t_uid, t_onclick);
+                                div.appendChild(child);
+                                }
                             addEvent(div, 'click', onclick);
                             return div
                             }
-                            // if list is the list of all labels received from the server:
-                            // window.labels = {}
-                            // for (var i in list){
+                        // if list is the list of all labels received from the server:
+                        // window.labels = {}
+                        // for (var i in list){
                             // if (list[i].id in labels){
-                            // labels[list[i].id].add_child(list[i].name, list[i].id, function(){alert('click')});
-                            // }
+                                // labels[list[i].id].add_child(list[i].name, list[i].id, function(){alert('click')});
+                                // }
                             // else{
-                            // var l = create_label(list[i].name, list[i].id, function(){alert('click')})
-                            // labels[list[i].id] = l;
-                            // root.appendChild(l);
-                            //}
+                                // var l = create_label(list[i].name, list[i].id, function(){alert('click')})
+                                // labels[list[i].id] = l;
+                                // root.appendChild(l);
+                                //}
                             //}
                         function create_post(data, user_list, onclick){
                             var container = document.createElement('div');
@@ -668,7 +685,7 @@ Version: 0.1; Sept 19th 2011
                                             set_style(container.how_many_like, {display : 'none'});
                                             set_style(container.like_icon, {display : 'none'});
                                             }
-                                        container.like_it.innerHTML = 'Like';  
+                                        container.like_it.innerHTML = 'Like';
                                         }
                                     });
                                 });
@@ -711,9 +728,15 @@ Version: 0.1; Sept 19th 2011
                             return container
                             }
                         function display_posts(args){
-                            this.destroy = function(){
-                                clearInterval(this._handler);
-                                while (this.posts_container.firstChild){this.posts_container.removeChild(this.posts_container.firstChild)}
+                            this.clear_container = function(){
+                                if (this.posts_container){while (this.posts_container.firstChild){this.posts_container.removeChild(this.posts_container.firstChild)}}
+                                }
+                            this.destroy = function(){                                //this.stop_timer();
+                                if (this.posts_container){
+                                    this.clear_container();
+                                    this.posts_container.updated_time = 0;
+                                    }                                this.posts_list={}
+                                
                                 }
                             this.posts_container = args.container;
                             this.update = function(posts, users){
@@ -743,23 +766,64 @@ Version: 0.1; Sept 19th 2011
                                         }
                                     }
                                 }
+                            this.stop_timer = function(){
+                                if (this._handler) try{clearInterval(this._handler);}catch(e){}
+                                }
                             this.timer = function(sec, func){
+                                this.stop_timer();
                                 var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
-                                var string_length = 8;
-                                var randomstring = '';
+                                var string_length = 8;                                var randomstring = '';
                                 for (var i=0; i<string_length; i++) {
                                     var rnum = Math.floor(Math.random() * chars.length);
                                     randomstring += chars.substring(rnum,rnum+1);
-                                    }
-                                var tmp = this;
+                                    }                                var tmp = this;
+                                this.id= this.id? this.id : randomstring;
                                 if (!window.display_post_time){window.display_post_time = {}}
-                                window.display_post_time[randomstring] = [func, tmp];
-                                this._handler = setInterval("if (window.display_post_time['" + randomstring + "']) {window.display_post_time['" + randomstring + "'][0](window.display_post_time['" + randomstring + "'][1])}else{}", sec)
+                                window.display_post_time[this.id] = [func, tmp];
+                                this._handler = setInterval("if (window.display_post_time['" + this.id + "']) {window.display_post_time['" + this.id + "'][0](window.display_post_time['" + this.id + "'][1])}else{}", sec)
                                 }
+                            }
+                        function switch_posts_to_page(n){
+                            var read_from_list = false;
+                            if (n == 0){
+                                window.to_date = null;
+                                }
+                            if ((n > window.post_show.now_displaying) && (n!=0)){
+                                window.to_date = window.from_date;
+                                //window.from_date = null;
+                                if (n!=1){
+                                    tmp_read_from_list = ''
+                                    for (var i in window.post_show.posts_list){
+                                        tmp_read_from_list = tmp_read_from_list==''? ('"' + i + '"') : ('"' + i + '",' + tmp_read_from_list);
+                                        }
+                                    if (window.posts_list){
+                                        window.posts_list.push(tmp_read_from_list)
+                                        }
+                                    else{
+                                        window.posts_list = [tmp_read_from_list]
+                                        }
+                                    }
+                                }
+                            if ((n < window.post_show.now_displaying) && (n!=0)){
+                                //window.from_date = window.to_date;
+                                //window.to_date = null;
+                                read_from_list = window.posts_list.pop()
+                                }
+                            window.post_show.now_displaying = n;
+                            window.post_show.timer(20000, function(){
+                                load_posts({posts_list: read_from_list, to: (window.post_show.now_displaying == 0? null : window.to_date), gid : document.location.pathname.split('/').length > 1? document.location.pathname.split('/')[1]
+                                    : '', onload : function(posts, users, from_date, to_date){
+                                        window.last_fine_post_page = window.post_show.now_displaying;
+                                        window.post_show.update(posts, users); window.from_date = from_date; window.to_date = to_date}});
+                                });
+                            load_posts({posts_list: read_from_list, to: window.to_date, gid : document.location.pathname.split('/').length > 1? document.location.pathname.split('/')[1] : '', onload : function(posts, users, from_date, to_date){
+                                    window.last_fine_post_page = window.post_show.now_displaying;
+                                    window.post_show.destroy(); window.to_date = to_date; window.from_date = from_date; window.post_show.update(posts, users);}});
+                            
                             }
                         function init(){
                             post_show = new display_posts({container: document.getElementById('posts'), onclick : function(post_id){
-                                    set_style(document.getElementById('posts'), {display: 'none'});
+                                    set_style(document.getElementById('posts_container'), {display: 'none'});
                                     set_style(document.getElementById('post_comment_container'), {display: 'block'});
                                     window.forum = new display_posts({container: document.getElementById('post_comment')});
                                     load_posts({post_id : post_id, gid : document.location.pathname.split('/').length > 1? document.location.pathname.split('/')[1] : '', onload : function(posts, users){window.forum.update(posts, users);}});
@@ -768,10 +832,7 @@ Version: 0.1; Sept 19th 2011
                                         })
                                     }
                                 });
-                            post_show.timer(20000, function(){
-                                load_posts({gid : document.location.pathname.split('/').length > 1? document.location.pathname.split('/')[1] : '', onload : function(posts, users){post_show.update(posts, users);}});
-                                });
-                            load_posts({gid : document.location.pathname.split('/').length > 1? document.location.pathname.split('/')[1] : '', onload : function(posts, users){post_show.update(posts, users);}});
+                            switch_posts_to_page(0);
                             }
                         
                         window.fbAsyncInit = function() {
@@ -801,103 +862,107 @@ Version: 0.1; Sept 19th 2011
                             e.async = true;
                             document.getElementById('fb-root').appendChild(e);
                             }());
-
+                        
                         //Popup dialog
                         function popup(message) {
-                            // get the screen height and width  
-                            var maskHeight = $(document).height();  
+                            // get the screen height and width
+                            var maskHeight = $(document).height();
                             var maskWidth = $(window).width();
                             var windowHeight = $(window).height();
                             
                             // calculate the values for center alignment
-                            var dialogTop =  (windowHeight/2) - ($('#dialog-box').height()/2);  
-                            var dialogLeft = (maskWidth/2) - ($('#dialog-box').width()/2); 
-
+                            var dialogTop =  (windowHeight/2) - ($('#dialog-box').height()/2);
+                            var dialogLeft = (maskWidth/2) - ($('#dialog-box').width()/2);
+                            
                             // assign values to the overlay and dialog box
                             $('#dialog-overlay').css({height:maskHeight, width:maskWidth}).show();
                             $('#dialog-box').css({top:dialogTop, left:dialogLeft}).show();
-
+                            
                             // display the message
                             $('#dialog-message').html(message);
                             };
-
+                        
                         //jQuery: DB connection and the Menu
                         
                         window.obj_load = function(source_id){
-
+                            
                             $(document).ready(function(){
-
-                                    $("#add_newlabel_menu").click(function() {
-
-                                            $.getJSON("get_labels?gid="+source_id, function(data) {
-                                            //alert("Labels: " + labels.type +"|" + labels.code + "|" + labels.reason);
-                                            if (data.type == "ok") {list = data.data;}
-                                            window.labels = {}
-                                            for (var i in list){
-                                                if (list[i].id in labels){
-                                                    labels[list[i].id].add_child(list[i].name, list[i].id, function(){alert('click')});
+                                
+                                $("#add_newlabel_menu").click(function() {
+                                    
+                                    $.getJSON("get_labels?gid="+source_id, function(data) {
+                                        //alert("Labels: " + labels.type +"|" + labels.code + "|" + labels.reason);
+                                        if (data.type == "ok") {list = data.data;}
+                                        window.labels = {}
+                                        for (var i in list){
+                                            if (list[i].id in labels){
+                                                labels[list[i].id].add_child(list[i].name, list[i].id, function(){alert('click')});
                                                 }
-                                                else{
-                                                    var l = create_label(list[i].name, list[i].id, function(){alert('click')})
-                                                    labels[list[i].id] = l;
-                                                    getelementById('lable_container').appendChild(l);
-                                                    }
+                                            else{
+                                                var l = create_label(list[i].name, list[i].id, function(){alert('click')})
+                                                labels[list[i].id] = l;
+                                                getelementById('lable_container').appendChild(l);
                                                 }
-                                            });
-
-                                                                                        
-                                            var s = '<div><h2> New Label </h2><p>Please enter a new label name: </p><input type="text" name="name_label" size="19" maxlength="40" value="" id="name_label" title="Name of the label" /><p>Please enter a nickname for the label: </p><input type="text" name="nick_label" size="19" maxlength="18" value="" id="nick_label" title="Nickname of the label" /><p>Please enter a description for this label: </p><textarea id="description_label" rows="4" cols="33"></textarea><p>Nest label under: <select name="list_labels" id="list_labels"><option value="Label 1">Label 1</option><option value="Label 2">Label 2</option><option value="Lable 3">Lable 3</option></select></p></div>';
-                                            
-                                            //popup(s); 
+                                            }
                                         });
-
-                                    $("a").click(function() {
-                                            $("a").removeClass("clickeditem");
-                                            $(this).addClass("clickeditem");
+                                    
+                                    
+                                    var s = '<div><h2> New Label </h2><p>Please enter a new label name: </p><input type="text" name="name_label" size="19" maxlength="40" value="" id="name_label" title="Name of the label" /><p>Please enter a nickname for the label: </p><input type="text" name="nick_label" size="19" maxlength="18" value="" id="nick_label" title="Nickname of the label" /><p>Please enter a description for this label: </p><textarea id="description_label" rows="4" cols="33"></textarea><p>Nest label under: <select name="list_labels" id="list_labels"><option value="Label 1">Label 1</option><option value="Label 2">Label 2</option><option value="Lable 3">Lable 3</option></select></p></div>';
+                                    
+                                    //popup(s);
+                                    });
+                                
+                                $("a").click(function() {
+                                    $("a").removeClass("clickeditem");
+                                    $(this).addClass("clickeditem");
+                                    });
+                                
+                                // if user clicked on button, the overlay layer or the dialogbox, close the dialog
+                                
+                                <!-- $('a.btn-ok, #dialog-overlay, #dialog-box').click(function () { -->
+                                    $('#Btn_labeldialog_close').click(function () {
+                                        $('#dialog-overlay, #dialog-box').hide();
+                                        return false;
                                         });
-
-                                    // if user clicked on button, the overlay layer or the dialogbox, close the dialog  
-
-                                    <!-- $('a.btn-ok, #dialog-overlay, #dialog-box').click(function () { -->
-                                    $('#Btn_labeldialog_close').click(function () {     
-                                            $('#dialog-overlay, #dialog-box').hide();       
-                                            return false;
-                                        });
-
-                                    $('#Btn_labeldialog_addlabel').click(function () {     
-                                            
+                                    
+                                    $('#Btn_labeldialog_addlabel').click(function () {
+                                        
                                         $.post("create_label",{gid: source_id, name: $("#name_label").val(), nick: $("#name_label").val(), desc: $("#description_label").val(), parent:"0"},
-                                            function(result) {
-                                                if (result["type"]=="ok"){
-                                                    $("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
+                                        function(result) {
+                                            if (result["type"]=="ok"){
+                                                $("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
                                                 } else {
-                                                    alert("An error occured, no lable culd be made, please try again!")
-                                                }  
+                                                alert("An error occured, no lable culd be made, please try again!")
+                                                }
                                             });
-                                            $('#dialog-overlay, #dialog-box').hide();
-                                            return false;
+                                        $('#dialog-overlay, #dialog-box').hide();
+                                        return false;
                                         });
-
+                                    
                                     // if user resize the window, call the same function again
-                                    // to make sure the overlay fills the screen and dialogbox aligned to center    
+                                    // to make sure the overlay fills the screen and dialogbox aligned to center
                                     $(window).resize(function () {
-
-                                            //only do it if the dialog box is not hidden
-                                            if (!$('#dialog-box').is(':hidden')) popup();       
-                                        }); 
-                                //}
+                                        
+                                        //only do it if the dialog box is not hidden
+                                        if (!$('#dialog-box').is(':hidden')) popup();
+                                        });
+                                    //}
                                 });
-                        } 
+                            }
                         //$("post").load(function(){
-                        //	$("ul:last").append('<li><a href="#">' + window.source_id + '</a></li>');
-                        //});
-
+                            //	$("ul:last").append('<li><a href="#">' + window.source_id + '</a></li>');
+                            //});
+                        
                     </script>
                     <a id="fb_connect_button" class="fb_button fb_button_medium" style="display:none"><span class="fb_button_text">Connect with Facebook</span></a>
                     <div id="forum_container">
-                        <div id="posts"></div>
+                        <div id="posts_container">
+                            <a onclick="switch_posts_to_page(window.post_show.now_displaying + 1)" href="javascript:void(0)" style="float: left; padding-right: 5px;" class="button gray"><table style="border:none 0px;"><tbody><tr><td style="border:none 0px;background-color:transparent;color: rgb(0, 0, 0);">&#x25C0;</td></tr></tbody></table></a>
+                            <a onclick="if (window.post_show.now_displaying > 1) {switch_posts_to_page(window.post_show.now_displaying-1)}else{switch_posts_to_page(0)}" href="javascript:void(0)" style="float: left; padding-right: 5px;" class="button gray"><table style="border:none 0px;"><tbody><tr><td style="border:none 0px;background-color:transparent;color: rgb(0, 0, 0);">&#x25BA;</td></tr></tbody></table></a>
+                            <div id="posts"></div>
+                        </div>
                         <div id="post_comment_container" style="display:none">
-                            <a onclick="window.forum.destroy(); set_style(this.parentNode, {display:'none'}); set_style(document.getElementById('posts'),{display: 'block'})" href="javascript:void(0)" style="float: right; padding-right: 5px;" class="button gray"><table style="border:none 0px;"><tbody><tr><td style="border:none 0px;background-color:transparent;color: rgb(0, 0, 0);">Back to posts</td></tr></tbody></table></a>
+                            <a onclick="window.forum.destroy(); set_style(this.parentNode, {display:'none'}); set_style(document.getElementById('posts_container'),{display: 'block'})" href="javascript:void(0)" style="float: right; padding-right: 5px;" class="button gray"><table style="border:none 0px;"><tbody><tr><td style="border:none 0px;background-color:transparent;color: rgb(0, 0, 0);">Back to posts</td></tr></tbody></table></a>
                             <div id="post_comment">		
                             </div>
                         </div>
@@ -907,21 +972,22 @@ Version: 0.1; Sept 19th 2011
                 </div>
             </div>
             <!-- end .container_12 -->
-                        
+            
             <div id="dialog-overlay">
             </div>
             <div id="dialog-box">
                 <div class="dialog-content">
                     <div id="dialog-message"></div>
                     <table width="100%" border="0">
-                      <tr>
-                        <td><a href="#" id="Btn_labeldialog_addlabel" class="buttond">+ Add</a></td>
-                        <td><a href="#" id="Btn_labeldialog_close" class="buttond">X Close</a></td>
-                      </tr>
+                        <tr>
+                            <td><a href="#" id="Btn_labeldialog_addlabel" class="buttond">+ Add</a></td>
+                            <td><a href="#" id="Btn_labeldialog_close" class="buttond">X Close</a></td>
+                        </tr>
                     </table>
                 </div>
             </div>
-
-
+            
+            
         </body>
     </html>
+    
