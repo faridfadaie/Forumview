@@ -904,10 +904,10 @@ Version: 0.1; Sept 19th 2011
                                 window.admin = true;
                                 window.global = true;
                                 window.owner = false;
-                                //window.labeldata = new Array();
+                                window.labeldata = new Array();
                                 
                                 $.getJSON("get_labels?gid="+source_id, function(data) {
-                                    //window.labeldata=data;
+                                    window.labeldata=data;
                                     
                                     
                                     if (data.type == 'ok'){
@@ -1028,16 +1028,21 @@ Version: 0.1; Sept 19th 2011
                                         });
                                     
                                     $('#Btn_labeldialog_addlabel').click(function () {
-                                        
-                                        $.post("create_label",{gid: source_id, name: $("#name_label").val(), nick: $("#name_label").val(), desc: $("#description_label").val(), parent: $("#list_labels").val()},
-                                        function(result) {
-                                            if (result["type"]=="ok"){
-                                                document.getElementById('lable_container').appendChild(create_label($("#name_label").val(), result["data"], function(){alert('click')}));
-                                                
-                                                //$("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
-                                                } else {
-                                                alert("An error occured, no lable culd be made, please try again!")
-                                                }
+                                        var parent_id = '0';
+                                        for (var i in window.labeldata){
+                                            if (window.labeldata[i].name == $("#list_labels").val()){
+                                                parent_id = window.labeldata[i].id;
+                                            }
+                                        }            
+                                        $.post("create_label",{gid: source_id, name: $("#name_label").val(), nick: $("#name_label").val(), desc: $("#description_label").val(), parent: parent_id},
+                                            function(result) {
+                                                if (result["type"]=="ok"){
+                                                            document.getElementById('lable_container').appendChild(create_label($("#name_label").val(), result["data"], function(){alert('click')}));
+
+                                                    //$("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
+                                                    } else {
+                                                    alert("An error occured, no lable culd be made, please try again!")
+                                                    }
                                             });
                                         $('#dialog-overlay, #dialog-box').hide();
                                         return false;
