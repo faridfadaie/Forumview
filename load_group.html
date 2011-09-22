@@ -887,7 +887,7 @@ this.posts_list={}
                                     
 
                                     if (data.type == 'ok'){
-                                        alert("Database connection is " + data.type);
+                                        //alert("Database connection is " + data.type);
                                         if (window.global) {
                                             // create the personal view on the top
                                             var menu_div = document.createElement('div');
@@ -907,7 +907,7 @@ this.posts_list={}
                                             list = data.data;
                                             window.labels = {}
                                             for (var i in list){
-                                                if (list[i].id in labels){
+                                                if (list[i].parent in labels){
                                                     labels[list[i].id].add_child(list[i].name, list[i].id, function(){alert('click')});
                                                 }
                                                 else{
@@ -941,7 +941,7 @@ this.posts_list={}
                                                 list = data.data;
                                                 window.labels = {}
                                                 for (var i in list){
-                                                    if (list[i].id in labels){
+                                                    if (list[i].parent in labels){
                                                         labels[list[i].id].add_child(list[i].name, list[i].id, function(){alert('click')});
                                                     }
                                                     else{
