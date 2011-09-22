@@ -880,6 +880,7 @@ this.posts_list={}
                                     window.admin = true;
                                     window.global = false;
                                     window.owner = false;
+                                    window.labeldata = new Array();
 
                                     $.getJSON("get_labels?gid="+source_id, function(data) {
                                         alert("Database connection is " + data.type);
