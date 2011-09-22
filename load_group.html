@@ -1008,7 +1008,9 @@ this.posts_list={}
                                         $.post("create_label",{gid: source_id, name: $("#name_label").val(), nick: $("#name_label").val(), desc: $("#description_label").val(), parent: $("#list_labels").val()},
                                         function(result) {
                                             if (result["type"]=="ok"){
-                                                $("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
+                                                        document.getElementById('lable_container').appendChild(create_label($("#name_label").val(), result["data"], function(){alert('click')}));
+
+                                                //$("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
                                                 } else {
                                                 alert("An error occured, no lable culd be made, please try again!")
                                                 }
