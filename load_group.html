@@ -882,7 +882,7 @@ this.posts_list={}
                                     var window.owner = false;
 
                                     $.getJSON("get_labels?gid="+source_id, function(data) {
-                                        alert("Database connection is " + labels.type);
+                                        alert("Database connection is " + data.type);
                                         var window.labeldata=data;
                                     });
 
