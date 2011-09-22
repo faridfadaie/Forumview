@@ -894,14 +894,14 @@ this.posts_list={}
                                             menu_div.uid = 'info_personal';
                                             menu_div.innerHTML = 'Personal View';
                                             add_class(menu_div, 'categories');
-                                            getelementById('lable_container').appendChild(menu_div);
+                                            getElementById('lable_container').appendChild(menu_div);
                                         
                                             // create the lable tag on the top
                                             var menu_div = document.createElement('div');
                                             menu_div.uid = 'label_category';
                                             menu_div.innerHTML = 'Labels';
                                             add_class(menu_div, 'categories');
-                                            getelementById('lable_container').appendChild(menu_div);
+                                            getElementById('lable_container').appendChild(menu_div);
 
                                             // making the menu
                                             list = data.data;
@@ -913,14 +913,14 @@ this.posts_list={}
                                                 else{
                                                     var l = create_label(list[i].name, list[i].id, function(){alert('click')})
                                                     labels[list[i].id] = l;
-                                                    getelementById('lable_container').appendChild(l);
+                                                    getElementById('lable_container').appendChild(l);
                                                     }
                                                 }
                                              if(window.admin){                                             
                                              
                                                 // create the creat label button 
                                                 var menu_div = create_label('Add label','creat_label', function(){alert('click')});
-                                                getelementById('lable_container').appendChild(menu_div);
+                                                getElementById('lable_container').appendChild(menu_div);
                                              }
                                         } else {
                                                 // create the global view on the top
@@ -928,14 +928,14 @@ this.posts_list={}
                                                 menu_div.uid = 'info_global';
                                                 menu_div.innerHTML = 'Global View';
                                                 add_class(menu_div, 'categories');
-                                                getelementById('lable_container').appendChild(menu_div);
+                                                getElementById('lable_container').appendChild(menu_div);
 
                                                 // create the lable tag on the top
                                                 var menu_div = document.createElement('div');
                                                 menu_div.uid = 'label_category';
                                                 menu_div.innerHTML = 'Labels';
                                                 add_class(menu_div, 'categories');
-                                                getelementById('lable_container').appendChild(menu_div);
+                                                getElementById('lable_container').appendChild(menu_div);
 
                                                 // making the menu
                                                 list = data.data;
@@ -947,7 +947,7 @@ this.posts_list={}
                                                     else{
                                                         var l = create_label(list[i].name, list[i].id, function(){alert('click')})
                                                         labels[list[i].id] = l;
-                                                        getelementById('lable_container').appendChild(l);
+                                                        getElementById('lable_container').appendChild(l);
                                                         }
                                                     }
                                                 
@@ -957,7 +957,7 @@ this.posts_list={}
                                                         var s = '<div><h2> New Label </h2><p>Please enter a new label name: </p><input type="text" name="name_label" size="19" maxlength="40" value="" id="name_label" title="Name of the label" /><p>Please enter a nickname for the label: </p><input type="text" name="nick_label" size="19" maxlength="18" value="" id="nick_label" title="Nickname of the label" /><p>Please enter a description for this label: </p><textarea id="description_label" rows="4" cols="33"></textarea><p>Nest label under: <select name="list_labels" id="list_labels"><option value="Label 1">Label 1</option><option value="Label 2">Label 2</option><option value="Lable 3">Lable 3</option></select></p></div>';
                                                         popup(s); 
                                                     });
-                                                    getelementById('lable_container').appendChild(menu_div);
+                                                    getElementById('lable_container').appendChild(menu_div);
                                                 }
                                             
                                         }
