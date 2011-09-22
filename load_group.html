@@ -242,8 +242,8 @@ Version: 0.1; Sept 19th 2011
             <div class="container_12">
                 <div id="container_header" class="grid_12">
                     <h3 style="color:#3B5998">
-                        <p>Sociolable</p>
-                        <p style="color:#000000">Facebook groups as you wish!</p>
+                        <span>Sociolable</span><br>
+                        <span style="color:#000000">Facebook groups as you wish!</span>
                     </h3>
                 </div>
                 <!-- end .grid_12 -->
@@ -252,18 +252,6 @@ Version: 0.1; Sept 19th 2011
                     
                     <div class="box menu">
                         <div id="lable_container" class="labelcontainers">
-                            <div class="categories">
-                                Labels
-                            </div>
-                            <div class="selectedlabel">
-                                <a id="1">Parent Label</a>
-                            </div>
-                            <div class="labels">
-                                <a id="2" style="padding-left: 20px">Child Lable</a>
-                            </div>
-                            <div class="labels">
-                                <a id="add_newlabel_menu">Add New Label...</a>
-                            </div>
                         </div>
                     </div>
                     
@@ -888,29 +876,100 @@ this.posts_list={}
                             
                             $(document).ready(function(){
                                 
-                                $("#add_newlabel_menu").click(function() {
-                                    
+                                
+                                    window.admin = true;
+                                    window.global = false;
+                                    window.owner = false;
+
                                     $.getJSON("get_labels?gid="+source_id, function(data) {
-                                        //alert("Labels: " + labels.type +"|" + labels.code + "|" + labels.reason);
-                                        if (data.type == "ok") {list = data.data;}
-                                        window.labels = {}
-                                        for (var i in list){
-                                            if (list[i].id in labels){
-                                                labels[list[i].id].add_child(list[i].name, list[i].id, function(){alert('click')});
-                                                }
-                                            else{
-                                                var l = create_label(list[i].name, list[i].id, function(){alert('click')})
-                                                labels[list[i].id] = l;
-                                                getelementById('lable_container').appendChild(l);
-                                                }
-                                            }
-                                        });
-                                    
-                                    
-                                    var s = '<div><h2> New Label </h2><p>Please enter a new label name: </p><input type="text" name="name_label" size="19" maxlength="40" value="" id="name_label" title="Name of the label" /><p>Please enter a nickname for the label: </p><input type="text" name="nick_label" size="19" maxlength="18" value="" id="nick_label" title="Nickname of the label" /><p>Please enter a description for this label: </p><textarea id="description_label" rows="4" cols="33"></textarea><p>Nest label under: <select name="list_labels" id="list_labels"><option value="Label 1">Label 1</option><option value="Label 2">Label 2</option><option value="Lable 3">Lable 3</option></select></p></div>';
-                                    
-                                    //popup(s);
+                                        alert("Database connection is " + labels.type);
+                                        window.labeldata=data;
                                     });
+
+                                    if (window.labeldata.type == 'ok'){
+                                        
+                                        if (window.global) {
+                                            // create the personal view on the top
+                                            var menu_div = document.createElement('div');
+                                            menu_div.uid = 'info_personal';
+                                            menu_div.innerHTML = 'Personal View';
+                                            add_class(menu_div, 'categories');
+                                            getelementById('lable_container').appendChild(menu_div);
+                                        
+                                            // create the lable tag on the top
+                                            var menu_div = document.createElement('div');
+                                            menu_div.uid = 'label_category';
+                                            menu_div.innerHTML = 'Labels';
+                                            add_class(menu_div, 'categories');
+                                            getelementById('lable_container').appendChild(menu_div);
+
+                                            // making the menu
+                                            list = window.labeldata.data;
+                                            window.labels = {}
+                                            for (var i in list){
+                                                if (list[i].id in labels){
+                                                    labels[list[i].id].add_child(list[i].name, list[i].id, function(){alert('click')});
+                                                }
+                                                else{
+                                                    var l = create_label(list[i].name, list[i].id, function(){alert('click')})
+                                                    labels[list[i].id] = l;
+                                                    getelementById('lable_container').appendChild(l);
+                                                    }
+                                                }
+                                             if(window.admin){                                             
+                                             
+                                                // create the creat label button 
+                                                var menu_div = create_label('Add label','creat_label', function(){alert('click')});
+                                                getelementById('lable_container').appendChild(menu_div);
+                                             }
+                                        } else {
+                                                // create the global view on the top
+                                                var menu_div = document.createElement('div');
+                                                menu_div.uid = 'info_global';
+                                                menu_div.innerHTML = 'Global View';
+                                                add_class(menu_div, 'categories');
+                                                getelementById('lable_container').appendChild(menu_div);
+
+                                                // create the lable tag on the top
+                                                var menu_div = document.createElement('div');
+                                                menu_div.uid = 'label_category';
+                                                menu_div.innerHTML = 'Labels';
+                                                add_class(menu_div, 'categories');
+                                                getelementById('lable_container').appendChild(menu_div);
+
+                                                // making the menu
+                                                list = window.labeldata.data;
+                                                window.labels = {}
+                                                for (var i in list){
+                                                    if (list[i].id in labels){
+                                                        labels[list[i].id].add_child(list[i].name, list[i].id, function(){alert('click')});
+                                                    }
+                                                    else{
+                                                        var l = create_label(list[i].name, list[i].id, function(){alert('click')})
+                                                        labels[list[i].id] = l;
+                                                        getelementById('lable_container').appendChild(l);
+                                                        }
+                                                    }
+                                                
+                                                if(window.owner){
+                                                    // create the creat label button 
+                                                    var menu_div = create_label('Add label','creat_label', function(){
+                                                        var s = '<div><h2> New Label </h2><p>Please enter a new label name: </p><input type="text" name="name_label" size="19" maxlength="40" value="" id="name_label" title="Name of the label" /><p>Please enter a nickname for the label: </p><input type="text" name="nick_label" size="19" maxlength="18" value="" id="nick_label" title="Nickname of the label" /><p>Please enter a description for this label: </p><textarea id="description_label" rows="4" cols="33"></textarea><p>Nest label under: <select name="list_labels" id="list_labels"><option value="Label 1">Label 1</option><option value="Label 2">Label 2</option><option value="Lable 3">Lable 3</option></select></p></div>';
+                                                        popup(s); 
+                                                    });
+                                                    getelementById('lable_container').appendChild(menu_div);
+                                                }
+                                            
+                                        }
+                                    }
+
+                                    //$("#creat_label").click(function() {
+                                                                                        
+                                    //        var s = '<div><h2> New Label </h2><p>Please enter a new label name: </p><input type="text" name="name_label" size="19" maxlength="40" value="" id="name_label" title="Name of the label" /><p>Please enter a nickname for the label: </p><input type="text" name="nick_label" size="19" maxlength="18" value="" id="nick_label" title="Nickname of the label" /><p>Please enter a description for this label: </p><textarea id="description_label" rows="4" cols="33"></textarea><p>Nest label under: <select name="list_labels" id="list_labels"><option value="Label 1">Label 1</option><option value="Label 2">Label 2</option><option value="Lable 3">Lable 3</option></select></p></div>';
+                                            
+                                    //        popup(s); 
+                                    //    });
+
                                 
                                 $("a").click(function() {
                                     $("a").removeClass("clickeditem");
