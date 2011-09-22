@@ -731,12 +731,12 @@ Version: 0.1; Sept 19th 2011
                             this.clear_container = function(){
                                 if (this.posts_container){while (this.posts_container.firstChild){this.posts_container.removeChild(this.posts_container.firstChild)}}
                                 }
-                            this.destroy = function(){                                //this.stop_timer();
+                            this.destroy = function(){
                                 if (this.posts_container){
                                     this.clear_container();
                                     this.posts_container.updated_time = 0;
-                                    }                                this.posts_list={}
-                                
+                                    }                                
+this.posts_list={}
                                 }
                             this.posts_container = args.container;
                             this.update = function(posts, users){
@@ -962,7 +962,7 @@ Version: 0.1; Sept 19th 2011
                             <div id="posts"></div>
                         </div>
                         <div id="post_comment_container" style="display:none">
-                            <a onclick="window.forum.destroy(); set_style(this.parentNode, {display:'none'}); set_style(document.getElementById('posts_container'),{display: 'block'})" href="javascript:void(0)" style="float: right; padding-right: 5px;" class="button gray"><table style="border:none 0px;"><tbody><tr><td style="border:none 0px;background-color:transparent;color: rgb(0, 0, 0);">Back to posts</td></tr></tbody></table></a>
+                            <a onclick="window.forum.destroy(); window.forum.stop_timer(); set_style(this.parentNode, {display:'none'}); set_style(document.getElementById('posts_container'),{display: 'block'})" href="javascript:void(0)" style="float: right; padding-right: 5px;" class="button gray"><table style="border:none 0px;"><tbody><tr><td style="border:none 0px;background-color:transparent;color: rgb(0, 0, 0);">Back to posts</td></tr></tbody></table></a>
                             <div id="post_comment">		
                             </div>
                         </div>
