@@ -1031,15 +1031,17 @@ Version: 0.1; Sept 19th 2011
                                     
                                     $('#Btn_labeldialog_addlabel').click(function () {
                                         var parent_id = '0';
+                                        var parent = new Object();
                                         for (var i in window.labeldata){
                                             if (window.labeldata[i].name == $("#list_labels").val()){
                                                 parent_id = window.labeldata[i].id;
+                                                parent = window.labeldata[i];
                                             }
                                         }            
                                         $.post("create_label",{gid: source_id, name: $("#name_label").val(), nick: $("#name_label").val(), desc: $("#description_label").val(), parent: parent_id},
                                             function(result) {
                                                 if (result["type"]=="ok"){
-                                                            window.labeldata[parent_id].appendChild(create_label($("#name_label").val(), result["data"], function(){alert('click')}));
+                                                            parent.appendChild(create_label($("#name_label").val(), result["data"], function(){alert('click')}));
 
                                                     //$("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
                                                     } else {
