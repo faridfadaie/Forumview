@@ -592,6 +592,7 @@ Version: 0.1; Sept 19th 2011
                         function create_label(txt, uid, onclick){
                             var div = document.createElement('div');
                             div.uid = uid;
+                            div.txt = txt;
                             div.innerHTML = txt;
                             add_class(div, 'labels');
                             div.add_child = function(t_txt, t_uid, t_onclick){
@@ -906,10 +907,10 @@ Version: 0.1; Sept 19th 2011
                                 window.admin = true;
                                 window.global = true;
                                 window.owner = false;
-                                window.labeldata = new Array();
+                                //window.labeldata = new Array();
                                 
                                 $.getJSON("get_labels?gid="+source_id, function(data) {
-                                    window.labeldata=data;
+                                    //window.labeldata=data.data;
                                     
                                     
                                     if (data.type == 'ok'){
@@ -933,12 +934,12 @@ Version: 0.1; Sept 19th 2011
                                             list = data.data;
                                             window.labels = {}
                                             for (var i in list){
-                                                if (list[i].parent in labels){
-                                                    labels[list[i].id].add_child(list[i].name, list[i].id, function(){alert('click')});
+                                                if (list[i].parent in window.labels){
+                                                    window.labels[list[i].parent].add_child(list[i].name, list[i].id, function(){alert('click')});
                                                     }
                                                 else{
                                                     var l = create_label(list[i].name, list[i].id, function(){alert('click')})
-                                                    labels[list[i].id] = l;
+                                                    window.labels[i] = l;
                                                     document.getElementById('lable_container').appendChild(l);
                                                     }
                                                 }
@@ -947,7 +948,6 @@ Version: 0.1; Sept 19th 2011
                                                 // create the creat label button
                                                 var menu_div = create_label('Add label','creat_label', function(){
                                                     var s = '<div><h2> New Label </h2><p>Please enter a new label name: </p><input type="text" name="name_label" size="19" maxlength="40" value="" id="name_label" title="Name of the label" /><p>Please enter a nickname for the label: </p><input type="text" name="nick_label" size="19" maxlength="18" value="" id="nick_label" title="Nickname of the label" /><p>Please enter a description for this label: </p><textarea id="description_label" rows="4" cols="33"></textarea><p>Nest label under: <select name="list_labels" id="list_labels"><option value="0">Root</option>';
-                                                    window.labels = {}
                                                     for (var i in list){
                                                         if (list[i].parent == '0'){
                                                             s += '<option value="'+list[i].name+'">'+list[i].name+'</option>';
@@ -977,12 +977,12 @@ Version: 0.1; Sept 19th 2011
                                             list = data.data;
                                             window.labels = {}
                                             for (var i in list){
-                                                if (list[i].parent in labels){
-                                                    labels[list[i].id].add_child(list[i].name, list[i].id, function(){alert('click')});
+                                                if (list[i].parent in window.labels){
+                                                    window.labels[list[i].parent].add_child(list[i].name, list[i].id, function(){alert('click')});
                                                     }
                                                 else{
                                                     var l = create_label(list[i].name, list[i].id, function(){alert('click')})
-                                                    labels[list[i].id] = l;
+                                                    window.labels[i] = l;
                                                     document.getElementById('lable_container').appendChild(l);
                                                     }
                                                 }
@@ -1032,19 +1032,20 @@ Version: 0.1; Sept 19th 2011
                                     $('#Btn_labeldialog_addlabel').click(function () {
                                         var parent_id = '0';
                                         var parent = new Object();
-                                        for (var i in window.labeldata){
-                                            if (window.labeldata[i].name == $("#list_labels").val()){
-                                                parent_id = window.labeldata[i].id;
-                                                parent = window.labeldata[i];
+                                        for (var i in window.labels){
+                                            if (window.labels[i].txt == $("#list_labels").val()){
+                                                parent_id = i;
+                                                parent = window.labels[i];
                                             }
-                                        }            
+                                        }           
                                         $.post("create_label",{gid: source_id, name: $("#name_label").val(), nick: $("#name_label").val(), desc: $("#description_label").val(), parent: parent_id},
                                             function(result) {
                                                 if (result["type"]=="ok"){
                                                     if (parent_id == '0'){
-                                                        document.getElementById('lable_container').appendChild(create_label($("#name_label").val(), result["data"], function(){alert('click')}));
+                                                        window.labels[result["data"]] = create_label($("#name_label").val(), result["data"], function(){alert('click')});
+                                                        document.getElementById('lable_container').appendChild(window.labels[result["data"]]);
                                                     } else {
-                                                            parent.add_child(($("#name_label").val(), result["data"], function(){alert('click')}));
+                                                            window.labels[parent_id].add_child($("#name_label").val(), result["data"], function(){alert('click')});
                                                     }
                                                     //$("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
                                                     } else {
