@@ -933,7 +933,6 @@ Version: 0.1; Sept 19th 2011
                                                     var l = create_label(list[i].name, list[i].id, function(){alert('click')})
                                                     window.labels[i] = l;
                                                     label_list.appendChild(l)
-                                                    //document.getElementById('lable_container').appendChild(l);
                                                     }
                                                 }
 document.getElementById('lable_container').appendChild(label_list);
@@ -998,10 +997,14 @@ document.getElementById('lable_container').appendChild(label_list);
                                         }           
                                         $.post("create_label",{gid: source_id, name: $("#name_label").val(), nick: $("#name_label").val(), desc: $("#description_label").val(), parent: parent_id},
                                             function(result) {
+                                            var label_list = document.createElement('ul');
+                                                                                        add_class(label_list, 'label_item');
+
                                                 if (result["type"]=="ok"){
                                                     if (parent_id == '0'){
                                                         window.labels[result["data"]] = create_label($("#name_label").val(), result["data"], function(){alert('click')});
-                                                        document.getElementById('lable_container').appendChild(window.labels[result["data"]]);
+                                                        label_list.appendChild(window.labels[result["data"]]);
+                                                        document.getElementById('lable_container').appendChild(label_list);
                                                     } else {
                                                             window.labels[parent_id].add_child($("#name_label").val(), result["data"], function(){alert('click')});
                                                     }
