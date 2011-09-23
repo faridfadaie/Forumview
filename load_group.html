@@ -1041,8 +1041,11 @@ Version: 0.1; Sept 19th 2011
                                         $.post("create_label",{gid: source_id, name: $("#name_label").val(), nick: $("#name_label").val(), desc: $("#description_label").val(), parent: parent_id},
                                             function(result) {
                                                 if (result["type"]=="ok"){
-                                                            parent.appendChild(create_label($("#name_label").val(), result["data"], function(){alert('click')}));
-
+                                                    if (parent_id == '0'){
+                                                        document.getElementById('lable_container').appendChild(create_label($("#name_label").val(), result["data"], function(){alert('click')}));
+                                                    } else {
+                                                            parent.add_child(($("#name_label").val(), result["data"], function(){alert('click')}));
+                                                    }
                                                     //$("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
                                                     } else {
                                                     alert("An error occured, no lable culd be made, please try again!")
