@@ -68,23 +68,8 @@ Version: 0.1; Sept 19th 2011
             
             #dialog-box {
                 
-                /* css3 drop shadow */
-                -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-                -moz-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+                width:100%;
                 
-                /* css3 border radius */
-                -moz-border-radius: 5px;
-                -webkit-border-radius: 5px;
-                
-                background:#eee;
-                /* styling of the dialog box, i have a fixed dimension for this demo */
-                width:328px;
-                
-                /* make sure it has the highest z-index */
-                position:absolute;
-                z-index:5000;
-                
-                /* hide it by default */
                 display:none;
                 }
             
@@ -228,14 +213,14 @@ Version: 0.1; Sept 19th 2011
                 padding: 5px 5px 0;
                 text-transform: uppercase;
                 }
-                .label_item li{
+            .label_item li{
                 list-style-type:none;
                 }
-                .label_item{
+            .label_item{
                 padding-left: 10px;
                 }
             .labels {
-            text-decoration:none;
+                text-decoration:none;
                 font-weight:normal;
                 background-color: #FFFFFF;
                 display: block;
@@ -284,7 +269,7 @@ Version: 0.1; Sept 19th 2011
                         <div id="lable_container" class="labelcontainers">
                         </div>
                         <div id="menu_container_down" class="labelcontainers">
-                        </div>                        
+                        </div>
                     </div>
                     
                 </div>
@@ -604,7 +589,7 @@ Version: 0.1; Sept 19th 2011
                             li.innerHTML = '<a href="javascript:void(0)">' + txt + '</a>';
                             add_class(li.getElementsByTagName('a')[0], 'labels');
                             li.add_child = function(t_txt, t_uid, t_onclick){
-                            if (!li.cn){var c = document.createElement('ul'); li.appendChild(c); li.cn = c; add_class(c, 'label_item');}
+                                if (!li.cn){var c = document.createElement('ul'); li.appendChild(c); li.cn = c; add_class(c, 'label_item');}
                                 var child = create_label(t_txt, t_uid, t_onclick);
                                 li.cn.appendChild(child);
                                 }
@@ -877,8 +862,6 @@ Version: 0.1; Sept 19th 2011
                         
                         //Popup dialog
                         function popup(message) {
-                            // get the screen height and width
-                            var maskHeight = $(document).height();
                             var maskWidth = $(window).width();
                             var windowHeight = $(window).height();
                             
@@ -893,15 +876,15 @@ Version: 0.1; Sept 19th 2011
                             // display the message
                             $('#dialog-message').html(message);
                             };
-                            
+                        
                         function create_tag(id,txt){
                             var menu_div = document.createElement('div');
                             menu_div.uid = id;
                             menu_div.innerHTML = txt;
                             add_class(menu_div, 'categories');
-                            document.getElementById('lable_container').appendChild(menu_div);                                
-                        };
-
+                            document.getElementById('lable_container').appendChild(menu_div);
+                            };
+                        
                         
                         //jQuery: DB connection and the Menu
                         
@@ -917,58 +900,67 @@ Version: 0.1; Sept 19th 2011
                                         if (window.global) {
                                             create_tag('info_personal','Personal View');
                                             }
-                                            else{
+                                        else{
                                             create_tag('info_global','Global View');
                                             }
-                                            create_tag('label_category','Labels');
-                                            list = data.data;
-                                            window.labels = {}
-                                            var label_list = document.createElement('ul');
-                                            label_list.id = 'lable_container_ul'
-                                            add_class(label_list, 'label_item');
-                                            for (var i in list){
-                                                if (list[i].parent in window.labels){
-                                                    window.labels[list[i].parent].add_child(list[i].name, list[i].id, function(){alert('click')});
-                                                    }
-                                                else{
-                                                    var l = create_label(list[i].name, list[i].id, function(){alert('click')})
-                                                    window.labels[i] = l;
-                                                    label_list.appendChild(l)
-                                                    }
+                                        create_tag('label_category','Labels');
+                                        list = data.data;
+                                        window.labels = {}
+                                        var label_list = document.createElement('ul');
+                                        label_list.id = 'lable_container_ul'
+                                        add_class(label_list, 'label_item');
+                                        for (var i in list){
+                                            if (list[i].parent in window.labels){
+                                                window.labels[list[i].parent].add_child(list[i].name, list[i].id, function(){alert('click')});
                                                 }
-document.getElementById('lable_container').appendChild(label_list);
-                                            if(window.admin && window.global){
-                                                var menu_add_label = create_label('Add label','creat_label', function(){
-                                                    var s = '<div><h2> New Label </h2><p>Please enter a new label name: </p><input type="text" name="name_label" size="19" maxlength="40" value="" id="name_label" title="Name of the label" /><p>Please enter a nickname for the label: </p><input type="text" name="nick_label" size="19" maxlength="18" value="" id="nick_label" title="Nickname of the label" /><p>Please enter a description for this label: </p><textarea id="description_label" rows="4" cols="33"></textarea><p>Nest label under: <select name="list_labels" id="list_labels"><option value="0">Root</option>';
-                                                    for (var i in window.labels){
-                                                            s += '<option value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
-                                                        }
-                                                    s += '</select></p></div>';
-                                                    popup(s);
-                                                    });
-                                                    menu_add_label_container = document.createElement('ul');
-                                                    add_class(menu_add_label_container, 'label_item');
-                                                    menu_add_label_container.appendChild(menu_add_label)
-                                                document.getElementById('menu_container_down').appendChild(menu_add_label_container);
-                                                }
-                                            if(window.owner){
-                                                var menu_add_label = create_label('Add label','creat_label', function(){
-                                                    var s = '<div><h2> New Label </h2><p>Please enter a new label name: </p><input type="text" name="name_label" size="19" maxlength="40" value="" id="name_label" title="Name of the label" /><p>Please enter a nickname for the label: </p><input type="text" name="nick_label" size="19" maxlength="18" value="" id="nick_label" title="Nickname of the label" /><p>Please enter a description for this label: </p><textarea id="description_label" rows="4" cols="33"></textarea><p>Nest label under: <select name="list_labels" id="list_labels"><option value="0">Root</option>';
-                                                    window.labels = {}
-                                                    for (var i in window.labels){
-                                                        if (list[i].parent == '0'){
-                                                            s += '<option value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
-                                                            }
-                                                        }
-                                                    s += '</select></p></div>';
-                                                    popup(s);
-                                                    });
-                                                    menu_add_label_container = document.createElement('ul');
-                                                    add_class(menu_add_label_container, 'label_item');
-                                                    menu_add_label_container.appendChild(menu_add_label);
-                                                document.getElementById('menu_container_down').appendChild(menu_add_label_container);
+                                            else{
+                                                var l = create_label(list[i].name, list[i].id, function(){alert('click')})
+                                                window.labels[i] = l;
+                                                label_list.appendChild(l)
                                                 }
                                             }
+                                        document.getElementById('lable_container').appendChild(label_list);
+                                        if(window.admin && window.global){
+                                            var menu_add_label = create_label('Add label','creat_label', function(){
+                                                set_style(document.getElementById('dialog-box'), {display : 'block'});
+                                                set_style(document.getElementById('posts_container'), {display : 'none'});
+                                                set_style(document.getElementById('post_comment_container'), {display : 'none'});
+                                                var s = '<div><h2> New Label </h2><p>Please enter a new label name: </p><input type="text" name="name_label" size="19" maxlength="40" value="" id="name_label" title="Name of the label" /><p>Please enter a nickname for the label: </p><input type="text" name="nick_label" size="19" maxlength="18" value="" id="nick_label" title="Nickname of the label" /><p>Please enter a description for this label: </p><textarea id="description_label" rows="4" cols="33"></textarea><p>Nest label under: <select name="list_labels" id="list_labels"><option value="0">Root</option>';
+                                                for (var i in window.labels){
+                                                    s += '<option value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
+                                                    }
+                                                s += '</select></p></div>';
+                                                //popup(s);
+                                                document.getElementById('dialog-message').innerHTML = s;
+                                                });
+                                            menu_add_label_container = document.createElement('ul');
+                                            add_class(menu_add_label_container, 'label_item');
+                                            menu_add_label_container.appendChild(menu_add_label)
+                                            document.getElementById('menu_container_down').appendChild(menu_add_label_container);
+                                            }
+                                        if(window.owner){
+                                            var menu_add_label = create_label('Add label','creat_label', function(){
+                                                set_style(document.getElementById('dialog-box'), {display : 'block'});
+                                                set_style(document.getElementById('posts_container'), {display : 'none'});
+                                                set_style(document.getElementById('post_comment_container'), {display : 'none'});
+                                                
+                                                var s = '<div><h2> New Label </h2><p>Please enter a new label name: </p><input type="text" name="name_label" size="19" maxlength="40" value="" id="name_label" title="Name of the label" /><p>Please enter a nickname for the label: </p><input type="text" name="nick_label" size="19" maxlength="18" value="" id="nick_label" title="Nickname of the label" /><p>Please enter a description for this label: </p><textarea id="description_label" rows="4" cols="33"></textarea><p>Nest label under: <select name="list_labels" id="list_labels"><option value="0">Root</option>';
+                                                window.labels = {}
+                                                for (var i in window.labels){
+                                                    if (list[i].parent == '0'){
+                                                        s += '<option value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
+                                                        }
+                                                    }
+                                                s += '</select></p></div>';
+                                                //popup(s);
+                                                document.getElementById('dialog-message').innerHTML = s;
+                                                });
+                                            menu_add_label_container = document.createElement('ul');
+                                            add_class(menu_add_label_container, 'label_item');
+                                            menu_add_label_container.appendChild(menu_add_label);
+                                            document.getElementById('menu_container_down').appendChild(menu_add_label_container);
+                                            }
+                                        }
                                     });
                                 
                                 
@@ -982,33 +974,42 @@ document.getElementById('lable_container').appendChild(label_list);
                                 <!-- $('a.btn-ok, #dialog-overlay, #dialog-box').click(function () { -->
                                     $('#Btn_labeldialog_close').click(function () {
                                         $('#dialog-overlay, #dialog-box').hide();
+                                        if (window.forum){
+                                            window.forum.destroy(); window.forum.stop_timer();
+                                            }
+                                        set_style(document.getElementById('posts_container'),{display: 'block'})
+                                        
                                         return false;
                                         });
                                     
                                     $('#Btn_labeldialog_addlabel').click(function () {
                                         var parent_id = '0';
+                                        if (window.forum){
+                                            window.forum.destroy(); window.forum.stop_timer();
+                                            }
+                                        set_style(document.getElementById('posts_container'),{display: 'block'})
                                         var parent = new Object();
                                         for (var i in window.labels){
                                             if (window.labels[i].txt == $("#list_labels").val()){
                                                 parent_id = i;
                                                 parent = window.labels[i];
+                                                }
                                             }
-                                        }           
                                         $.post("create_label",{gid: source_id, name: $("#name_label").val(), nick: $("#name_label").val(), desc: $("#description_label").val(), parent: parent_id},
-                                            function(result) {
-
-                                                if (result["type"]=="ok"){
-                                                    if (parent_id == '0'){
-                                                        window.labels[result["data"]] = create_label($("#name_label").val(), result["data"], function(){alert('click')});
-                                                        document.getElementById('lable_container_ul').appendChild(window.labels[result["data"]]);
-
+                                        function(result) {
+                                            
+                                            if (result["type"]=="ok"){
+                                                if (parent_id == '0'){
+                                                    window.labels[result["data"]] = create_label($("#name_label").val(), result["data"], function(){alert('click')});
+                                                    document.getElementById('lable_container_ul').appendChild(window.labels[result["data"]]);
+                                                    
                                                     } else {
-                                                            window.labels[parent_id].add_child($("#name_label").val(), result["data"], function(){alert('click')});
+                                                    window.labels[parent_id].add_child($("#name_label").val(), result["data"], function(){alert('click')});
                                                     }
-                                                    //$("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
-                                                    } else {
-                                                    alert("An error occured, no lable culd be made, please try again!")
-                                                    }
+                                                //$("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
+                                                } else {
+                                                alert("An error occured, no lable culd be made, please try again!")
+                                                }
                                             });
                                         $('#dialog-overlay, #dialog-box').hide();
                                         return false;
@@ -1019,7 +1020,6 @@ document.getElementById('lable_container').appendChild(label_list);
                                     $(window).resize(function () {
                                         
                                         //only do it if the dialog box is not hidden
-                                        if (!$('#dialog-box').is(':hidden')) popup();
                                         });
                                     //}
                                 });
@@ -1031,6 +1031,18 @@ document.getElementById('lable_container').appendChild(label_list);
                     </script>
                     <a id="fb_connect_button" class="fb_button fb_button_medium" style="display:none"><span class="fb_button_text">Connect with Facebook</span></a>
                     <div id="forum_container">
+                        <div id="dialog-box">
+                            <div class="dialog-content">
+                                <div id="dialog-message"></div>
+                                <table width="100%" border="0">
+                                    <tr>
+                                        <td><a href="#" id="Btn_labeldialog_addlabel" class="buttond">+ Add</a></td>
+                                        <td><a href="#" id="Btn_labeldialog_close" class="buttond">X Close</a></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        
                         <div id="posts_container">
                             <a onclick="switch_posts_to_page(window.post_show.now_displaying + 1)" href="javascript:void(0)" style="float: left; padding-right: 5px;" class="button gray"><table style="border:none 0px;"><tbody><tr><td style="border:none 0px;background-color:transparent;color: rgb(0, 0, 0);">&#x25C0;</td></tr></tbody></table></a>
                             <a onclick="if (window.post_show.now_displaying > 1) {switch_posts_to_page(window.post_show.now_displaying-1)}else{switch_posts_to_page(0)}" href="javascript:void(0)" style="float: left; padding-right: 5px;" class="button gray"><table style="border:none 0px;"><tbody><tr><td style="border:none 0px;background-color:transparent;color: rgb(0, 0, 0);">&#x25BA;</td></tr></tbody></table></a>
@@ -1048,22 +1060,10 @@ document.getElementById('lable_container').appendChild(label_list);
             </div>
             <!-- end .container_12 -->
             
-            <div id="dialog-overlay">
-            </div>
-            <div id="dialog-box">
-                <div class="dialog-content">
-                    <div id="dialog-message"></div>
-                    <table width="100%" border="0">
-                        <tr>
-                            <td><a href="#" id="Btn_labeldialog_addlabel" class="buttond">+ Add</a></td>
-                            <td><a href="#" id="Btn_labeldialog_close" class="buttond">X Close</a></td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
             
             
         </body>
     </html>
+    
     
     
