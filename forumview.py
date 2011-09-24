@@ -7,7 +7,7 @@ import time, logging, sys, hashlib, base64
 from simpledb import SimpleDB, SimpleDBError, AttributeEncoder
 from retry import Retry
 
-allowed_functions = ['get_post_labels', 'get_post_labels', 'get_posts', '/get_posts', '/assign_label', 'assign_label', '/create_label', 'create_label', '/get_labels', 'get_labels']
+allowed_functions = ['get_exceptions', '/get_exceptions', 'get_post_labels', 'get_post_labels', 'get_posts', '/get_posts', '/assign_label', 'assign_label', '/create_label', 'create_label', '/get_labels', 'get_labels']
 page_names = ['load_group.html']
 page_contents = {}
 LISTEN_IP = '0.0.0.0'
@@ -15,13 +15,21 @@ LISTEN_PORT = 20000
 RETRY_LIMIT = 3
 PROTOCOL = 'http'
 DYN_LOADING = True
+
+SHARE_DEL = 'A:' 
+NAME_DEL = 'B:'
+NICK_DEL = 'C:'
+PARENT_DEL = 'D:'
+RULE_DEL = 'E:'
+
 config = {'FACEBOOK_SECRET': 'bba342dc751c88d7522ce822d4d30ab8', 'AWS_ACCESS_KEY': 'AKIAJ36DOHUEJB4QN5WA', 'FACEBOOK_KEY': '246575252046549', 'AWS_SECRET_ACCESS_KEY': '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'}
 #load_enc_conf('init.cfg.enc')
 FACEBOOK_KEY = config['FACEBOOK_KEY']
 FACEBOOK_SECRET = config['FACEBOOK_SECRET'] 
 AWS_ACCESS_KEY = config['AWS_ACCESS_KEY'] 
 AWS_SECRET_ACCESS_KEY = config['AWS_SECRET_ACCESS_KEY'] 
-AWS_SDB_LABELS_DOMAIN = 'test'
+AWS_SDB_LABELS_DOMAIN = 'labels'
+AWS_SDB_EXCEPTIONS_DOMAIN = 'exceptions'
 AWS_SDB_POST_DOMAIN = 'test2'
 for i in sys.argv:
     if i.find('-proto=') != -1:
@@ -55,24 +63,47 @@ def _validate_fb(env):
         cookies = [(x.split('=')[0], x.strip(x.split('=')[0]+'=')) for x in cookies.split(';')]
     cookies = dict(cookies)
     user = facebook.get_user_from_cookie(cookies, FACEBOOK_KEY, FACEBOOK_SECRET)
-    if user:
-        graph = facebook.GraphAPI(user["access_token"])
-        groups = graph.get_connections("me", "groups")
-        user['groups'] = groups['data']
     return user
 
-def _is_group_admin(gid, user):
-    for i in user['groups']:
-        if (i['id'] == gid) and (i.has_key('administrator')):
-            return True
-    return False
-
-def _can_access(gid, user):
+def _detect_obj_type(obj_id, user):
     graph = facebook.GraphAPI(user["access_token"])
-    obj = graph.get_object("%s" %gid)
-    if obj.has_key('id'):
-        return True
-    return False
+    obj = graph.get_object("%s" %obj_id)
+    if not obj.has_key('id'):
+        return None, None
+    if obj.has_key('owner'):
+        return 'group', obj['id']
+    if obj.has_key('start_time'):
+        return 'event', obj['id']
+    if obj.has_key('first_name'):
+        return 'profile', obj['id']
+    if obj.has_key('likes'):
+        return 'page', obj['id']
+    if obj.has_key('canvas_name'):
+        return 'app', obj['id']
+    return 'unsupported', obj['id']
+
+def _is_admin(obj_id, user):
+    obj_type, id = _detect_obj_type(obj_id, user)
+    if (obj_type is None) or obj_type in ['unsupported', 'canvas_name', 'event']:
+        return None
+    if obj_type == 'profile':
+        if user['uid'] == id:
+            return True
+        return False
+    if obj_type == 'group':
+        graph = facebook.GraphAPI(user["access_token"])
+        groups = graph.get_connections("me", "groups")
+        for i in groups['data']:
+            if (i['id'] == id) and (i.has_key('administrator')):
+                return True
+        return False
+    if obj_type == 'page':
+        graph = facebook.GraphAPI(user["access_token"])
+        accounts = graph.get_connections("me", "accounts")
+        for i in accounts['data']:
+            if i['id'] == id:
+                return True
+        return False
 
 def _get_post_info(post_id, user):
     graph = facebook.GraphAPI(user["access_token"])
@@ -91,89 +122,66 @@ def _get_post_info(post_id, user):
         updated_time = obj['updated_time']
     return from_id, to_id, created_time, updated_time
 
-#class SimpleDBWRTY(SimpleDB):
-    #This class adds the ability to retry put and get functions in the SimpleDB library.
-    #it exposes all functions with the same interface.
-#    def __init__(self, aws_access_key, aws_secret_access_key, db='sdb.amazonaws.com',
-#                secure=True, encoder=AttributeEncoder(), retry_limit = 0):
-#        SimpleDB.__init__(self, aws_access_key, aws_secret_access_key, db, secure, encoder)
-#        self.retry_limit = retry_limit
-#    def __getattribute__(self, name):
-#        if name in ['select', 'get_attributes', 'put_attributes']:
-#            retry = 0
-#            while True:
-#                try:
-#                    return object.__getattribute__(self, name)
-#                except:
-#                    if retry < self.retry_limit + 1:
-#                        retry = retry + 1
-#                    else:
-#                        raise
-#        return object.__getattribute__(self, name)
-
 def create_label(env, start_response, args):
     method = env['REQUEST_METHOD']
     #if method != 'POST':
     #    start_response('501 Not Implemented', [])
     #    return ['Unsupported']
     user = _validate_fb(env)
-    print args
-    if user:
-        if ('gid' in args) and ('parent' in args) and ('name' in args) and ('nick' in args) and ('desc' in args):
-            try:
-                gid = str(int(args['gid']))
-            except:
-                return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'gid is not valid.')
-            if not _can_access(gid, user):
-                return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_PERMISSION, 'access to the object is denied.')
-            layer_id = str(user['uid'])
-            if _is_group_admin(gid, user):
-                shared = 'global'
-                layer_id = '0'
-            elif ('personal' not in args) or (str(args['personal']) != '1'):
-                return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'the personal view should be selected.')
-            if ('personal' in args) and (str(args['personal']) == '1'):
-                gid = str(gid) + ':' + str(user['uid'])
-                shared = 'personal'
-                if ('shared' in args) and (str(args['shared']) == '1'):
-                    shared = 'shared'
-            sdb = Retry(SimpleDB, RETRY_LIMIT, ['select', 'put_attributes', 'get_attributes'], AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
-            #sdb = SimpleDBWRTY(AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, retry_limit = RETRY_LIMIT)
-            try:
-                if not str(args['parent']) == '0':
-                    parent = sdb.get_attributes(AWS_SDB_LABELS_DOMAIN, gid, [args['parent']])
-                    if not parent.has_key(args['parent']) or parent[args['parent']] is None:
-                        return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER,'parent label_id is not passed.')
-                label_id = hashlib.sha1(str(args['name']) + str(time.time())).hexdigest()
-                sdb.put_attributes(AWS_SDB_LABELS_DOMAIN, gid, [(label_id, 'OBJ:' + gid.split(':')[0], True), 
-                                                                (label_id, 'SHR:' + shared, True), (label_id, 'NAME:' + base64.b64encode(args['name']), True), 
-                                                                (label_id, 'NIK:' + base64.b64encode(args['nick']), True), (label_id, 'PAR:' + args['parent'], True), 
-                                                                (label_id, 'DESC:' + base64.b64encode(args['desc']), True), (label_id, 'CRT:' + layer_id, True)])
-            except:
-                raise
-                start_response('503 Service Unavailable',[])
-                return ['Temporarily not available']
-            return json_ok(env, start_response, label_id)
-        return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER)
-    return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_SESSION)
+    if user is None:
+        return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_SESSION)
+    if ('obj_id' in args) and ('parent' in args) and ('name' in args) and ('nick' in args) and ('rule' in args):
+        try:
+            obj_id = str(int(args['obj_id']))
+        except:
+            return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'obj_id is not valid.')
+        layer_id = str(user['uid'])
+        admin = _is_admin(obj_id, user)
+        if admin is None:
+            return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_PERMISSION, 'access to the object is denied or the object is not supported.')
+        if admin:
+            shared = 'global'
+            layer_id = '0'
+        elif ('personal' not in args) or (str(args['personal']) != '1'):
+            return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'the personal view should be selected.')
+        if ('personal' in args) and (str(args['personal']) == '1'):
+            obj_id = str(obj_id) + ':' + str(user['uid'])
+            shared = 'personal'
+            if ('shared' in args) and (str(args['shared']) == '1'):
+                shared = 'shared'
+        sdb = Retry(SimpleDB, RETRY_LIMIT, ['select', 'put_attributes', 'get_attributes'], AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
+        #sdb = SimpleDBWRTY(AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, retry_limit = RETRY_LIMIT)
+        try:
+            if not str(args['parent']) == '0':
+                parent = sdb.get_attributes(AWS_SDB_LABELS_DOMAIN, obj_id, [args['parent']])
+                if not parent.has_key(args['parent']) or parent[args['parent']] is None:
+                    return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER,'parent label_id is not passed.')
+            label_id = hashlib.sha1(str(args['name']) + str(time.time())).hexdigest()
+            sdb.put_attributes(AWS_SDB_LABELS_DOMAIN, obj_id, [(label_id, SHARE_DEL + shared, True), 
+                                                            (label_id, NAME_DEL + args['name'], True), 
+                                                            (label_id, NICK_DEL + args['nick'], True), 
+                                                            (label_id, PARENT_DEL + args['parent'], True), 
+                                                            (label_id, RULE_DEL + args['rule'], True)])
+        except:
+            raise
+            start_response('503 Service Unavailable',[])
+            return ['Temporarily not available']
+        return json_ok(env, start_response, label_id)
+    return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER)
 
 def _decode_label(lb):
     for j in lb:
-        if j.find('SHR:') == 0:
-            shared_status = j.strip('SHR:')
-        if j.find('NAME:') == 0:
-            name_status = j.strip('NAME:')
-        if j.find('NIK:') == 0:
-            nik_status = j.strip('NIK:')
-        if j.find('PAR:') == 0:
-            parent_status = j.strip('PAR:')
-        if j.find('DESC:') == 0:
-            desc_status = j.strip('DESC:')
-        if j.find('CRT:') == 0:
-            creator_status = j.strip('CRT:')
-        if j.find('OBJ:') == 0:
-            obj_status = j.strip('OBJ:')
-    return shared_status, name_status, nik_status, parent_status, desc_status, creator_status, obj_status
+        if j.find(SHARE_DEL) == 0:
+            shared_status = j.strip(SHARE_DEL)
+        if j.find(NAME_DEL) == 0:
+            name = j.strip(NAME_DEL)
+        if j.find(NICK_DEL) == 0:
+            nick = j.strip(NICK_DEL)
+        if j.find(PARENT_DEL) == 0:
+            parent = j.strip(PARENT_DEL)
+        if j.find(RULE_DEL) == 0:
+            rule = j.strip(RULE_DEL)
+    return shared_status, name, nick, parent, rule
 
 def _decode_post(ps):
     for j in ps:
@@ -183,6 +191,48 @@ def _decode_post(ps):
             shared_status = j.strip('SHR:')
     return sticky, shared_status
 
+def get_exceptions(env, start_response, args):
+    method = env['REQUEST_METHOD']
+    #if method != 'GET':
+    #    start_response('501 Not Implemented', [])
+    #    return ['Unsupported']
+    user = _validate_fb(env)
+    if user is None:
+        return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_SESSION)
+    if 'obj_id' not in args:
+        return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'obj_id is not passed.')
+    try:
+        obj_id = str(int(args['obj_id']))
+    except:
+        return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'obj_id is not valid.')
+    admin = _is_admin(obj_id, user)
+    if admin is None:
+        return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_PERMISSION, 'access to the object is denied or the object is not supported.')
+    if 'label_id' in args:
+        sdb = Retry(SimpleDB, RETRY_LIMIT, ['select', 'put_attributes', 'get_attributes'], AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
+        try:
+            exceptions = sdb.select(AWS_SDB_EXCEPTIONS_DOMAIN, 'select exclude, post_id from %s where label_id=`%s`' %(AWS_SDB_EXCEPTIONS_DOMAIN, args['label_id']) )
+            return json_ok(env, start_response, exceptions)
+        except:
+            raise
+            start_response('503 Service Unavailable',[])
+            return ['Temporarily not available']
+    if 'post_id' not in args:
+        return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'post_id or label_id should be passed.')
+    sdb = Retry(SimpleDB, RETRY_LIMIT, ['select', 'put_attributes', 'get_attributes'], AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
+    try:
+        post_id = ''
+        for i in args['post_id'].split(','):
+            post_id = post_id + ',"%s`"' %i
+        post_id = post_id.strip(',')
+        exceptions = sdb.select(AWS_SDB_EXCEPTIONS_DOMAIN, 'select exclude, post_id, label_id from %s where post_id in (%s)' %(AWS_SDB_EXCEPTIONS_DOMAIN, post_id) )
+        return json_ok(env, start_response, exceptions)
+    except:
+        raise
+        start_response('503 Service Unavailable',[])
+        return ['Temporarily not available']
+
+
 
 def get_labels(env, start_response, args):
     method = env['REQUEST_METHOD']
@@ -190,48 +240,46 @@ def get_labels(env, start_response, args):
     #    start_response('501 Not Implemented', [])
     #    return ['Unsupported']
     user = _validate_fb(env)
-    if user:
-        if 'gid' not in args:
-            return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'gid is not passed.')
+    if user is None:
+        return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_SESSION)
+    if 'obj_id' not in args:
+        return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'obj_id is not passed.')
+    try:
+        obj_id = str(int(args['obj_id']))
+    except:
+        return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'obj_id is not valid.')
+    admin = _is_admin(obj_id, user)
+    if admin is None:
+        return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_PERMISSION, 'access to the object is denied or the object is not supported.')
+    shared = 'global'
+    if 'uid' in args:
         try:
-            gid = str(int(args['gid']))
-        except:
-            return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'gid is not valid.')
-        if _can_access(int(gid), user):
-            shared = 'global'
-            if 'uid' in args:
-                try:
-                    uid = str(int(args['uid']))
-                    if uid != str(user['uid']):
-                        shared = 'shared'
-                    else:
-                        shared = 'personal'
-                except:
-                    return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'uid is not valid.')
-                gid = str(gid) + ':' + str(user['uid'])
+            uid = str(int(args['uid']))
+            if uid != str(user['uid']):
+                shared = 'shared'
             else:
-                uid = str(user['uid'])
-            try:
-                sdb = Retry(SimpleDB, RETRY_LIMIT, ['select', 'put_attributes', 'get_attributes'], AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
-                #sdb = SimpleDBWRTY(AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, retry_limit = RETRY_LIMIT)
-                labels = sdb.get_attributes(AWS_SDB_LABELS_DOMAIN, gid)
-                easy_labels = {}
-                for i in labels:
-                    shared_status, name_status, nik_status, parent_status, desc_status, creator_status, obj_status = _decode_label(labels[i])
-                    if ((shared == 'shared') and (shared_status == 'shared'))\
-                    or ((shared == 'personal') and (shared_status in ['shared', 'personal'])) \
-                    or (shared == 'global'):
-                        easy_labels[i] = {'obj_id' : obj_status, 'creator' : creator_status, 
-                                          'parent' : parent_status, 'name' : base64.b64decode(name_status), 
-                                          'nick': base64.b64decode(nik_status), 'shared' : shared_status, 'desc' : base64.b64decode(desc_status)}
-                return json_ok(env, start_response, easy_labels)
-            except:
-                raise
-                start_response('503 Service Unavailable',[])
-                return ['Temporarily not available']
-        else:
-            return json_error(env, start_response, ERROR_CODES.NO_PERMISSION)
-    return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_SESSION)
+                shared = 'personal'
+        except:
+            return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'uid is not valid.')
+        obj_id = obj_id + ':' + str(user['uid'])
+    else:
+        uid = str(user['uid'])
+    try:
+        sdb = Retry(SimpleDB, RETRY_LIMIT, ['select', 'put_attributes', 'get_attributes'], AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
+        labels = sdb.get_attributes(AWS_SDB_LABELS_DOMAIN, obj_id)
+        easy_labels = {}
+        for i in labels:
+            shared_status, name, nick, parent, rule = _decode_label(labels[i])
+            if ((shared == 'shared') and (shared_status == 'shared'))\
+            or ((shared == 'personal') and (shared_status in ['shared', 'personal'])) \
+            or (shared == 'global'):
+                easy_labels[i] = {'parent' : parent, 'name' : name, 
+                                  'nick': nick, 'shared' : shared_status, 'rule' : rule}
+        return json_ok(env, start_response, easy_labels)
+    except:
+        raise
+        start_response('503 Service Unavailable',[])
+        return ['Temporarily not available']
         
 def assign_label(env, start_response, args):
     method = env['REQUEST_METHOD']
