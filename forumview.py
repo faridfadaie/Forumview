@@ -199,20 +199,15 @@ def get_exceptions(env, start_response, args):
     user = _validate_fb(env)
     if user is None:
         return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_SESSION)
-    if 'obj_id' not in args:
-        return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'obj_id is not passed.')
-    try:
-        obj_id = str(int(args['obj_id']))
-    except:
-        return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'obj_id is not valid.')
-    admin = _is_admin(obj_id, user)
-    if admin is None:
-        return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_PERMISSION, 'access to the object is denied or the object is not supported.')
     if 'label_id' in args:
         sdb = Retry(SimpleDB, RETRY_LIMIT, ['select', 'put_attributes', 'get_attributes'], AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
         try:
-            exceptions = sdb.select(AWS_SDB_EXCEPTIONS_DOMAIN, 'select exclude, post_id from %s where label_id=`%s`' %(AWS_SDB_EXCEPTIONS_DOMAIN, args['label_id']) )
-            return json_ok(env, start_response, exceptions)
+            print 'select excluded, post_id from %s where label_id="%s"' %(AWS_SDB_EXCEPTIONS_DOMAIN, args['label_id'])
+            exceptions = sdb.select(AWS_SDB_EXCEPTIONS_DOMAIN, 'select excluded, post_id from %s where label_id="%s"' %(AWS_SDB_EXCEPTIONS_DOMAIN, args['label_id']) )
+            post_list = {}
+            for i in exceptions:
+                post_list[i['post_id']] = i['excluded']
+            return json_ok(env, start_response, post_list)
         except:
             raise
             start_response('503 Service Unavailable',[])
@@ -221,12 +216,15 @@ def get_exceptions(env, start_response, args):
         return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'post_id or label_id should be passed.')
     sdb = Retry(SimpleDB, RETRY_LIMIT, ['select', 'put_attributes', 'get_attributes'], AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
     try:
+        post_list = {}
         post_id = ''
         for i in args['post_id'].split(','):
-            post_id = post_id + ',"%s`"' %i
+            post_id = post_id + ',"%s"' %i
         post_id = post_id.strip(',')
-        exceptions = sdb.select(AWS_SDB_EXCEPTIONS_DOMAIN, 'select exclude, post_id, label_id from %s where post_id in (%s)' %(AWS_SDB_EXCEPTIONS_DOMAIN, post_id) )
-        return json_ok(env, start_response, exceptions)
+        exceptions = sdb.select(AWS_SDB_EXCEPTIONS_DOMAIN, 'select excluded, post_id, label_id from %s where post_id in (%s)' %(AWS_SDB_EXCEPTIONS_DOMAIN, post_id) )
+        for i in exceptions:
+            post_list[i['post_id']] = {'excluded' : i['excluded'], 'label_id' : i['label_id']}
+        return json_ok(env, start_response, post_list)
     except:
         raise
         start_response('503 Service Unavailable',[])
