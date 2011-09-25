@@ -988,6 +988,8 @@ Version: 0.1; Sept 19th 2011
                                                    //alert('changed ouside');
                                                    var e = document.getElementById('conditions_kindoflike');
                                                    set_style(e,{display: 'inline'});
+                                                   var chosencondition=this.options[this.selectedIndex];
+                                                   alert(chosencondition.value);
                                                 });
                                                 
                                                 $('#Btn_addrule').click(function () {
