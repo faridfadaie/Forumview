@@ -987,9 +987,9 @@ Version: 0.1; Sept 19th 2011
                                                 $('#conditions').change(function(){
                                                    //alert('changed ouside');
                                                    var e = document.getElementById('conditions_kindoflike');
-                                                   set_style(e,{display: 'inline'});
+                                                   
                                                    var chosencondition=this.options[this.selectedIndex];
-                                                   if(chosencondition.value==5){alert("like");}
+                                                   if(chosencondition.value==5){set_style(e,{display: 'inline'});}
                                                    //alert(chosencondition.value);
                                                    //switch (chosencondition.value){
                                                    //        case 5:
