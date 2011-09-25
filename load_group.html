@@ -948,6 +948,10 @@ Version: 0.1; Sept 19th 2011
                                                 //popup(s);
                                                 document.getElementById('dialog-message').innerHTML = s;
                                                 
+                                                $('#conditions').change(function(){
+                                                   alert('changed inside');
+                                                });
+                                                
                                                 var conditions = document.getElementById("conditions");
                                                 conditions.onchange=function(){
                                                      var chosencondition=this.options[this.selectedIndex]
@@ -977,6 +981,10 @@ Version: 0.1; Sept 19th 2011
                                                      // window.open(chosenoption.value, "", "") //open target site (based on option's value attr) in new window
                                                      //}
                                                 }                                                
+                                                
+                                                $('#conditions').change(function(){
+                                                   alert('changed ouside');
+                                                });
                                                 
                                                 $('#Btn_addrule').click(function () {
                                                     //alert('clicked')
