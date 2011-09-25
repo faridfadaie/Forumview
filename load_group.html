@@ -942,16 +942,9 @@ Version: 0.1; Sept 19th 2011
                                                 s += '<option value="8">Date of the post</option>';
                                                 s += '<option value="9">Post has attachments</option>';
                                                 s += '</select>';
-                                                s += '<select name="conditions2" id="conditions2" style = "display:none;">';
-                                                s += '<option value="1">Who posted the messge</option>';
-                                                s += '<option value="2">Who is mentioned</option>';
-                                                s += '<option value="3">What is in the text</option>';
-                                                s += '<option value="4">What is not the text</option>';
-                                                s += '<option value="5">How many likes it has</option>';
-                                                s += '<option value="6">How many comments it has</option>';
-                                                s += '<option value="7">What links are in the message</option>';
-                                                s += '<option value="8">Date of the post</option>';
-                                                s += '<option value="9">Post has attachments</option>';
+                                                s += '<select name="conditions_kindoflike" id="conditions_kindoflike" style = "display:none;">';
+                                                s += '<option value="1">more than</option>';
+                                                s += '<option value="2">less than</option>';
                                                 s += '</select>';
                                                 
                                                 s += '<select name="condition_kindof_likesandcomments" id="rules_kindof_likesandcomments" style = "display:none;"><option>more than</option><option>less than</option></select>';
@@ -993,7 +986,7 @@ Version: 0.1; Sept 19th 2011
                                                 
                                                 $('#conditions').change(function(){
                                                    //alert('changed ouside');
-                                                   set_style(document.getElementById('conditions2'),{display: 'inline'});
+                                                   set_style(document.getElementById('conditions_kindoflike'),{display: 'inline'});
                                                 });
                                                 
                                                 $('#Btn_addrule').click(function () {
