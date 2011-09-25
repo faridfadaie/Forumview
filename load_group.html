@@ -948,68 +948,39 @@ Version: 0.1; Sept 19th 2011
                                                 //popup(s);
                                                 document.getElementById('dialog-message').innerHTML = s;
                                                 
-                                                $('#conditions').change(function(){
-                                                    $('#condition_kindof_date').show();
-                                                   var chosencondition = this.options[this.selectedIndex];
-                                                   //alert(chosencondition.value);
-                                                     switch(chosencondition.value)
-                                                            {
-                                                            case "5",5:
-                                                              {
-                                                                  //$('#condition_kindof_date').show();
-                                                                  //set_style(document.getElementById('condition_kindof_date'),{display: 'none'});
-                                                                  //set_style(document.getElementById('condition_kindof_likesandcomments'),{display: 'inline'});
-                                                               //set_style(document.getElementById('rules_kindof_likesandcomments'), {display : 'none'});	  
-                                                              }
-                                                              break;
-                                                            case "8":
-                                                              {
-                                                                  set_style(document.getElementById('condition_kindof_likesandcomments'),{display: 'none'});
-                                                                  set_style(document.getElementById('condition_kindof_date'),{display: 'inline'});
-                                                              }
-                                                              break;
-                                                            default:
-                                                              {
-                                                                  set_style(document.getElementById('condition_kindof_likesandcomments'),{display: 'none'});
-                                                                  set_style(document.getElementById('condition_kindof_date'),{display: 'none'});
-                                                                      }
-                                                            }
-                                                   
-                                                });
-                                                
-                                                var conditions = document.getElementById("conditions");
-                                                conditions.onchange=function(){
-                                                     var chosencondition=this.options[this.selectedIndex]
-                                                     switch(chosencondition.value)
-                                                            {
-                                                            case 5,6:
-                                                              {
-                                                                  set_style(document.getElementById('condition_kindof_date'),{display: 'none'});
-                                                                  set_style(document.getElementById('condition_kindof_likesandcomments'),{display: 'inline'});
-                                                               //set_style(document.getElementById('rules_kindof_likesandcomments'), {display : 'none'});	  
-                                                              }
-                                                              break;
-                                                            case 8:
-                                                              {
-                                                                  set_style(document.getElementById('condition_kindof_likesandcomments'),{display: 'none'});
-                                                                  set_style(document.getElementById('condition_kindof_date'),{display: 'inline'});
-                                                              }
-                                                              break;
-                                                            default:
-                                                              {
-                                                                  set_style(document.getElementById('condition_kindof_likesandcomments'),{display: 'none'});
-                                                                  set_style(document.getElementById('condition_kindof_date'),{display: 'none'});
-                                                                      }
-                                                            }
+                                                //var conditions = document.getElementById("conditions");
+                                                //conditions.onchange=function(){
+                                                //     var chosencondition=this.options[this.selectedIndex]
+                                                //     switch(chosencondition.value)
+                                                //            {
+                                                //            case 5,6:
+                                                //              {
+                                                //                  set_style(document.getElementById('condition_kindof_date'),{display: 'none'});
+                                                //                  set_style(document.getElementById('condition_kindof_likesandcomments'),{display: 'inline'});
+                                                //               //set_style(document.getElementById('rules_kindof_likesandcomments'), {display : 'none'});	  
+                                                //              }
+                                                //              break;
+                                                //            case 8:
+                                                //              {
+                                                  //                set_style(document.getElementById('condition_kindof_likesandcomments'),{display: 'none'});
+                                                    //              set_style(document.getElementById('condition_kindof_date'),{display: 'inline'});
+                                                      //        }
+                                                        //      break;
+                                                          //  default:
+                                                            //  {
+                                                              //    set_style(document.getElementById('condition_kindof_likesandcomments'),{display: 'none'});
+                                                                //  set_style(document.getElementById('condition_kindof_date'),{display: 'none'});
+                                                                  //    }
+                                                           // }
 
                                                      //if (chosenrulekind.value!="nothing"){
                                                      // window.open(chosenoption.value, "", "") //open target site (based on option's value attr) in new window
                                                      //}
                                                 }                                                
                                                 
-                                                //$('#conditions').change(function(){
-                                                //   alert('changed ouside');
-                                                //});
+                                                $('#conditions').change(function(){
+                                                   alert('changed ouside');
+                                                });
                                                 
                                                 $('#Btn_addrule').click(function () {
                                                     //alert('clicked')
