@@ -895,7 +895,7 @@ Version: 0.1; Sept 19th 2011
                                 window.global = true;
                                 window.owner = false;
                                 
-                                $.getJSON("get_labels?gid="+source_id, function(data) {
+                                $.getJSON("get_labels?obj_id="+source_id, function(data) {
                                     if (data.type == 'ok'){
                                         if (window.global) {
                                             create_tag('info_personal','Personal View');
@@ -995,7 +995,7 @@ Version: 0.1; Sept 19th 2011
                                                 parent = window.labels[i];
                                                 }
                                             }
-                                        $.post("create_label",{gid: source_id, name: $("#name_label").val(), nick: $("#name_label").val(), desc: $("#description_label").val(), parent: parent_id},
+                                        $.post("create_label",{obj_id: source_id, name: $("#name_label").val(), nick: $("#name_label").val(), desc: $("#description_label").val(), parent: parent_id},
                                         function(result) {
                                             
                                             if (result["type"]=="ok"){
