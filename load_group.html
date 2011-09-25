@@ -958,8 +958,15 @@ Version: 0.1; Sept 19th 2011
                                                 //popup(s);
                                                 document.getElementById('dialog-message').innerHTML = s;
                                                 
-                                                //var conditions = document.getElementById("conditions");
-                                                //conditions.onchange=function(){
+                                                var conditions = document.getElementById("conditions");
+                                                conditions.onchange=function(){
+                                                   var l = document.getElementById('conditions_kindoflike');
+                                                   var d = document.getElementById('conditions_kindofdate');
+                                                   var chosencondition=this.options[this.selectedIndex];
+                                                   if(chosencondition.value==5||chosencondition.value==6){set_style(d,{display: 'none'});set_style(l,{display: 'inline'});}
+                                                   else if(chosencondition.value==8){set_style(d,{display: 'inline'});set_style(l,{display: 'none'});}
+                                                   else {set_style(d,{display: 'none'});set_style(l,{display: 'none'});}                                                    
+                                                }
                                                 //     var chosencondition=this.options[this.selectedIndex]
                                                 //     switch(chosencondition.value)
                                                 //            {
@@ -988,15 +995,15 @@ Version: 0.1; Sept 19th 2011
                                                      //}
                                                 //}                                                
                                                 
-                                                $('#conditions').change(function(){
+                                                //$('#conditions').change(function(){
                                                    //alert('changed ouside');
-                                                   var l = document.getElementById('conditions_kindoflike');
-                                                   var d = document.getElementById('conditions_kindofdate');
-                                                   var chosencondition=this.options[this.selectedIndex];
-                                                   if(chosencondition.value==5||chosencondition.value==6){set_style(d,{display: 'none'});set_style(l,{display: 'inline'});}
-                                                   else if(chosencondition.value==8){set_style(d,{display: 'inline'});set_style(l,{display: 'none'});}
-                                                   else {set_style(d,{display: 'none'});set_style(l,{display: 'none'});}
-                                                });
+                                                  // var l = document.getElementById('conditions_kindoflike');
+                                               //    var d = document.getElementById('conditions_kindofdate');
+                                               //    var chosencondition=this.options[this.selectedIndex];
+                                               //    if(chosencondition.value==5||chosencondition.value==6){set_style(d,{display: 'none'});set_style(l,{display: 'inline'});}
+                                               //    else if(chosencondition.value==8){set_style(d,{display: 'inline'});set_style(l,{display: 'none'});}
+                                               //    else {set_style(d,{display: 'none'});set_style(l,{display: 'none'});}
+                                               // });
                                                 
                                                 $('#Btn_addrule').click(function () {
                                                     //alert('clicked')
