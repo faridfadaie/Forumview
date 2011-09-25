@@ -984,11 +984,22 @@ Version: 0.1; Sept 19th 2011
                                                 s += '</div>';
                                                 //popup(s);
                                                 document.getElementById('dialog-message').innerHTML = s;
+                                                
+                                                $('#Btn_addrule').click(function () {
+                                                    alert('clicked')
+                                                    //$("#conditions").show();
+                                                    //set_style(document.getElementById('conditions'),{display: 'inline'});
+                                                    //set_style(document.getElementById('condition_textbox'),{display: 'inline'});
+                                                    //return false;
+                                                    });
+                                    
+
                                                 });
                                             menu_add_label_container = document.createElement('ul');
                                             add_class(menu_add_label_container, 'label_item');
                                             menu_add_label_container.appendChild(menu_add_label);
                                             document.getElementById('menu_container_down').appendChild(menu_add_label_container);
+                                            
                                             }
                                         }
                                     });
@@ -1012,14 +1023,6 @@ Version: 0.1; Sept 19th 2011
                                         return false;
                                         });
 
-                                    $('#Btn_addrule').click(function () {
-                                        alert('clicked');
-                                        $("#conditions").show();
-                                        set_style(document.getElementById('conditions'),{display: 'inline'});
-                                        set_style(document.getElementById('condition_textbox'),{display: 'inline'});
-                                        return false;
-                                        });
-                                    
                                     $('#Btn_labeldialog_addlabel').click(function () {
                                         var parent_id = '0';
                                         if (window.forum){
