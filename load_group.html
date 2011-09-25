@@ -987,7 +987,7 @@ Version: 0.1; Sept 19th 2011
                                                 $('#conditions').change(function(){
                                                    //alert('changed ouside');
                                                    var chosencondition=this.options[this.selectedIndex];
-                                                   
+                                                   set_style(document.getElementById('conditions_kindoflike'),{display: 'inline'});
                                                    switch(chosencondition.value){
                                                         case "5": {
                                                             alert(chosencondition.value);
