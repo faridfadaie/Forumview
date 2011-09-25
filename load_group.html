@@ -950,12 +950,8 @@ Version: 0.1; Sept 19th 2011
                                                 s += '<option value="1">Before</option>';
                                                 s += '<option value="2">After</option>';
                                                 s += '</select>';
-                                                
-                                                //s += '<select name="condition_kindof_likesandcomments" id="rules_kindof_likesandcomments" style = "display:none;"><option>more than</option><option>less than</option></select>';
-                                                //s += '<select name="condition_kindof_date" id="rules_kindof_date" style = "display:none;"><option>after</option><option>before</option></select>';
-                                                s += '<input type="text" name="condition_textbox" size="19" maxlength="40" value="" id="condition_textbox" title="Text" style = "display:none;"/></p>';
+                                                s += '<input type="text" name="condition_textbox" size="15" maxlength="40" value="" id="condition_textbox" title="Text" style = "display:none;"/></p>';
                                                 s += '</div>';
-                                                //popup(s);
                                                 document.getElementById('dialog-message').innerHTML = s;
                                                 
                                                 var conditions = document.getElementById("conditions");
@@ -967,47 +963,8 @@ Version: 0.1; Sept 19th 2011
                                                    else if(chosencondition.value==8){set_style(d,{display: 'inline'});set_style(l,{display: 'none'});}
                                                    else {set_style(d,{display: 'none'});set_style(l,{display: 'none'});}                                                    
                                                 }
-                                                //     var chosencondition=this.options[this.selectedIndex]
-                                                //     switch(chosencondition.value)
-                                                //            {
-                                                //            case 5,6:
-                                                //              {
-                                                //                  set_style(document.getElementById('condition_kindof_date'),{display: 'none'});
-                                                //                  set_style(document.getElementById('condition_kindof_likesandcomments'),{display: 'inline'});
-                                                //               //set_style(document.getElementById('rules_kindof_likesandcomments'), {display : 'none'});	  
-                                                //              }
-                                                //              break;
-                                                //            case 8:
-                                                //              {
-                                                  //                set_style(document.getElementById('condition_kindof_likesandcomments'),{display: 'none'});
-                                                    //              set_style(document.getElementById('condition_kindof_date'),{display: 'inline'});
-                                                      //        }
-                                                        //      break;
-                                                          //  default:
-                                                            //  {
-                                                              //    set_style(document.getElementById('condition_kindof_likesandcomments'),{display: 'none'});
-                                                                //  set_style(document.getElementById('condition_kindof_date'),{display: 'none'});
-                                                                  //    }
-                                                           // }
-
-                                                     //if (chosenrulekind.value!="nothing"){
-                                                     // window.open(chosenoption.value, "", "") //open target site (based on option's value attr) in new window
-                                                     //}
-                                                //}                                                
-                                                
-                                                //$('#conditions').change(function(){
-                                                   //alert('changed ouside');
-                                                  // var l = document.getElementById('conditions_kindoflike');
-                                               //    var d = document.getElementById('conditions_kindofdate');
-                                               //    var chosencondition=this.options[this.selectedIndex];
-                                               //    if(chosencondition.value==5||chosencondition.value==6){set_style(d,{display: 'none'});set_style(l,{display: 'inline'});}
-                                               //    else if(chosencondition.value==8){set_style(d,{display: 'inline'});set_style(l,{display: 'none'});}
-                                               //    else {set_style(d,{display: 'none'});set_style(l,{display: 'none'});}
-                                               // });
                                                 
                                                 $('#Btn_addrule').click(function () {
-                                                    //alert('clicked')
-                                                    //$("#conditions").show();
                                                     set_style(document.getElementById('conditions'),{display: 'inline'});
                                                     set_style(document.getElementById('condition_textbox'),{display: 'inline'});
                                                     return false;
