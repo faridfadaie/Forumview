@@ -986,7 +986,8 @@ Version: 0.1; Sept 19th 2011
                                                 
                                                 $('#conditions').change(function(){
                                                    //alert('changed ouside');
-                                                   set_style(document.getElementById('conditions_kindoflike'),{display: 'inline'});
+                                                   var e = document.getElementById('conditions_kindoflike');
+                                                   set_style(e,{display: 'inline'});
                                                 });
                                                 
                                                 $('#Btn_addrule').click(function () {
