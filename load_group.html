@@ -989,10 +989,14 @@ Version: 0.1; Sept 19th 2011
                                                    var e = document.getElementById('conditions_kindoflike');
                                                    set_style(e,{display: 'inline'});
                                                    var chosencondition=this.options[this.selectedIndex];
-                                                   
-                                                   switch (chosencondition.value){
-                                                           case 5:{alert(chosencondition.value);}
-                                                   }
+                                                   alert(chosencondition.value);
+                                                   //switch (chosencondition.value){
+                                                   //        case 5:
+                                                   //            alert(chosencondition.value);
+                                                   //            break;
+                                                   //        default:
+                                                   //            alert("hid it");
+                                                   //        }
                                                 });
                                                 
                                                 $('#Btn_addrule').click(function () {
