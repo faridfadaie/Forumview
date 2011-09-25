@@ -7,7 +7,7 @@ import time, logging, sys, hashlib, base64
 from simpledb import SimpleDB, SimpleDBError, AttributeEncoder
 from retry import Retry
 
-allowed_functions = ['get_exceptions', '/get_exceptions', 'get_post_labels', 'get_post_labels', 'get_posts', '/get_posts', '/assign_label', 'assign_label', '/create_label', 'create_label', '/get_labels', 'get_labels']
+allowed_functions = ['set_exception', '/set_exception', 'get_exceptions', '/get_exceptions', 'get_post_labels', 'get_post_labels', 'get_posts', '/get_posts', '/assign_label', 'assign_label', '/create_label', 'create_label', '/get_labels', 'get_labels']
 page_names = ['load_group.html']
 page_contents = {}
 LISTEN_IP = '0.0.0.0'
@@ -232,8 +232,6 @@ def get_exceptions(env, start_response, args):
         start_response('503 Service Unavailable',[])
         return ['Temporarily not available']
 
-
-
 def get_labels(env, start_response, args):
     method = env['REQUEST_METHOD']
     #if method != 'GET':
@@ -281,102 +279,7 @@ def get_labels(env, start_response, args):
         start_response('503 Service Unavailable',[])
         return ['Temporarily not available']
         
-def assign_label(env, start_response, args):
-    method = env['REQUEST_METHOD']
-    #if method != 'GET':
-    #    start_response('501 Not Implemented', [])
-    #    return ['Unsupported']
-    user = _validate_fb(env)
-    if user:
-        if ('post_id' not in args) or ('label_id' not in args):
-            return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER)
-        try:
-            from_id, to_id, created_time, updated_time = _get_post_info(args['post_id'], user)
-        except:
-            return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'post_id is not valid or not accessible.')
-        if from_id is None:
-            return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'the post does not have a from_id field.')
-        try:
-            sdb = Retry(SimpleDB, RETRY_LIMIT, ['select', 'put_attributes', 'get_attributes'], AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
-            #sdb = SimpleDBWRTY(AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, retry_limit = RETRY_LIMIT)
-            labels = sdb.select(AWS_SDB_LABELS_DOMAIN, "select `%s` from %s where `%s` is not null" %(args['label_id'], AWS_SDB_LABELS_DOMAIN, args['label_id']))
-            if len(labels) == 0:    
-                return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'the label_id is not a valid label or is not public.')
-            shared_status, name_status, nik_status, parent_status, desc_status, creator_status, obj_id = _decode_label(labels[0].values()[0])
-            if str(to_id) != obj_id:
-                return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'the label is not defined for this object.')
-            is_admin = _is_group_admin(to_id, user)
-            if (shared_status == 'global') and (str(user['uid']) != str(from_id)) and (not is_admin):
-                return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'only the admin or the author can assign global labels.')
-            if (shared_status == 'shared') and (str(user['uid']) != str(from_id)) and (creator_status != str(user['uid'])):
-                return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'only the label creator or the author can assign shared labels.')
-            if ('sticky' in args) and (str(args['sticky']) == '1'):
-                if (shared_status == 'global') and not is_admin:
-                    return json_error(env, start_response, ERROR_CODES.NO_PERMISSION, 'only the admin can mark global labels as sticky.')
-                if (shared_status in ['shared', 'personal']) and (creator_status != str(user['uid'])):
-                    return json_error(env, start_response, ERROR_CODES.NO_PERMISSION, 'only the label creator can mark shared/personal labels as sticky.')
-                sticky = '1'
-            else:
-                sticky = '0'
-            if shared_status == 'global':
-                itm = args['post_id']
-                creator_status = '0'
-            else:
-                itm = args['post_id'] + ':' + creator_status
-            sdb.put_attributes(AWS_SDB_POST_DOMAIN, itm, [('C_TIME', time.mktime(time.strptime(str(created_time), "%Y-%m-%dT%H:%M:%S+0000")), True),
-                                                          ('U_TIME', time.mktime(time.strptime(str(updated_time), "%Y-%m-%dT%H:%M:%S+0000")), True),
-                                                          (args['label_id'], 'STICKY:%s' %sticky, True), (args['label_id'], 'SHR:%s' %shared_status, True),
-                                                          ('post_id', '%s' %args['post_id'].split(':')[0], True), ('layer_id', '%s' %creator_status, True)])
-            return json_ok(env, start_response, {})
-        except:
-            raise
-            start_response('503 Service Unavailable',[])
-            return ['Temporarily not available']
-    return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_SESSION)
-
-def get_posts(env, start_response, args):
-    method = env['REQUEST_METHOD']
-    #if method != 'GET':
-    #    start_response('501 Not Implemented', [])
-    #    return ['Unsupported']
-    user = _validate_fb(env)
-    if user:
-        if ('label_id' not in args) or ('up_to' not in args) or ('count' not in args):
-            return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER)
-        try:
-           up_to = int(args['up_to'])
-           count = int(args['count'])
-        except:
-            return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'the up_to time stamp or the count value is not valid.')
-        sdb = Retry(SimpleDB, RETRY_LIMIT, ['select', 'put_attributes', 'get_attributes'], AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
-        #sdb = SimpleDBWRTY(AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, retry_limit = RETRY_LIMIT)
-        labels = sdb.select(AWS_SDB_LABELS_DOMAIN, "select `%s` from %s where `%s` is not null" %(args['label_id'], AWS_SDB_LABELS_DOMAIN, args['label_id']))
-        if len(labels) == 0:
-            return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'the label_id is not a valid label or is not public.')
-        shared_status, name_status, nik_status, parent_status, desc_status, creator_status, obj_id = _decode_label(labels[0].values()[0])
-        if shared_status in ['global', 'shared'] and (not _can_access(obj_id, user)):
-            return json_error(env, start_response, ERROR_CODES.NO_PERMISSION, 'access to the requested object is denied.')
-        if (shared_status == 'personal') and (str(user['uid']) != creator_status):
-            return json_error(env, start_response, ERROR_CODES.NO_PERMISSION, 'this is a personal label and is not shared. access is denied.')
-        if shared_status != 'global':
-            gid = obj_id + ':' + str(user['uid']) 
-        else:
-            gid = obj_id
-        try:
-            posts = sdb.select(AWS_SDB_POST_DOMAIN, 'select * from %s where U_TIME<"%s" or `%s`="STICKY:1" limit %s' %(AWS_SDB_POST_DOMAIN, up_to, args['label_id'], count))
-        except:
-            raise
-            start_response('503 Service Unavailable',[])
-            return ['Temporarily not available']
-        post_list = []
-        for i in posts:
-            sticky, shared_status = _decode_post(i[args['label_id']])
-            post_list.append({'created' : i['C_TIME'], 'updated': i['U_TIME'], 'post_id' : i['post_id'], 'shared' : shared_status, 'sticky' : sticky, 'layer_id' : i['layer_id']})
-        return json_ok(env, start_response, post_list)
-    return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_SESSION)
-    
-
-def get_post_labels(env, start_response, args):
+def set_exception(env, start_response, args):
     method = env['REQUEST_METHOD']
     #if method != 'GET':
     #    start_response('501 Not Implemented', [])
@@ -384,40 +287,47 @@ def get_post_labels(env, start_response, args):
     user = _validate_fb(env)
     if user is None:
         return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_SESSION)
-    if ('layer_id' not in args) or ('gid' not in args) or ('post_list' not in args):
+    if ('post_id' not in args) or ('label_id' not in args) or ('excluded' not in args):
         return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER)
-    post_list = ''
-    for i in args['post_list'].split(','):
-        post_list = post_list + ",'" + i + "'"
-    post_list = post_list.strip(',')
     try:
-        gid = int(args['gid'])
+        from_id, to_id, created_time, updated_time = _get_post_info(args['post_id'], user)
     except:
-        return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'gid is not valid.')
-    if not _can_access(args['gid'], user):
-        return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_PERMISSION)
-    #sdb = SimpleDBWRTY(AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, retry_limit = RETRY_LIMIT)
-    sdb = Retry(SimpleDB, RETRY_LIMIT, ['select'], AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
-    if args['layer_id'] == 'global':
-        shared = ['SHR:global']
-        layer_id = '0'
-    else:
-        if str(args['layer_id']) == str(user['uid']):
-            shared = ['SHR:personal', 'SHR:shared']
+        return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'post_id is not valid or not accessible.')
+    if from_id is None:
+        return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'the post does not have a from_id field.')
+    try:
+        sdb = Retry(SimpleDB, RETRY_LIMIT, ['select', 'put_attributes', 'get_attributes'], AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
+        labels = sdb.select(AWS_SDB_LABELS_DOMAIN, "select `%s` from %s where `%s` is not null" %(args['label_id'], AWS_SDB_LABELS_DOMAIN, args['label_id']))
+        if len(labels) == 0:    
+            return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'the label_id is not a valid label or is not public.')
+        if labels[0].name.count(':') == 0:
+            owner = 'admin'
         else:
-            shared = ['SHR:shared']
-        layer_id = str(args['layer_id'])
-    labels = sdb.select(AWS_SDB_POST_DOMAIN, "select * from %s where post_id in (%s) and layer_id='%s'" %(AWS_SDB_POST_DOMAIN, post_list, layer_id)) 
-    mapping = {}
-    for i in labels:
-        label_list = []
-        for j in i:
-            if type(i[j])==list:
-                if ((len(shared) == 1) and (shared[0] in i[j])) or ((len(shared) == 2) and (shared[0] in i[j]) or (shared[1] in i[j])):
-                    label_list.append(j)
-        mapping[i['post_id']] = label_list
-    return json_ok(env, start_response, mapping)
-        
+            owner = labels[0].name.split(':')[1]
+        obj_id = labels[0].name.split(':')[0]
+        shared_status, name, nick, parent, rule = _decode_label(labels[0].values()[0])
+        if str(to_id) != obj_id:
+            return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'the label is not defined for this object.')
+        is_admin = _is_admin(to_id, user)
+        if (shared_status == 'global') and (str(user['uid']) != str(from_id)) and (not is_admin):
+            return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'only the admin or the author can assign global labels.')
+        if (shared_status == 'shared') and (str(user['uid']) != str(from_id)) and (creator_status != str(user['uid'])):
+            return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'only the label creator or the author can assign shared labels.')
+        itm = args['label_id'] + ':' + args['post_id']
+        if args['excluded'] == '1':
+            excluded = '1'
+        else:
+            excluded = '0'
+        sdb.put_attributes(AWS_SDB_EXCEPTIONS_DOMAIN, itm, [('excluded', excluded, True),
+                                                      ('label_id', args['label_id'], True),
+                                                      ('post_id', args['post_id'], True),
+                                                      ('creator', str(user['uid']), True)])
+        return json_ok(env, start_response, {})
+    except:
+        raise
+        start_response('503 Service Unavailable',[])
+        return ['Temporarily not available']
+
 def request_handler(env, start_response):
     method = env['REQUEST_METHOD']
     path = env['PATH_INFO']
