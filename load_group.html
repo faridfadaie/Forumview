@@ -946,9 +946,13 @@ Version: 0.1; Sept 19th 2011
                                                 s += '<option value="1">more than</option>';
                                                 s += '<option value="2">less than</option>';
                                                 s += '</select>';
+                                                s += '<select name="conditions_kindofdate" id="conditions_kindofdate" style = "display:none;">';
+                                                s += '<option value="1">Before</option>';
+                                                s += '<option value="2">After</option>';
+                                                s += '</select>';
                                                 
-                                                s += '<select name="condition_kindof_likesandcomments" id="rules_kindof_likesandcomments" style = "display:none;"><option>more than</option><option>less than</option></select>';
-                                                s += '<select name="condition_kindof_date" id="rules_kindof_date" style = "display:none;"><option>after</option><option>before</option></select>';
+                                                //s += '<select name="condition_kindof_likesandcomments" id="rules_kindof_likesandcomments" style = "display:none;"><option>more than</option><option>less than</option></select>';
+                                                //s += '<select name="condition_kindof_date" id="rules_kindof_date" style = "display:none;"><option>after</option><option>before</option></select>';
                                                 s += '<input type="text" name="condition_textbox" size="19" maxlength="40" value="" id="condition_textbox" title="Text" style = "display:none;"/></p>';
                                                 s += '</div>';
                                                 //popup(s);
@@ -986,19 +990,12 @@ Version: 0.1; Sept 19th 2011
                                                 
                                                 $('#conditions').change(function(){
                                                    //alert('changed ouside');
-                                                   var e = document.getElementById('conditions_kindoflike');
-                                                   
+                                                   var l = document.getElementById('conditions_kindoflike');
+                                                   var d = document.getElementById('conditions_kindofdate');
                                                    var chosencondition=this.options[this.selectedIndex];
-                                                   if(chosencondition.value==5){set_style(e,{display: 'inline'});}
-                                                   else{set_style(e,{display: 'none'});}
-                                                   //alert(chosencondition.value);
-                                                   //switch (chosencondition.value){
-                                                   //        case 5:
-                                                   //            alert(chosencondition.value);
-                                                   //            break;
-                                                   //        default:
-                                                   //            alert("hid it");
-                                                   //        }
+                                                   if(chosencondition.value==5||chosencondition.value==6){set_style(d,{display: 'none'});set_style(l,{display: 'inline'});}
+                                                   else if(chosencondition.value==8){set_style(d,{display: 'inline'});set_style(l,{display: 'none'});}
+                                                   else {set_style(d,{display: 'none'});set_style(l,{display: 'none'});}
                                                 });
                                                 
                                                 $('#Btn_addrule').click(function () {
