@@ -986,22 +986,8 @@ Version: 0.1; Sept 19th 2011
                                                 
                                                 $('#conditions').change(function(){
                                                    //alert('changed ouside');
-                                                   var cond_kind = document.getElementById('conditions_kindoflike');
-                                                   set_style(cond_kind,{display: 'inline'});
-                                                   
-                                                   //var chosencondition=this.options[this.selectedIndex];
-                                                   //set_style(document.getElementById('conditions_kindoflike'),{display: 'inline'});
-                                                   //switch(chosencondition.value){
-                                                   //     case "5": {
-                                                   //         alert(chosencondition.value);
-                                                   //         set_style(document.getElementById('conditions_kindoflike'),{display: 'inline'});
-                                                   //     }
-                                                   //     default: {
-                                                   //         set_style(document.getElementById('conditions_kindoflike'),{display: 'none'});    
-                                                   //     }
-                                                   // }
+                                                   set_style(document.getElementById('conditions_kindoflike'),{display: 'inline'});
                                                 });
-                                                
                                                 
                                                 $('#Btn_addrule').click(function () {
                                                     //alert('clicked')
