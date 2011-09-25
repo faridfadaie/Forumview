@@ -986,7 +986,14 @@ Version: 0.1; Sept 19th 2011
                                                 
                                                 $('#conditions').change(function(){
                                                    //alert('changed ouside');
-                                                   set_style(document.getElementById('conditions_kindoflike'),{display: 'inline'});
+                                                   var chosencondition=this.options[this.selectedIndex];
+                                                   switch(chosencondition.value){}
+                                                        case 5,6: {
+                                                            set_style(document.getElementById('conditions_kindoflike'),{display: 'inline'});
+                                                        }
+                                                        default: {
+                                                            set_style(document.getElementById('conditions_kindoflike'),{display: 'none'});    
+                                                        }
                                                 });
                                                 
                                                 $('#Btn_addrule').click(function () {
