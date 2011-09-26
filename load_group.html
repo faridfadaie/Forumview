@@ -972,6 +972,17 @@ Version: 0.1; Sept 19th 2011
                                         document.getElementById('lable_container').appendChild(label_list);
 
                                         function create_condition(){
+                                        
+                                            var conditions = document.getElementById('conditions_container');
+                                            var newcond = document.creatElement('div');
+                                            var button, condlist, likelist, datelist, textbox;
+
+                                            // add rule button
+                                            button = documnt.creatElement('a');
+                                            newcond.appendChild(button);
+
+                                            conditions.appendChild(newcond);
+
                                             var comment = document.createElement('div');
                                             comment.uid = data.id;
                                             comment.updated_time = data.time;
