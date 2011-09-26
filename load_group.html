@@ -8,6 +8,7 @@ Version: 0.1; Sept 19th 2011
         <!-- <link rel="stylesheet" type="text/css" href="http://www.tayfeh.com/resources/css/reset.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="http://www.tayfeh.com/resources/css/text.css" media="screen" /> -->
         <link rel="stylesheet" type="text/css" href="http://www.tayfeh.com/resources/css/960.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="http://www.tayfeh.com/resources/colorpicker/colorPicker.css" media="screen" />
         <!--<link rel="stylesheet" type="text/css" href="http://www.tayfeh.com/resources/css/layout.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="http://www.tayfeh.com/resources/css/nav.css" media="screen" /> -->
         
@@ -289,6 +290,7 @@ Version: 0.1; Sept 19th 2011
         </style>
         
         <script src="http://code.jquery.com/jquery-latest.js"></script>
+        <script src="http://www.tayfeh.com/resources/colorpicker/jquery.colorPicker.js" type="text/javascript"><!--mce:1--></script>
         
         <body>
             <div id="fb-root"></div>
@@ -969,6 +971,8 @@ Version: 0.1; Sept 19th 2011
                                                     s += '<option value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
                                                     }
                                                 s += '</select></p>';
+                                                s += '<div><label for="color1">Color 1</label>';
+                                                s += '<input id="color1" name="color1" type="text" value="#333399" /></div>';
                                                 s += '<p><a href="#" id="Btn_addrule" class="buttoninline">Add rule:</a>';
                                                 s += '<select name="conditions" id="conditions" style = "display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px;">';
                                                 s += '<option value="1">Who posted the messge</option>';
@@ -1007,7 +1011,8 @@ Version: 0.1; Sept 19th 2011
                                                     set_style(document.getElementById('conditions'),{display: 'inline'});
                                                     set_style(document.getElementById('condition_textbox'),{display: 'inline'});
                                                     return false;
-                                                    });                                                
+                                                    });
+                                                $('#color1').colorPicker();
                                                 });
                                             menu_add_label_container = document.createElement('ul');
                                             add_class(menu_add_label_container, 'label_item');
