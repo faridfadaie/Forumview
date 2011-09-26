@@ -287,7 +287,7 @@ Version: 0.1; Sept 19th 2011
                 cursor: pointer;
                 background-color: #d8dfea;
                 }
-            div.form-container { margin: 10px; padding: 5px; background-color: #FFF; border: 0;}
+            div.form-container { margin: 20px 0; padding: 0px; background-color: #FFF; border: 0;}
 
             div.form-container div.controlset {display: block; float:left; width: 100%; padding: 0.25em 0; border: 0;}
 
@@ -295,7 +295,7 @@ Version: 0.1; Sept 19th 2011
             div.form-container div.controlset input,
             div.form-container div.controlset div { display: inline; float: left;  border: 0;}
 
-            div.form-container div.controlset label { width: 100px; border: 0;}
+            div.form-container div.controlset label { width: 140px; border: 0;}
         </style>
         
         <script src="http://code.jquery.com/jquery-latest.js"></script>
@@ -980,7 +980,7 @@ Version: 0.1; Sept 19th 2011
                                                     s += '<option value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
                                                     }
                                                 s += '</select></p>';
-                                                s += '<div class="form-container"><form action="#" method="post"><div class="controlset"><label for="color1">Choose Label'+"'"+'s color</label> <input id="color1" type="text" name="color1" value="#333399" /></div></form></div><p>&nbsp;</p>'
+                                                s += '<div class="form-container"><form action="#" method="post"><div class="controlset"><label for="color1"><strong>Choose Label'+"'"+'s color</strong></label> <input id="color1" type="text" name="color1" value="#333399" /></div></form></div><p>&nbsp;</p>'
                                                 s += '<p><a href="#" id="Btn_addrule" class="buttoninline">Add rule:</a>';
                                                 s += '<select name="conditions" id="conditions" style = "display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px;">';
                                                 s += '<option value="1">Who posted the messge</option>';
