@@ -1019,13 +1019,15 @@ Version: 0.1; Sept 19th 2011
                                                 $('#Btn_addrule').click(function () {
                                                     document.rule = !document.rule;
                                                     if (document.rule){
-                                                    set_style(document.getElementById('conditions'),{display: 'inline'});
-                                                    set_style(document.getElementById('condition_textbox'),{display: 'inline'});                                                        
+                                                        this.innerHTML='Cancel';
+                                                        set_style(document.getElementById('conditions'),{display: 'inline'});
+                                                        set_style(document.getElementById('condition_textbox'),{display: 'inline'});                                                        
                                                     } else {
-                                                    set_style(document.getElementById('conditions'),{display: 'none'});
-                                                    set_style(document.getElementById('condition_textbox'),{display: 'none'});                                                        
-                                                    set_style(document.getElementById('conditions_kindoflike'),{display: 'none'});
-                                                    set_style(document.getElementById('conditions_kindofdate'),{display: 'none'});
+                                                        this.innerHTML='Add rule';
+                                                        set_style(document.getElementById('conditions'),{display: 'none'});
+                                                        set_style(document.getElementById('condition_textbox'),{display: 'none'});                                                        
+                                                        set_style(document.getElementById('conditions_kindoflike'),{display: 'none'});
+                                                        set_style(document.getElementById('conditions_kindofdate'),{display: 'none'});
                                                     }
                                                     return false;
                                                     });
