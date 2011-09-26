@@ -972,6 +972,7 @@ Version: 0.1; Sept 19th 2011
                                         document.getElementById('lable_container').appendChild(label_list);
                                         if(window.admin && window.global){
                                             var menu_add_label = create_label('Add label','creat_label', function(){
+                                                document.rule = false;
                                                 set_style(document.getElementById('dialog-box'), {display : 'block'});
                                                 set_style(document.getElementById('posts_container'), {display : 'none'});
                                                 set_style(document.getElementById('post_comment_container'), {display : 'none'});
@@ -981,7 +982,7 @@ Version: 0.1; Sept 19th 2011
                                                     }
                                                 s += '</select></p>';
                                                 s += '<div class="form-container"><form action="#" method="post"><div class="controlset"><label for="color1"><strong>Choose Label'+"'"+'s color</strong></label> <input id="color1" type="text" name="color1" value="#333399" /></div></form></div><p>&nbsp;</p>'
-                                                s += '<p><a href="#" id="Btn_addrule" class="buttoninline">Add rule:</a>';
+                                                s += '<p><a href="#" id="Btn_addrule" class="buttoninline">Add rule</a>';
                                                 s += '<select name="conditions" id="conditions" style = "display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px; margin: 0 5px;">';
                                                 s += '<option value="1">Who posted the messge</option>';
                                                 s += '<option value="2">Who is mentioned</option>';
@@ -1016,8 +1017,16 @@ Version: 0.1; Sept 19th 2011
                                                 }
                                                 
                                                 $('#Btn_addrule').click(function () {
+                                                    document.rule = !document.rule;
+                                                    if (document.rule){
                                                     set_style(document.getElementById('conditions'),{display: 'inline'});
-                                                    set_style(document.getElementById('condition_textbox'),{display: 'inline'});
+                                                    set_style(document.getElementById('condition_textbox'),{display: 'inline'});                                                        
+                                                    } else {
+                                                    set_style(document.getElementById('conditions'),{display: 'none'});
+                                                    set_style(document.getElementById('condition_textbox'),{display: 'none'});                                                        
+                                                    set_style(document.getElementById('conditions_kindoflike'),{display: 'none'});
+                                                    set_style(document.getElementById('conditions_kindofdate'),{display: 'none'});
+                                                    }
                                                     return false;
                                                     });
                                                 $('#color1').colorPicker();
