@@ -970,6 +970,26 @@ Version: 0.1; Sept 19th 2011
                                                 }
                                             }
                                         document.getElementById('lable_container').appendChild(label_list);
+
+                                        function create_condition(){
+                                            var comment = document.createElement('div');
+                                            comment.uid = data.id;
+                                            comment.updated_time = data.time;
+                                            var img = document.createElement('div');
+                                            img.innerHTML = '<a href="javascript:void(0)" style="margin-right:8px; width:32px;height:32px; float:left"><img style="width:32px; height:32px;border:none;" src="'+document.location.protocol +"//graph.facebook.com/" + data.fromid + '/picture" /></a>'
+                                            comment.appendChild(img.firstChild);
+
+                                            var comment_details = document.createElement('div');
+                                            set_style(comment_details, {float:'right', width : '90%'});
+                                            var full_name = document.createElement('a');
+                                            full_name.href="http://www.facebook.com/profile.php?id=" + data.fromid;
+                                            full_name.target = "_blank";
+                                            add_class(full_name, 'full_name');
+                                            full_name.innerHTML = user_list[data.fromid];
+                                            comment_details.appendChild(full_name);
+                                        };
+
+
                                         if(window.admin && window.global){
                                             var menu_add_label = create_label('Add label','creat_label', function(){
                                                 document.rule = false;
