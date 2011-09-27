@@ -967,15 +967,9 @@ Version: 0.1; Sept 19th 2011
                                         }
                                 //getElementsByTagName("img")
                                  
-                                //condlis
-                                
-                                //<select name="conditions" id="conditions" style = "display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px; margin: 0 5px;">
-                                
-                                
+                                //condlis                                
                                 condlist = document.createElement('select');
-                                //condlist.setAttribute('id', 'conditions'); 
                                 condlist.setAttribute('style', 'display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px; margin: 0 5px;');
-
 
                                 theOption = document.createElement("OPTION");
                                 theText = document.createTextNode("Who posted the messge");
@@ -1032,20 +1026,56 @@ Version: 0.1; Sept 19th 2011
                                 condlist.appendChild(theOption);
                                 
                                 condlist.onchange=function(){
-                                   var l = this.parentNode.getElementsByTagName("select")[0];
+                                   var l = this.parentNode.getElementsByTagName("select")[1];
                                    //getElementById('conditions_kindoflike');
-                                   var d = this.parentNode.getElementsByTagName("select")[0];
+                                   var d = this.parentNode.getElementsByTagName("select")[2];
                                    var chosencondition=this.options[this.selectedIndex];
                                    if(chosencondition.value==5||chosencondition.value==6){set_style(d,{display: 'none'});set_style(l,{display: 'inline'});}
                                    else if(chosencondition.value==8){set_style(d,{display: 'inline'});set_style(l,{display: 'none'});}
                                    else {set_style(d,{display: 'none'});set_style(l,{display: 'none'});}                                                    
                                 }
 
+
+                                //likelist                                
+                                likelist = document.createElement('select');
+                                likelist.setAttribute('style', 'display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px; margin-right: 5px;');
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("more than");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","1");
+                                likelist.appendChild(theOption);
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("less than");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","2");
+                                likelist.appendChild(theOption);
+
+
+                                //datelist                                
+                                datelist = document.createElement('select');
+                                //condlist.setAttribute('id', 'conditions'); 
+                                datelist.setAttribute('style', 'display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px; margin-right: 5px;');
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("before");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","1");
+                                datelist.appendChild(theOption);
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("after");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","2");
+                                datelist.appendChild(theOption);
                                  
                                 //other elements
                                 conditions.appendChild(newcond);
                                 newcond.appendChild(button);
                                 newcond.appendChild(condlist);
+                                newcond.appendChild(likelist);
+                                newcond.appendChild(datelist);                                
                                 };
                                 
                         //jQuery: DB connection and the Menu
@@ -1113,15 +1143,15 @@ Version: 0.1; Sept 19th 2011
                                                 //s += '<option value="8">Date of the post</option>';
                                                 //s += '<option value="9">Post has attachments</option>';
                                                 //s += '</select>';
-                                                s += '<div><select name="conditions_kindoflike" id="conditions_kindoflike" style = "display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px; margin-right: 5px;">';
-                                                s += '<option value="1">more than</option>';
-                                                s += '<option value="2">less than</option>';
-                                                s += '</select>';
-                                                s += '<select name="conditions_kindofdate" id="conditions_kindofdate" style = "display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px; margin-right: 5px;">';
-                                                s += '<option value="1">Before</option>';
-                                                s += '<option value="2">After</option>';
-                                                s += '</select>';
-                                                s += '<input type="text" name="condition_textbox" size="15" maxlength="40" value="" id="condition_textbox" title="Text" style = "display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px;"/>';
+                                                //s += '<select name="conditions_kindoflike" id="conditions_kindoflike" style = "display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px; margin-right: 5px;">';
+                                                //s += '<option value="1">more than</option>';
+                                                //s += '<option value="2">less than</option>';
+                                                //s += '</select>';
+                                                //s += '<select name="conditions_kindofdate" id="conditions_kindofdate" style = "display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px; margin-right: 5px;">';
+                                                //s += '<option value="1">Before</option>';
+                                                //s += '<option value="2">After</option>';
+                                                //s += '</select>';
+                                                s += '<div><input type="text" name="condition_textbox" size="15" maxlength="40" value="" id="condition_textbox" title="Text" style = "display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px;"/>';
                                                 s += '</div></div></div>';
                                                 document.getElementById('dialog-message').innerHTML = s;
                                                 
