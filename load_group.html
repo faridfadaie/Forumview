@@ -1023,7 +1023,6 @@ Version: 0.1; Sept 19th 2011
                                                 s += '<div class="form-container"><form action="#" method="post"><div class="controlset"><label for="color1"><strong>Choose Label'+"'"+'s color</strong></label> <input id="color1" type="text" name="color1" value="#333399" /></div></form></div><p>&nbsp;</p>'
                                                 s += '<div id="conditions_container">';
                                                 s += '<div id="cdtest"></div>'
-                                                create_condition(1);
                                                 //s += '<a href="#" id="Btn_addrule" class="buttoninline">Add rule</a>';
                                                 s += '<div><select name="conditions" id="conditions" style = "display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px; margin: 0 5px;">';
                                                 s += '<option value="1">Who posted the messge</option>';
@@ -1074,6 +1073,7 @@ Version: 0.1; Sept 19th 2011
                                                     return false;
                                                     });
                                                 $('#color1').colorPicker();
+                                                create_condition(1);
                                                 });
                                             menu_add_label_container = document.createElement('ul');
                                             add_class(menu_add_label_container, 'label_item');
