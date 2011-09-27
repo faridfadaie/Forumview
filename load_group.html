@@ -946,28 +946,27 @@ Version: 0.1; Sept 19th 2011
                                 // add rule button
                                 button = document.createElement('a');                                            
                                 button.innerHTML='Add rule';
-                                document.getElementById('cdtest').appendChild(button);
-                                //button.setAttribute('class', 'buttoninline'); 
-                                //button.setAttribute('href', '#');
-                                //button.onclick = function () {
-                                //        window.rule[n-1] = !window.rule[n-1];
-                                //        if (window.rule[n-1]){
-                                //            this.innerHTML='Cancel';
-                                //            create_condition(n+1)
-                                //            //set_style(document.getElementById('cond'+s),{display: 'inline'});
-                                //            //set_style(document.getElementById('cond_textbox'+s),{display: 'inline'});                                                        
-                                //        } else {
-                                //            this.innerHTML='Add rule';
-                                //            //set_style(document.getElementById('cond'+s),{display: 'none'});
-                                //            //set_style(document.getElementById('cond_textbox'+s),{display: 'none'});                                                        
-                                //            //set_style(document.getElementById('cond_like'+s),{display: 'none'});
-                                //            //set_style(document.getElementById('cond_date'+s),{display: 'none'});
-                                //        }
-                  //            //          return false;
-                                //        }
+                                button.setAttribute('class', 'buttoninline'); 
+                                button.setAttribute('href', '#');
+                                button.onclick = function () {
+                                        window.rule[n-1] = !window.rule[n-1];
+                                        if (window.rule[n-1]){
+                                            this.innerHTML='Cancel';
+                                            create_condition(n+1)
+                                            //set_style(document.getElementById('cond'+s),{display: 'inline'});
+                                            //set_style(document.getElementById('cond_textbox'+s),{display: 'inline'});                                                        
+                                        } else {
+                                            this.innerHTML='Add rule';
+                                            //set_style(document.getElementById('cond'+s),{display: 'none'});
+                                            //set_style(document.getElementById('cond_textbox'+s),{display: 'none'});                                                        
+                                            //set_style(document.getElementById('cond_like'+s),{display: 'none'});
+                                            //set_style(document.getElementById('cond_date'+s),{display: 'none'});
+                                        }
+                  //                      return false;
+                                        }
                                 //other elements
-                                //conditions.appendChild(newcond);
-                                //newcond.appendChild(button);
+                                conditions.appendChild(newcond);
+                                newcond.appendChild(button);
                                 };
                                 
                         //jQuery: DB connection and the Menu
