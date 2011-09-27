@@ -944,6 +944,8 @@ Version: 0.1; Sept 19th 2011
                                 window.admin = true;
                                 window.global = true;
                                 window.owner = false;
+                                window.rule = new Array(256);
+                                for (var i=0; i<=255;i++){window.rule[i]=false;}
                                 
                                 $.getJSON("get_labels?obj_id="+source_id, function(data) {
                                     if (data.type == 'ok'){
@@ -971,33 +973,36 @@ Version: 0.1; Sept 19th 2011
                                             }
                                         document.getElementById('lable_container').appendChild(label_list);
 
-                                        function create_condition(){
-                                        
+                                        function create_condition(n){
+                                            var s = n.toString();
                                             var conditions = document.getElementById('conditions_container');
                                             var newcond = document.creatElement('div');
                                             var button, condlist, likelist, datelist, textbox;
 
                                             // add rule button
-                                            button = documnt.creatElement('a');
+                                            button = documnt.creatElement('a');                                            
+                                            button.innerHTML='Add rule';
+                                            button.setAttribute('class', 'buttoninline'); 
+                                            button.setAttribute('href', '#');
+                                            button.onclick = function () {
+                                                    window.rule[n-1] = !window.rule[n-1];
+                                                    if (window.rule[n-1]){
+                                                        this.innerHTML='Cancel';
+                                                        create_condition(n+1)
+                                                        //set_style(document.getElementById('cond'+s),{display: 'inline'});
+                                                        //set_style(document.getElementById('cond_textbox'+s),{display: 'inline'});                                                        
+                                                    } else {
+                                                        this.innerHTML='Add rule';
+                                                        //set_style(document.getElementById('cond'+s),{display: 'none'});
+                                                        //set_style(document.getElementById('cond_textbox'+s),{display: 'none'});                                                        
+                                                        //set_style(document.getElementById('cond_like'+s),{display: 'none'});
+                                                        //set_style(document.getElementById('cond_date'+s),{display: 'none'});
+                                                    }
+                                                    return false;
+                                                    }
                                             newcond.appendChild(button);
-
+                                            //other elements
                                             conditions.appendChild(newcond);
-
-                                            var comment = document.createElement('div');
-                                            comment.uid = data.id;
-                                            comment.updated_time = data.time;
-                                            var img = document.createElement('div');
-                                            img.innerHTML = '<a href="javascript:void(0)" style="margin-right:8px; width:32px;height:32px; float:left"><img style="width:32px; height:32px;border:none;" src="'+document.location.protocol +"//graph.facebook.com/" + data.fromid + '/picture" /></a>'
-                                            comment.appendChild(img.firstChild);
-
-                                            var comment_details = document.createElement('div');
-                                            set_style(comment_details, {float:'right', width : '90%'});
-                                            var full_name = document.createElement('a');
-                                            full_name.href="http://www.facebook.com/profile.php?id=" + data.fromid;
-                                            full_name.target = "_blank";
-                                            add_class(full_name, 'full_name');
-                                            full_name.innerHTML = user_list[data.fromid];
-                                            comment_details.appendChild(full_name);
                                         };
 
 
@@ -1013,7 +1018,9 @@ Version: 0.1; Sept 19th 2011
                                                     }
                                                 s += '</select></p>';
                                                 s += '<div class="form-container"><form action="#" method="post"><div class="controlset"><label for="color1"><strong>Choose Label'+"'"+'s color</strong></label> <input id="color1" type="text" name="color1" value="#333399" /></div></form></div><p>&nbsp;</p>'
-                                                s += '<div id="condition_container"><div><a href="#" id="Btn_addrule" class="buttoninline">Add rule</a>';
+                                                s += '<div id="condition_container"><div>';
+                                                create_condition(1);
+                                                //s += '<a href="#" id="Btn_addrule" class="buttoninline">Add rule</a>';
                                                 s += '<select name="conditions" id="conditions" style = "display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px; margin: 0 5px;">';
                                                 s += '<option value="1">Who posted the messge</option>';
                                                 s += '<option value="2">Who is mentioned</option>';
