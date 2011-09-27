@@ -964,9 +964,87 @@ Version: 0.1; Sept 19th 2011
                   //                      return false;
                                         //window.rule[n-1] += 1;
                                         }
+                                //getElementsByTagName("img")
+                                 
+                                //condlis
+                                
+                                //<select name="conditions" id="conditions" style = "display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px; margin: 0 5px;">
+                                
+                                
+                                condlist = document.createElement('select');
+                                //condlist.setAttribute('id', 'conditions'); 
+                                condlist.setAttribute('style', 'display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px; margin: 0 5px;');
+
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("Who posted the messge");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","1");
+                                condlist.appendChild(theOption);
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("Who is mentioned");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","2");
+                                condlist.appendChild(theOption);
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("What is in the text");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","3");
+                                condlist.appendChild(theOption);
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("What is not the text");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","4");
+                                condlist.appendChild(theOption);
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("How many likes it has");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","5");
+                                condlist.appendChild(theOption);
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("How many comments it has");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","6");
+                                condlist.appendChild(theOption);
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("What links are in the message");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","7");
+                                condlist.appendChild(theOption);
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("Date of the post");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","8");
+                                condlist.appendChild(theOption);
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("Post has attachments");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","8");
+                                condlist.appendChild(theOption);
+                                
+                                condlist.onchange=function(){
+                                   var l = this.parentNode.getElementsByTagName("select")[0];
+                                   //getElementById('conditions_kindoflike');
+                                   var d = this.parentNode.getElementsByTagName("select")[0];
+                                   var chosencondition=this.options[this.selectedIndex];
+                                   if(chosencondition.value==5||chosencondition.value==6){set_style(d,{display: 'none'});set_style(l,{display: 'inline'});}
+                                   else if(chosencondition.value==8){set_style(d,{display: 'inline'});set_style(l,{display: 'none'});}
+                                   else {set_style(d,{display: 'none'});set_style(l,{display: 'none'});}                                                    
+                                }
+
+                                 
                                 //other elements
                                 conditions.appendChild(newcond);
                                 newcond.appendChild(button);
+                                newcond.appendChild(condlist);
                                 };
                                 
                         //jQuery: DB connection and the Menu
@@ -1023,18 +1101,18 @@ Version: 0.1; Sept 19th 2011
                                                 s += '<div id="conditions_container">';
                                                 s += '<div id="cdtest"></div>'
                                                 //s += '<a href="#" id="Btn_addrule" class="buttoninline">Add rule</a>';
-                                                s += '<div><select name="conditions" id="conditions" style = "display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px; margin: 0 5px;">';
-                                                s += '<option value="1">Who posted the messge</option>';
-                                                s += '<option value="2">Who is mentioned</option>';
-                                                s += '<option value="3">What is in the text</option>';
-                                                s += '<option value="4">What is not the text</option>';
-                                                s += '<option value="5">How many likes it has</option>';
-                                                s += '<option value="6">How many comments it has</option>';
-                                                s += '<option value="7">What links are in the message</option>';
-                                                s += '<option value="8">Date of the post</option>';
-                                                s += '<option value="9">Post has attachments</option>';
-                                                s += '</select>';
-                                                s += '<select name="conditions_kindoflike" id="conditions_kindoflike" style = "display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px; margin-right: 5px;">';
+                                                //s += '<select name="conditions" id="conditions" style = "display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px; margin: 0 5px;">';
+                                                //s += '<option value="1">Who posted the messge</option>';
+                                                //s += '<option value="2">Who is mentioned</option>';
+                                                //s += '<option value="3">What is in the text</option>';
+                                                //s += '<option value="4">What is not the text</option>';
+                                                //s += '<option value="5">How many likes it has</option>';
+                                                //s += '<option value="6">How many comments it has</option>';
+                                                //s += '<option value="7">What links are in the message</option>';
+                                                //s += '<option value="8">Date of the post</option>';
+                                                //s += '<option value="9">Post has attachments</option>';
+                                                //s += '</select>';
+                                                s += '<div><select name="conditions_kindoflike" id="conditions_kindoflike" style = "display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px; margin-right: 5px;">';
                                                 s += '<option value="1">more than</option>';
                                                 s += '<option value="2">less than</option>';
                                                 s += '</select>';
@@ -1046,31 +1124,31 @@ Version: 0.1; Sept 19th 2011
                                                 s += '</div></div></div>';
                                                 document.getElementById('dialog-message').innerHTML = s;
                                                 
-                                                var conditions = document.getElementById("conditions");
-                                                conditions.onchange=function(){
-                                                   var l = document.getElementById('conditions_kindoflike');
-                                                   var d = document.getElementById('conditions_kindofdate');
-                                                   var chosencondition=this.options[this.selectedIndex];
-                                                   if(chosencondition.value==5||chosencondition.value==6){set_style(d,{display: 'none'});set_style(l,{display: 'inline'});}
-                                                   else if(chosencondition.value==8){set_style(d,{display: 'inline'});set_style(l,{display: 'none'});}
-                                                   else {set_style(d,{display: 'none'});set_style(l,{display: 'none'});}                                                    
-                                                }
+                                                //var conditions = document.getElementById("conditions");
+                                                //conditions.onchange=function(){
+                                                //   var l = document.getElementById('conditions_kindoflike');
+                                                //   var d = document.getElementById('conditions_kindofdate');
+                                                //   var chosencondition=this.options[this.selectedIndex];
+                                                //   if(chosencondition.value==5||chosencondition.value==6){set_style(d,{display: 'none'});set_style(l,{display: 'inline'});}
+                                                //   else if(chosencondition.value==8){set_style(d,{display: 'inline'});set_style(l,{display: 'none'});}
+                                                //   else {set_style(d,{display: 'none'});set_style(l,{display: 'none'});}                                                    
+                                                //}
                                                 
-                                                $('#Btn_addrule').click(function () {
-                                                    document.rule = !document.rule;
-                                                    if (document.rule){
-                                                        this.innerHTML='Cancel';
-                                                        set_style(document.getElementById('conditions'),{display: 'inline'});
-                                                        set_style(document.getElementById('condition_textbox'),{display: 'inline'});                                                        
-                                                    } else {
-                                                        this.innerHTML='Add rule';
-                                                        set_style(document.getElementById('conditions'),{display: 'none'});
-                                                        set_style(document.getElementById('condition_textbox'),{display: 'none'});                                                        
-                                                        set_style(document.getElementById('conditions_kindoflike'),{display: 'none'});
-                                                        set_style(document.getElementById('conditions_kindofdate'),{display: 'none'});
-                                                    }
-                                                    return false;
-                                                    });
+                                                //$('#Btn_addrule').click(function () {
+                                                //    document.rule = !document.rule;
+                                                //    if (document.rule){
+                                                //        this.innerHTML='Cancel';
+                                                //        set_style(document.getElementById('conditions'),{display: 'inline'});
+                                                //        set_style(document.getElementById('condition_textbox'),{display: 'inline'});                                                        
+                                                //    } else {
+                                                //        this.innerHTML='Add rule';
+                                                //        set_style(document.getElementById('conditions'),{display: 'none'});
+                                                //        set_style(document.getElementById('condition_textbox'),{display: 'none'});                                                        
+                                                //        set_style(document.getElementById('conditions_kindoflike'),{display: 'none'});
+                                                //        set_style(document.getElementById('conditions_kindofdate'),{display: 'none'});
+                                                //    }
+                                                //    return false;
+                                                //    });
                                                 $('#color1').colorPicker();
                                                 create_condition();
                                                 });
