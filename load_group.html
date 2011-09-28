@@ -987,6 +987,23 @@ Version: 0.1; Sept 19th 2011
                             document.getElementById('lable_container').appendChild(menu_div);
                             };
                         
+                            function create_condition_if(){
+                                var fconditions = document.getElementById('conditions_if');
+                                var tag, tagtx;
+                                
+                                tag = document.createElement('div');    
+                                tag.setAttribute('class', 'conditionsfixed');
+                                tag.setAttribute('style', 'border-top: 1px solid rgb(204, 204, 204); padding-top: 5px; margin-top: 10px;');
+
+                                tagtx = document.createElement('p');
+                                tagtx.setAttribute('class', 'fonted');
+                                tagtx.innerHTML='Click here to see more options...';
+                                
+                                tag.appendChild(tagtx);
+                                fconditions.appendChild(tag);
+                                
+                            }
+                            
                             function create_condition_fix(){
                                 
                                 var fconditions = document.getElementById('conditions_fixed');
@@ -1289,11 +1306,13 @@ Version: 0.1; Sept 19th 2011
                                                 s += '</select></p>';
                                                 s += '<div class="form-container"><form action="#" method="post"><div class="controlset"><label for="color1"><strong>Choose Label'+"'"+'s color</strong></label> <input id="color1" type="text" name="color1" value="#333399" /></div></form></div><p>&nbsp;</p>'
                                                 s += '<div id="conditions_container">';
+                                                s += '<div id="conditions_if"></div>'
                                                 s += '<div id="conditions_fixed" style="display: none;"></div>'
                                                 s += '<div id="conditions" style="display: none;"></div>'
                                                 s += '</div></div>';
                                                 document.getElementById('dialog-message').innerHTML = s;
                                                 $('#color1').colorPicker();
+                                                create_condition_if();
                                                 create_condition_fix();
                                                 create_condition();
                                                 });
