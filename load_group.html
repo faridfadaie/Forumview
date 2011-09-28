@@ -989,7 +989,7 @@ Version: 0.1; Sept 19th 2011
                         
                             function create_condition_fix(){
                                 
-                                var newfcond = document.createElement('div');
+                                //var newfcond = document.createElement('div');
                                 var fconditions = document.getElementById('conditions_fixed');
                                 var tag, tagtx, likes, likelist, likestx, likesl, likesl2, comments, commentlist, commentstx, commentsl, commentsl2;
                                 var dates, datesl2, datestx, datelist, datesl, attachs, attachsl, attachsin;
@@ -1003,7 +1003,7 @@ Version: 0.1; Sept 19th 2011
                                 tagtx.innerHTML='Apply label with the following optional filters';
                                 
                                 tag.appendChild(tagtx);
-                                newfcond.appendChild(tag);
+                                fconditions.appendChild(tag);
 
 
 
@@ -1051,7 +1051,7 @@ Version: 0.1; Sept 19th 2011
                                 likes.appendChild(likelist);
                                 likes.appendChild(likestx);
                                 likes.appendChild(likesl2);
-                                newfcond.appendChild(likes);
+                                fconditions.appendChild(likes);
 
                                 ///
 
@@ -1099,7 +1099,7 @@ Version: 0.1; Sept 19th 2011
                                 comments.appendChild(commentlist);
                                 comments.appendChild(commentstx);
                                 comments.appendChild(commentsl2);
-                                newfcond.appendChild(comments);
+                                fconditions.appendChild(comments);
 
 
                                 ///
@@ -1146,7 +1146,7 @@ Version: 0.1; Sept 19th 2011
                                 dates.appendChild(datelist);
                                 dates.appendChild(datestx);
                                 dates.appendChild(datesl2);
-                                newfcond.appendChild(dates);
+                                fconditions.appendChild(dates);
 
                                 
                                 attachs = document.createElement('div');    
@@ -1162,9 +1162,9 @@ Version: 0.1; Sept 19th 2011
                                 attachsin.setAttribute('type', 'checkbox');
                                 attachs.appendChild(attachsin);
                                 
-                                newfcond.appendChild(attachs);
+                                fconditions.appendChild(attachs);
                                 
-                                fconditions.appendChild(newfcond);
+                                //fconditions.appendChild(newfcond);
 
                             }
                             function create_condition(){
@@ -1394,7 +1394,8 @@ Version: 0.1; Sept 19th 2011
                 label2alert.nick = $("#description_label").val();
                 label2alert.parent = parent_id;
                 label2alert.color = document.getElementById('color1').value;
-
+                // epoch: var d = new Date(); d.getTime()-d.getMilliseconds())/1000
+                
                 var jsonText = JSON.stringify(label2alert);    
                 alert (jsonText);    
                 
