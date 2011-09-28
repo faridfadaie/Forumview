@@ -955,7 +955,25 @@ Version: 0.1; Sept 19th 2011
                             document.getElementById('lable_container').appendChild(menu_div);
                             };
                         
-                        
+                            function create_condition_fix(){
+                                var newfcond = document.createElement('div');
+                                var fconditions = document.getElementById('conditions_fixed');
+                                var likesin, likesl, likes, comments, date, attachment;
+                                
+                                likes = document.createElement('div');    
+                                likes.setAttribute('class', 'conditionsfixed');
+                                likesin = document.createElement('input');
+                                likesin.setAttribute('id', 'howmanylikeit');
+                                likesin.setAttribute('type', 'checkbox');
+                                likes.appendChild(likesin);
+                                likesl = document.createElement('label');
+                                likesl.setAttribute('for', 'howmanylikeit');
+                                likesl.innerHTML='How many likes it has';
+                                likes.appendChild(likesl);
+                                newfcond.appendChild(likes);
+                                fconditions.appendChild(newfcond);
+
+                            }
                             function create_condition(){
                                 var newcond = document.createElement('div');
                                 var conditions = document.getElementById('conditions');
@@ -1163,10 +1181,12 @@ Version: 0.1; Sept 19th 2011
                                                 s += '</select></p>';
                                                 s += '<div class="form-container"><form action="#" method="post"><div class="controlset"><label for="color1"><strong>Choose Label'+"'"+'s color</strong></label> <input id="color1" type="text" name="color1" value="#333399" /></div></form></div><p>&nbsp;</p>'
                                                 s += '<div id="conditions_container">';
+                                                s += '<div id="conditions_fixed"></div>'
                                                 s += '<div id="conditions"></div>'
                                                 s += '</div></div>';
                                                 document.getElementById('dialog-message').innerHTML = s;
                                                 $('#color1').colorPicker();
+                                                create_condition_fix();
                                                 create_condition();
                                                 //$('.datetextbox').simpleDatepicker();
                                                 });
@@ -1258,22 +1278,32 @@ Version: 0.1; Sept 19th 2011
                                                 parent = window.labels[i];
                                                 }
                                             }
-                                        $.post("create_label",{obj_id: source_id, name: $("#name_label").val(), nick: $("#name_label").val(), desc: $("#description_label").val(), parent: parent_id},
-                                        function(result) {
-                                            
-                                            if (result["type"]=="ok"){
-                                                if (parent_id == '0'){
-                                                    window.labels[result["data"]] = create_label($("#name_label").val(), result["data"], function(){alert('click')});
-                                                    document.getElementById('lable_container_ul').appendChild(window.labels[result["data"]]);
-                                                    
-                                                    } else {
-                                                    window.labels[parent_id].add_child($("#name_label").val(), result["data"], function(){alert('click')});
-                                                    }
-                                                //$("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
-                                                } else {
-                                                alert("An error occured, no lable culd be made, please try again!")
-                                                }
-                                            });
+                var label2alert = new Object();
+                label2alert.obj_id = source_id;
+                label2alert.name = $("#name_label").val();
+                label2alert.nick = $("#description_label").val();
+                label2alert.parent = parent_id;
+                label2alert.nick = $("#description_label").val();
+
+                var jsonText = JSON.stringify(label2alert);    
+                alert (jsonText);    
+                
+                                        //$.post("create_label",{obj_id: source_id, name: $("#name_label").val(), nick: $("#description_label").val(), parent: parent_id},
+                                        //function(result) {
+                                         //   
+                                         //   if (result["type"]=="ok"){
+                                         //       if (parent_id == '0'){
+                                         //           window.labels[result["data"]] = create_label($("#name_label").val(), result["data"], function(){alert('click')});
+                                         //           document.getElementById('lable_container_ul').appendChild(window.labels[result["data"]]);
+                                         //           
+                                         //           } else {
+                                         //           window.labels[parent_id].add_child($("#name_label").val(), result["data"], function(){alert('click')});
+                                         //           }
+                                         //       //$("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
+                                         //       } else {
+                                         //       alert("An error occured, no lable culd be made, please try again!")
+                                         //      }
+                                         //   });
                                         $('#dialog-overlay, #dialog-box').hide();
                                         return false;
                                         });
