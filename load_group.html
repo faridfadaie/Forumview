@@ -992,7 +992,7 @@ Version: 0.1; Sept 19th 2011
                                 var newfcond = document.createElement('div');
                                 var fconditions = document.getElementById('conditions_fixed');
                                 var tag, tagtx, likes, likelist, likestx, likesl, likesl2, comments, commentlist, commentstx, commentsl, commentsl2;
-                                var dates, datesl2, datestx, datelist, datesl;
+                                var dates, datesl2, datestx, datelist, datesl, attachs, attachsl, attachsin;
                                 
                                 tag = document.createElement('div');    
                                 tag.setAttribute('class', 'conditionsfixed');
@@ -1142,13 +1142,22 @@ Version: 0.1; Sept 19th 2011
                                 datesl2.setAttribute('for', 'likelist');
                                 datesl2.innerHTML='(date).';
 
+                                
+                                attachs = document.createElement('div');    
+                                attachs.setAttribute('class', 'conditionsfixed');
 
-                                dates.appendChild(datesl);
-                                dates.appendChild(datelist);
-                                dates.appendChild(datestx);
-                                dates.appendChild(datesl2);
-                                newfcond.appendChild(dates);
+                                attachsl = document.createElement('label');
+                                attachsl.setAttribute('for', 'hasattachments');
+                                attachsl.innerHTML='If it has attachments';
+                                attachs.appendChild(attachsl);
 
+                                attachsin = document.createElement('input');
+                                attachsin.setAttribute('id', 'hasattachments');
+                                attachsin.setAttribute('type', 'checkbox');
+                                attachs.appendChild(attachsin);
+                                
+                                newfcond.appendChild(attachs);
+                                
                                 fconditions.appendChild(newfcond);
 
                             }
