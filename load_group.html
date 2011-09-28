@@ -1002,8 +1002,15 @@ Version: 0.1; Sept 19th 2011
                                 tagtx.innerHTML='more options...';
                                 tagtx.onclick = function(){
                                     //alert('clicked');
-                                    set_style(document.getElementById('conditions_fixed'),{display: 'block'});
-                                    set_style(document.getElementById('conditions'),{display: 'block'});
+                                    if (this.innerHTML == 'more options...'){
+                                        this.innerHTML='cancel options...';
+                                        set_style(document.getElementById('conditions_fixed'),{display: 'block'});
+                                        set_style(document.getElementById('conditions'),{display: 'block'});
+                                    } else {
+                                        this.innerHTML='more options...';
+                                        set_style(document.getElementById('conditions_fixed'),{display: 'none'});
+                                        set_style(document.getElementById('conditions'),{display: 'none'});                                        
+                                    }
                                 }
                                 
                                 tag.appendChild(tagtx);
