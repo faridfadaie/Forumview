@@ -1021,9 +1021,11 @@ Version: 0.1; Sept 19th 2011
                                    var l = this.parentNode.getElementsByTagName("select")[1];
                                    //getElementById('conditions_kindoflike');
                                    var d = this.parentNode.getElementsByTagName("select")[2];
+                                   var t = this.parentNode.getElementsByTagName("input")[0];
                                    var chosencondition=this.options[this.selectedIndex];
                                    if(chosencondition.value==5||chosencondition.value==6){set_style(d,{display: 'none'});set_style(l,{display: 'inline'});}
                                    else if(chosencondition.value==8){set_style(d,{display: 'inline'});set_style(l,{display: 'none'});}
+                                   else if(chosencondition.value==9){set_style(d,{display: 'none'});set_style(l,{display: 'none'});set_style(t,{display: 'none'});}
                                    else {set_style(d,{display: 'none'});set_style(l,{display: 'none'});}                                                    
                                 }
 
