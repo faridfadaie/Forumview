@@ -1214,7 +1214,7 @@ Version: 0.1; Sept 19th 2011
                                 condlist.appendChild(theOption);
 
                                 theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("What is not the text");
+                                theText = document.createTextNode("What is not in the text");
                                 theOption.appendChild(theText);
                                 theOption.setAttribute("value","4");
                                 condlist.appendChild(theOption);
@@ -1299,7 +1299,6 @@ Version: 0.1; Sept 19th 2011
                                                 $('#color1').colorPicker();
                                                 create_condition_fix();
                                                 create_condition();
-                                                //$('.datetextbox').simpleDatepicker();
                                                 });
                                             menu_add_label_container = document.createElement('ul');
                                             add_class(menu_add_label_container, 'label_item');
@@ -1394,7 +1393,7 @@ Version: 0.1; Sept 19th 2011
                 label2alert.name = $("#name_label").val();
                 label2alert.nick = $("#description_label").val();
                 label2alert.parent = parent_id;
-                label2alert.nick = $("#description_label").val();
+                label2alert.color = document.getElementById(color1).val();
 
                 var jsonText = JSON.stringify(label2alert);    
                 alert (jsonText);    
