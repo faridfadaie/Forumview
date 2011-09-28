@@ -950,7 +950,7 @@ Version: 0.1; Sept 19th 2011
                                 button.onclick = function () {
                                         if (this.innerHTML=='Add rule'){
                                             set_style(this.parentNode.getElementsByTagName("select")[0],{display: 'inline'});
-                                            //set_style(this.parentNode.getElementsByTagName("input"),{display: 'inline'});
+                                            set_style(this.parentNode.getElementsByTagName("input"),{display: 'inline'});
                                             this.innerHTML='Delete';
                                             create_condition();
                                             //set_style(document.getElementById('cond'+s),{display: 'inline'});
