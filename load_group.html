@@ -995,9 +995,10 @@ Version: 0.1; Sept 19th 2011
                                 tag.setAttribute('class', 'conditionsfixed');
                                 tag.setAttribute('style', 'border-top: 1px solid rgb(204, 204, 204); padding-top: 5px; margin-top: 10px;');
 
-                                tagtx = document.createElement('p');
+                                tagtx = document.createElement('a');
                                 tagtx.setAttribute('class', 'fonted');
-                                tagtx.innerHTML='Click here to see more options...';
+                                tagtx.setAttribute('href', '#');
+                                tagtx.innerHTML='more options...';
                                 
                                 tag.appendChild(tagtx);
                                 fconditions.appendChild(tag);
