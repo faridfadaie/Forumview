@@ -1181,7 +1181,7 @@ Version: 0.1; Sept 19th 2011
                                                 set_style(document.getElementById('dialog-box'), {display : 'block'});
                                                 set_style(document.getElementById('posts_container'), {display : 'none'});
                                                 set_style(document.getElementById('post_comment_container'), {display : 'none'});
-                                                var s = '<div><h2> New Label </h2><p>Please enter a name for the new label: </p><input type="text" name="name_label" size="26" maxlength="25" value="" id="name_label" title="Name of the label" class="conditionsfixed"/><p>Please enter a description: </p><textarea id="description_label" rows="4" cols="33"></textarea><p>Nest label under: <select name="list_labels" id="list_labels"><option value="0">Root</option>';
+                                                var s = '<div><h2> New Label </h2><p>Please enter a name for the new label: </p><input type="text" name="name_label" size="26" maxlength="25" value="" id="name_label" title="Name of the label" class="conditionsfixed"/><p>Please enter a description: </p><textarea id="description_label" rows="4" cols="33" class="conditionsfixed"></textarea><p>Nest label under: <select name="list_labels" id="list_labels"><option value="0">Root</option>';
                                                 for (var i in window.labels){
                                                     s += '<option value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
                                                     }
