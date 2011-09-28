@@ -751,4 +751,742 @@ Version: 0.1; Sept 19th 2011
                             how_many_like.innerHTML = data.likes.count + ' people';
                             like_container.appendChild(how_many_like);
                             if (data.likes.count == 0){
-                       
+                                set_style(how_many_like, {display : 'none'});
+                                set_style(like_icon, {display : 'none'});
+                                }
+                            container.how_many_like = how_many_like;
+                            container.like_counter = data.likes.count;
+                            container.like_icon = like_icon;
+                            container.like_it = like_it;
+                            div.appendChild(like_container);
+                            container.time_date = time_date;
+                            container.updated_time = data.updated_time;
+                            addEvent(like_it, 'click', function(){
+                                if (this.innerHTML.indexOf('Like') != -1){
+                                    FB.api('/' + container.post_id + '/likes', 'post', {}, function(response) {
+                                        if (!response || response.error) {
+                                            } else {
+                                            container.like_it.innerHTML = 'Unlike';
+                                            set_style(container.how_many_like, {display : ''});
+                                            set_style(container.like_icon, {display : ''});
+                                            container.like_counter = parseInt(container.like_counter) + 1;
+                                            container.how_many_like.innerHTML =  container.like_counter + ' people';
+                                            }
+                                        });
+                                    return
+                                    }
+                                FB.api('/' + container.post_id + '/likes', 'delete', {}, function(response) {
+                                    if (!response || response.error) {
+                                        } else {
+                                        container.like_counter = parseInt(container.like_counter) - 1;
+                                        container.how_many_like.innerHTML =  container.like_counter + ' people';
+                                        if (container.like_counter == 0){
+                                            set_style(container.how_many_like, {display : 'none'});
+                                            set_style(container.like_icon, {display : 'none'});
+                                            }
+                                        container.like_it.innerHTML = 'Like';
+                                        }
+                                    });
+                                });
+                            div.comments = {}
+                            if (data.comments)
+                            for (var j = 0; j < data.comments.comment_list.length; j++){
+                                var comment = create_post_comment(div, data.comments.comment_list[j], user_list);
+                                div.appendChild(comment);
+                                div.comments[comment.uid] = comment;
+                                }
+                            container.update = function(data, user_list){
+                                container.updated_time = data.updated_time;
+                                if (data.comments)
+                                for (var j = 0; j < data.comments.comment_list.length; j++){
+                                    if (data.comments.comment_list[j].id in div.comments){
+                                        div.comments[data.comments.comment_list[j].id].update(data.comments.comment_list[j], user_list);
+                                        }else{
+                                        var comment = create_post_comment(div, data.comments.comment_list[j], user_list);
+                                        div.appendChild(comment);
+                                        div.comments[comment.uid] = comment;
+                                        }
+                                    }
+                                container.like_it.innerHTML = data.likes.user_likes? 'Unlike' : 'Like';
+                                container.how_many_like.innerHTML = data.likes.count + ' people';
+                                if (data.likes.count == 0){
+                                    set_style(container.how_many_like, {display : 'none'});
+                                    set_style(container.like_icon, {display : 'none'});
+                                    }
+                                else{
+                                    set_style(container.how_many_like, {display : ''});
+                                    set_style(container.like_icon, {display : ''});
+                                    
+                                    }
+                                var created = new Date();
+                                created.setTime(data.updated_time*1000);
+                                container.time_dateinnerHTML = aprox_time(created);
+                                
+                                }
+                            
+                            return container
+                            }
+                        function display_posts(args){
+                            this.clear_container = function(){
+                                if (this.posts_container){while (this.posts_container.firstChild){this.posts_container.removeChild(this.posts_container.firstChild)}}
+                                }
+                            this.destroy = function(){
+                                if (this.posts_container){
+                                    this.clear_container();
+                                    this.posts_container.updated_time = 0;
+                                    }
+                                this.posts_list={}
+                                }
+                            this.posts_container = args.container;
+                            this.update = function(posts, users){
+                                this.posts_container.updated_time = 0;
+                                if (!this.posts_list){this.posts_list = {};}
+                                user_list = {}
+                                for (var i = 0; i < users.length; i++){
+                                    user_list[users[i].uid] = users[i].name;
+                                    }
+                                for (var i = 0; i < posts.length; i++){
+                                    if (posts[i].post_id in this.posts_list){
+                                        this.posts_list[posts[i].post_id].update(posts[i], user_list);
+                                        for (var k = (this.posts_container.childNodes.length - 1); k >= 0; k--){
+                                            if (posts[i].updated_time > this.posts_container.childNodes[k].updated_time){
+                                                this.posts_container.insertBefore(this.posts_list[posts[i].post_id], this.posts_container.childNodes[k]);
+                                                }
+                                            }
+                                        }else{
+                                        var post = create_post(posts[i], user_list, args.onclick);
+                                        if (posts[i].updated_time > this.posts_container.updated_time){
+                                            this.posts_container.insertBefore(post, this.posts_container.firstChild);
+                                            this.posts_container.updated_time = posts[i].updated_time;
+                                            }else{
+                                            this.posts_container.appendChild(post);
+                                            }
+                                        this.posts_list[posts[i].post_id] = post;
+                                        }
+                                    }
+                                }
+                            this.stop_timer = function(){
+                                if (this._handler) try{clearInterval(this._handler);}catch(e){}
+                                }
+                            this.timer = function(sec, func){
+                                this.stop_timer();
+                                var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+                                var string_length = 8;                                var randomstring = '';
+                                for (var i=0; i<string_length; i++) {
+                                    var rnum = Math.floor(Math.random() * chars.length);
+                                    randomstring += chars.substring(rnum,rnum+1);
+                                    }                                var tmp = this;
+                                this.id= this.id? this.id : randomstring;
+                                if (!window.display_post_time){window.display_post_time = {}}
+                                window.display_post_time[this.id] = [func, tmp];
+                                this._handler = setInterval("if (window.display_post_time['" + this.id + "']) {window.display_post_time['" + this.id + "'][0](window.display_post_time['" + this.id + "'][1])}else{}", sec)
+                                }
+                            }
+                        function switch_posts_to_page(n){
+                            var read_from_list = false;
+                            if (n == 0){
+                                window.to_date = null;
+                                }
+                            if ((n > window.post_show.now_displaying) && (n!=0)){
+                                window.to_date = window.from_date;
+                                //window.from_date = null;
+                                if (n!=1){
+                                    tmp_read_from_list = ''
+                                    for (var i in window.post_show.posts_list){
+                                        tmp_read_from_list = tmp_read_from_list==''? ('"' + i + '"') : ('"' + i + '",' + tmp_read_from_list);
+                                        }
+                                    if (window.posts_list){
+                                        window.posts_list.push(tmp_read_from_list)
+                                        }
+                                    else{
+                                        window.posts_list = [tmp_read_from_list]
+                                        }
+                                    }
+                                }
+                            if ((n < window.post_show.now_displaying) && (n!=0)){
+                                //window.from_date = window.to_date;
+                                //window.to_date = null;
+                                read_from_list = window.posts_list.pop()
+                                }
+                            window.post_show.now_displaying = n;
+                            window.post_show.timer(20000, function(){
+                                load_posts({posts_list: read_from_list, to: (window.post_show.now_displaying == 0? null : window.to_date), gid : document.location.pathname.split('/').length > 1? document.location.pathname.split('/')[1]
+                                    : '', onload : function(posts, users, from_date, to_date){
+                                        window.last_fine_post_page = window.post_show.now_displaying;
+                                        window.post_show.update(posts, users); window.from_date = from_date; window.to_date = to_date}});
+                                });
+                            load_posts({posts_list: read_from_list, to: window.to_date, gid : document.location.pathname.split('/').length > 1? document.location.pathname.split('/')[1] : '', onload : function(posts, users, from_date, to_date){
+                                    window.last_fine_post_page = window.post_show.now_displaying;
+                                    window.post_show.destroy(); window.to_date = to_date; window.from_date = from_date; window.post_show.update(posts, users);}});
+                            
+                            }
+                        function init(){
+                            post_show = new display_posts({container: document.getElementById('posts'), onclick : function(post_id){
+                                    set_style(document.getElementById('posts_container'), {display: 'none'});
+                                    set_style(document.getElementById('post_comment_container'), {display: 'block'});
+                                    window.forum = new display_posts({container: document.getElementById('post_comment')});
+                                    load_posts({post_id : post_id, gid : document.location.pathname.split('/').length > 1? document.location.pathname.split('/')[1] : '', onload : function(posts, users){window.forum.update(posts, users);}});
+                                    window.forum.timer(20000, function(){
+                                        load_posts({post_id : post_id, gid : document.location.pathname.split('/').length > 1? document.location.pathname.split('/')[1] : '', onload : function(posts, users){window.forum.update(posts, users);}});
+                                        })
+                                    }
+                                });
+                            switch_posts_to_page(0);
+                            }
+                        
+                        window.fbAsyncInit = function() {
+                            FB.init({
+                                appId  : '246575252046549',
+                                status : true, // check login status
+                                cookie : true, // enable cookies to allow the server to access the session
+                                xfbml  : true  // parse XFBML
+                                })
+                            FBtools = new fb_tools({connect_button: 'fb_connect_button', init : init, perms:'publish_stream, read_stream, user_groups'})
+                            FB.Event.subscribe("auth.login", function(response) {
+                                FBtools.fb_check_permission(response);
+                                });
+                            FB.getLoginStatus(function(response) {
+                                FBtools.fb_check_permission(response);
+                                if (response.session) {
+                                    // logged in and connected user, someone you know
+                                    } else {
+                                    // no user session available, someone you dont know
+                                    }
+                                });
+                            };
+                        
+                        (function() {
+                            var e = document.createElement('script');
+                            e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+                            e.async = true;
+                            document.getElementById('fb-root').appendChild(e);
+                            }());
+                        
+                        //Popup dialog
+                        function popup(message) {
+                            var maskWidth = $(window).width();
+                            var windowHeight = $(window).height();
+                            
+                            // calculate the values for center alignment
+                            var dialogTop =  (windowHeight/2) - ($('#dialog-box').height()/2);
+                            var dialogLeft = (maskWidth/2) - ($('#dialog-box').width()/2);
+                            
+                            // assign values to the overlay and dialog box
+                            $('#dialog-overlay').css({height:maskHeight, width:maskWidth}).show();
+                            $('#dialog-box').css({top:dialogTop, left:dialogLeft}).show();
+                            
+                            // display the message
+                            $('#dialog-message').html(message);
+                            };
+                        
+                        function create_tag(id,txt){
+                            var menu_div = document.createElement('div');
+                            menu_div.uid = id;
+                            menu_div.innerHTML = txt;
+                            add_class(menu_div, 'categories');
+                            document.getElementById('lable_container').appendChild(menu_div);
+                            };
+                        
+                            function create_condition_if(){
+                                var fconditions = document.getElementById('conditions_if');
+                                var tag, tagtx;
+                                
+                                tag = document.createElement('div');    
+                                tag.setAttribute('class', 'conditionsfixed');
+                                tag.setAttribute('style', 'border-top: 1px solid rgb(204, 204, 204); padding-top: 5px; margin-top: 10px;');
+
+                                tagtx = document.createElement('a');
+                                tagtx.setAttribute('class', 'fonted');
+                                tagtx.setAttribute('style', 'text-decoration:none; font-weight: 700; text-transform: capitalize;');
+                                tagtx.setAttribute('href', '#');
+                                tagtx.innerHTML='more options...';
+                                
+                                tag.appendChild(tagtx);
+                                fconditions.appendChild(tag);
+                                
+                            }
+                            
+                            function create_condition_fix(){
+                                
+                                var fconditions = document.getElementById('conditions_fixed');
+                                var tag, tagtx, likes, likelist, likestx, likesl, likesl2, comments, commentlist, commentstx, commentsl, commentsl2;
+                                var dates, datesl2, datestx, datelist, datesl, attachs, attachsl, attachsin;
+                                
+                                tag = document.createElement('div');    
+                                tag.setAttribute('class', 'conditionsfixed');
+                                tag.setAttribute('style', 'border-top: 1px solid rgb(204, 204, 204); padding-top: 5px; margin-top: 10px;');
+
+                                tagtx = document.createElement('p');
+                                tagtx.setAttribute('class', 'fonted');
+                                tagtx.innerHTML='Apply label with the following optional filters';
+                                
+                                tag.appendChild(tagtx);
+                                fconditions.appendChild(tag);
+
+
+
+                                likes = document.createElement('div');    
+                                likes.setAttribute('class', 'conditionsfixed');
+                                
+                                likesl = document.createElement('label');
+                                likesl.setAttribute('for', 'likelist');
+                                likesl.setAttribute('style', 'margin-right: 5px;');
+                                likesl.innerHTML='If it has';
+
+
+                                likelist = document.createElement('select');
+                                likelist.setAttribute('id', 'likelist');                                
+                                likelist.setAttribute('class', 'fonted');
+                                likelist.setAttribute('style', 'margin-right: 5px;');
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("more than");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","1");
+                                likelist.appendChild(theOption);
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("less than");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","2");
+                                likelist.appendChild(theOption);
+
+
+                                likestx = document.createElement('input');  
+                                likestx.setAttribute('type', 'text');
+                                likestx.setAttribute('size', '3'); 
+                                likestx.setAttribute('maxlength', '3');
+                                likestx.setAttribute('style', 'margin-right: 5px;');
+                                likestx.setAttribute('class', 'fonted');
+                                
+                                
+                                likesl2 = document.createElement('label');
+                                likesl2.setAttribute('for', 'likelist');
+                                likesl2.innerHTML='likes.';
+
+
+                                likes.appendChild(likesl);
+                                likes.appendChild(likelist);
+                                likes.appendChild(likestx);
+                                likes.appendChild(likesl2);
+                                fconditions.appendChild(likes);
+
+                                ///
+
+                                comments = document.createElement('div');    
+                                comments.setAttribute('class', 'conditionsfixed');
+                                
+                                commentsl = document.createElement('label');
+                                commentsl.setAttribute('for', 'commentlist');
+                                commentsl.setAttribute('style', 'margin-right: 5px;');
+                                commentsl.innerHTML='If it has';
+
+
+                                commentlist = document.createElement('select');
+                                commentlist.setAttribute('id', 'commentlist');                                
+                                commentlist.setAttribute('class', 'fonted');
+                                commentlist.setAttribute('style', 'margin-right: 5px;');
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("more than");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","1");
+                                commentlist.appendChild(theOption);
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("less than");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","2");
+                                commentlist.appendChild(theOption);
+
+
+                                commentstx = document.createElement('input');  
+                                commentstx.setAttribute('type', 'text');
+                                commentstx.setAttribute('size', '3'); 
+                                commentstx.setAttribute('maxlength', '3');
+                                commentstx.setAttribute('style', 'margin-right: 5px;');
+                                commentstx.setAttribute('class', 'fonted');
+                                
+                                
+                                commentsl2 = document.createElement('label');
+                                commentsl2.setAttribute('for', 'commentlist');
+                                commentsl2.innerHTML='comments.';
+
+
+                                comments.appendChild(commentsl);
+                                comments.appendChild(commentlist);
+                                comments.appendChild(commentstx);
+                                comments.appendChild(commentsl2);
+                                fconditions.appendChild(comments);
+
+
+                                ///
+                                dates = document.createElement('div');    
+                                dates.setAttribute('class', 'conditionsfixed');
+                                
+                                datesl = document.createElement('label');
+                                datesl.setAttribute('for', 'likelist');
+                                datesl.setAttribute('style', 'margin-right: 5px;');
+                                datesl.innerHTML='If it has been posted';
+
+
+                                datelist = document.createElement('select');
+                                datelist.setAttribute('id', 'likelist');                                
+                                datelist.setAttribute('class', 'fonted');
+                                datelist.setAttribute('style', 'margin-right: 5px;');
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("before");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","1");
+                                datelist.appendChild(theOption);
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("after");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","2");
+                                datelist.appendChild(theOption);
+
+
+                                datestx = document.createElement('input');  
+                                datestx.setAttribute('type', 'text');
+                                datestx.setAttribute('size', '10'); 
+                                datestx.setAttribute('maxlength', '10');
+                                datestx.setAttribute('style', 'margin-right: 5px;');
+                                datestx.setAttribute('class', 'fonted');
+                                $(datestx).simpleDatepicker({ startdate: 2007 , y: -200});
+                                
+                                datesl2 = document.createElement('label');
+                                datesl2.setAttribute('for', 'likelist');
+                                datesl2.innerHTML='(date).';
+
+                                dates.appendChild(datesl);
+                                dates.appendChild(datelist);
+                                dates.appendChild(datestx);
+                                dates.appendChild(datesl2);
+                                fconditions.appendChild(dates);
+
+                                
+                                attachs = document.createElement('div');    
+                                attachs.setAttribute('class', 'conditionsfixed');
+
+                                attachsl = document.createElement('label');
+                                attachsl.setAttribute('for', 'hasattachments');
+                                attachsl.innerHTML='If it has attachments';
+                                attachs.appendChild(attachsl);
+
+                                attachsin = document.createElement('input');
+                                attachsin.setAttribute('id', 'hasattachments');
+                                attachsin.setAttribute('type', 'checkbox');
+                                attachs.appendChild(attachsin);
+                                
+                                fconditions.appendChild(attachs);
+                                
+                            }
+                            function create_condition(){
+                                var newcond = document.createElement('div');
+                                var conditions = document.getElementById('conditions');
+
+                                var button, condlist, textbox;
+
+                                // add rule button
+                                button = document.createElement('a');                                            
+                                button.setAttribute('class', 'buttoninline'); 
+                                button.setAttribute('href', '#');
+                                button.innerHTML='more';
+                                button.onclick = function () {
+                                        if (this.innerHTML=='more'){
+                                            set_style(this.parentNode.getElementsByTagName("select")[0],{display: 'inline'});
+                                            set_style(this.parentNode.getElementsByTagName("input")[0],{display: 'inline'});
+                                            this.innerHTML='delete';
+                                            create_condition();
+                                        } else {
+                                            //this.innerHTML='Add rule';
+                                            this.parentNode.parentNode.removeChild(this.parentNode);
+                                        }
+                                        }
+                                        
+                                //condlis                                
+                                condlist = document.createElement('select');
+                                condlist.setAttribute('class', 'fonted');
+                                condlist.setAttribute('style', 'display: none; margin-left: 5px; margin-right: 5px;');
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("Who posted the messge");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","1");
+                                condlist.appendChild(theOption);
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("Who is mentioned");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","2");
+                                condlist.appendChild(theOption);
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("What is in the text");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","3");
+                                condlist.appendChild(theOption);
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("What is not in the text");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","4");
+                                condlist.appendChild(theOption);
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("What links are in the message");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","5");
+                                condlist.appendChild(theOption);
+
+
+                                // textbox
+                                textbox = document.createElement('input');  
+                                textbox.setAttribute('type', 'text');
+                                textbox.setAttribute('size', '25'); 
+                                textbox.setAttribute('maxlength', '40');
+                                textbox.setAttribute('class', 'datetextbox');
+                                                                
+                                
+                                //appending the elements
+                                newcond.setAttribute("style", "margin-bottom: 5px;");
+                                conditions.appendChild(newcond);
+                                newcond.appendChild(button);
+                                newcond.appendChild(condlist);
+                                newcond.appendChild(textbox);
+                                };
+                                
+                        //jQuery: DB connection and the Menu
+                        
+                        window.obj_load = function(source_id){
+                            
+                            $(document).ready(function(){
+                                window.admin = true;
+                                window.global = true;
+                                window.owner = false;
+                                
+                                $.getJSON("get_labels?obj_id="+source_id, function(data) {
+                                    if (data.type == 'ok'){
+                                        if (window.global) {
+                                            create_tag('info_personal','Personal View');
+                                            }
+                                        else{
+                                            create_tag('info_global','Global View');
+                                            }
+                                        create_tag('label_category','Labels');
+                                        list = data.data;
+                                        window.labels = {}
+                                        var label_list = document.createElement('ul');
+                                        label_list.id = 'lable_container_ul'
+                                        add_class(label_list, 'label_item');
+                                        for (var i in list){
+                                            if (list[i].parent in window.labels){
+                                                window.labels[list[i].parent].add_child(list[i].name, list[i].id, function(){alert('click')});
+                                                }
+                                            else{
+                                                var l = create_label(list[i].name, list[i].id, function(){alert('click')})
+                                                window.labels[i] = l;
+                                                label_list.appendChild(l)
+                                                }
+                                            }
+                                        document.getElementById('lable_container').appendChild(label_list);
+
+
+
+                                        if(window.admin && window.global){
+                                            var menu_add_label = create_label('Add label','creat_label', function(){
+                                                document.rule = false;
+                                                set_style(document.getElementById('dialog-box'), {display : 'block'});
+                                                set_style(document.getElementById('posts_container'), {display : 'none'});
+                                                set_style(document.getElementById('post_comment_container'), {display : 'none'});
+                                                var s = '<div><h2> New Label </h2><p>Please enter a name for the new label: </p><input type="text" name="name_label" size="26" maxlength="25" value="" id="name_label" title="Name of the label" class="conditionsfixed"/><p>Please enter a description: </p><textarea id="description_label" rows="2" cols="50" class="conditionsfixed"></textarea><p>Nest label under: <select name="list_labels" id="list_labels" class="conditionsfixed"><option value="0">Root</option>';
+                                                for (var i in window.labels){
+                                                    s += '<option value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
+                                                    }
+                                                s += '</select></p>';
+                                                s += '<div class="form-container"><form action="#" method="post"><div class="controlset"><label for="color1"><strong>Choose Label'+"'"+'s color</strong></label> <input id="color1" type="text" name="color1" value="#333399" /></div></form></div><p>&nbsp;</p>'
+                                                s += '<div id="conditions_container">';
+                                                s += '<div id="conditions_if"></div>'
+                                                s += '<div id="conditions_fixed" style="display: none;"></div>'
+                                                s += '<div id="conditions" style="display: none;"></div>'
+                                                s += '</div></div>';
+                                                document.getElementById('dialog-message').innerHTML = s;
+                                                $('#color1').colorPicker();
+                                                create_condition_if();
+                                                create_condition_fix();
+                                                create_condition();
+                                                });
+                                            menu_add_label_container = document.createElement('ul');
+                                            add_class(menu_add_label_container, 'label_item');
+                                            menu_add_label_container.appendChild(menu_add_label)
+                                            document.getElementById('menu_container_down').appendChild(menu_add_label_container);
+                                            }
+                                        if(window.owner){
+                                            var menu_add_label = create_label('Add label','creat_label', function(){
+                                                set_style(document.getElementById('dialog-box'), {display : 'block'});
+                                                set_style(document.getElementById('posts_container'), {display : 'none'});
+                                                set_style(document.getElementById('post_comment_container'), {display : 'none'});
+                                                
+                                                var s = '<div><h2> New Label </h2><p>Please enter a new label name: </p><input type="text" name="name_label" size="19" maxlength="40" value="" id="name_label" title="Name of the label" /><p>Please enter a nickname for the label: </p><input type="text" name="nick_label" size="19" maxlength="18" value="" id="nick_label" title="Nickname of the label" /><p>Please enter a description for this label: </p><textarea id="description_label" rows="4" cols="33"></textarea><p>Nest label under: <select name="list_labels" id="list_labels"><option value="0">Root</option>';
+                                                window.labels = {}
+                                                for (var i in window.labels){
+                                                    if (list[i].parent == '0'){
+                                                        s += '<option value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
+                                                        }
+                                                    }
+                                                s += '</select></p>';
+                                                s += '<p><a href="#" id="Btn_addrule" class="buttoninline" style = "display:inline; width:70px; background-color: #AD2525;">Add rule:</a>';
+                                                s += '<select name="conditions" id="conditions" style = "display:none;">';
+                                                s += '<option value="1">Who posted the messge</option>';
+                                                s += '<option value="2">Who is mentioned</option>';
+                                                s += '<option value="3">What is in the text</option>';
+                                                s += '<option value="4">What is not the text</option>';
+                                                s += '<option value="5">How many likes it has</option>';
+                                                s += '<option value="6">How many comments it has</option>';
+                                                s += '<option value="7">What links are in the message</option>';
+                                                s += '<option value="8">Date of the post</option>';
+                                                s += '<option value="9">Post has attachments</option>';
+                                                s += '</select><select name="condition_kindof_likesandcomments" id="rules_kindof_likesandcomments" style = "display:none;"><option>more than</option><option>less than</option></select>';
+                                                s += '<select name="condition_kindof_date" id="rules_kindof_date" style = "display:none;"><option>after</option><option>before</option></select>';
+                                                s += '<input type="text" name="condition_textbox" size="19" maxlength="40" value="" id="condition_textbox" title="Text" style = "display:none;"/></p>';
+                                                s += '</div>';
+                                                //popup(s);
+                                                document.getElementById('dialog-message').innerHTML = s;
+                                                
+                                                $('#Btn_addrule').click(function () {
+                                                    alert('clicked')
+                                                    //$("#conditions").show();
+                                                    set_style(document.getElementById('conditions'),{display: 'inline'});
+                                                    set_style(document.getElementById('condition_textbox'),{display: 'inline'});
+                                                    return false;
+                                                    });
+                                    
+
+                                                });
+                                            menu_add_label_container = document.createElement('ul');
+                                            add_class(menu_add_label_container, 'label_item');
+                                            menu_add_label_container.appendChild(menu_add_label);
+                                            document.getElementById('menu_container_down').appendChild(menu_add_label_container);
+                                            
+                                            }
+                                        }
+                                    });
+                                
+                                
+                                $("a").click(function() {
+                                    $("a").removeClass("clickeditem");
+                                    $(this).addClass("clickeditem");
+                                    });
+                                
+                                // if user clicked on button, the overlay layer or the dialogbox, close the dialog
+                                
+                                <!-- $('a.btn-ok, #dialog-overlay, #dialog-box').click(function () { -->
+                                    $('#Btn_labeldialog_close').click(function () {
+                                        $('#dialog-overlay, #dialog-box').hide();
+                                        if (window.forum){
+                                            window.forum.destroy(); window.forum.stop_timer();
+                                            }
+                                        set_style(document.getElementById('posts_container'),{display: 'block'})
+                                        
+                                        return false;
+                                        });
+
+                                    $('#Btn_labeldialog_addlabel').click(function () {
+                                        var parent_id = '0';
+                                        if (window.forum){
+                                            window.forum.destroy(); window.forum.stop_timer();
+                                            }
+                                        set_style(document.getElementById('posts_container'),{display: 'block'})
+                                        var parent = new Object();
+                                        for (var i in window.labels){
+                                            if (window.labels[i].txt == $("#list_labels").val()){
+                                                parent_id = i;
+                                                parent = window.labels[i];
+                                                }
+                                            }
+                var label2alert = new Object();
+                label2alert.obj_id = source_id;
+                label2alert.name = $("#name_label").val();
+                label2alert.nick = $("#description_label").val();
+                label2alert.parent = parent_id;
+                label2alert.color = document.getElementById('color1').value;
+                // epoch: var d = new Date(); d.getTime()-d.getMilliseconds())/1000
+                
+                var jsonText = JSON.stringify(label2alert);    
+                alert (jsonText);    
+                
+                                        //$.post("create_label",{obj_id: source_id, name: $("#name_label").val(), nick: $("#description_label").val(), parent: parent_id},
+                                        //function(result) {
+                                         //   
+                                         //   if (result["type"]=="ok"){
+                                         //       if (parent_id == '0'){
+                                         //           window.labels[result["data"]] = create_label($("#name_label").val(), result["data"], function(){alert('click')});
+                                         //           document.getElementById('lable_container_ul').appendChild(window.labels[result["data"]]);
+                                         //           
+                                         //           } else {
+                                         //           window.labels[parent_id].add_child($("#name_label").val(), result["data"], function(){alert('click')});
+                                         //           }
+                                         //       //$("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
+                                         //       } else {
+                                         //       alert("An error occured, no lable culd be made, please try again!")
+                                         //      }
+                                         //   });
+                                        $('#dialog-overlay, #dialog-box').hide();
+                                        return false;
+                                        });
+                                    
+                                    // if user resize the window, call the same function again
+                                    // to make sure the overlay fills the screen and dialogbox aligned to center
+                                    $(window).resize(function () {
+                                        
+                                        //only do it if the dialog box is not hidden
+                                        });
+                                    //}
+                                });
+                            }
+                        //$("post").load(function(){
+                            //	$("ul:last").append('<li><a href="#">' + window.source_id + '</a></li>');
+                            //});
+                        
+                    </script>
+                    <a id="fb_connect_button" class="fb_button fb_button_medium" style="display:none"><span class="fb_button_text">Connect with Facebook</span></a>
+                    <div id="forum_container">
+                        <div id="dialog-box">
+                            <div class="dialog-content">
+                                <div id="dialog-message"></div>
+                                <table width="100%" border="0" style="border-top: 1px solid rgb(204, 204, 204); padding-top: 5px; margin-top: 15px;">
+                                    <tr>
+                                        <!-- <td><a href="#" id="Btn_addrule" class="buttoninline">Add rule:</a></td> -->
+                                        <td><a href="#" id="Btn_labeldialog_addlabel" class="buttoninline">+ Add</a></td>
+                                        <td><a href="#" id="Btn_labeldialog_close" class="buttoninline">X Close</a></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div id="posts_container">
+                            <a onclick="switch_posts_to_page(window.post_show.now_displaying + 1)" href="javascript:void(0)" style="float: left; padding-right: 5px;" class="button gray"><table style="border:none 0px;"><tbody><tr><td style="border:none 0px;background-color:transparent;color: rgb(0, 0, 0);">&#x25C0;</td></tr></tbody></table></a>
+                            <a onclick="if (window.post_show.now_displaying > 1) {switch_posts_to_page(window.post_show.now_displaying-1)}else{switch_posts_to_page(0)}" href="javascript:void(0)" style="float: left; padding-right: 5px;" class="button gray"><table style="border:none 0px;"><tbody><tr><td style="border:none 0px;background-color:transparent;color: rgb(0, 0, 0);">&#x25BA;</td></tr></tbody></table></a>
+                            <div id="posts"></div>
+                        </div>
+                        <div id="post_comment_container" style="display:none">
+                            <a onclick="window.forum.destroy(); window.forum.stop_timer(); set_style(this.parentNode, {display:'none'}); set_style(document.getElementById('posts_container'),{display: 'block'})" href="javascript:void(0)" style="float: right; padding-right: 5px;" class="button gray"><table style="border:none 0px;"><tbody><tr><td style="border:none 0px;background-color:transparent;color: rgb(0, 0, 0);">Back to posts</td></tr></tbody></table></a>
+                            <div id="post_comment">		
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+            </div>
+            <!-- end .container_12 -->
+            
+            
+            
+        </body>
+    </html>
+    
+    
+    
