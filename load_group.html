@@ -990,7 +990,7 @@ Version: 0.1; Sept 19th 2011
                                 
                                 var newfcond = document.createElement('div');
                                 var fconditions = document.getElementById('conditions_fixed');
-                                var likelist, likestx, likesl, likesl2, likes, comments, date, attachment;
+                                var likes, likelist, likestx, likesl, likesl2, comments, commentlist, commentstx, commentsl, commentsl2;
                                 
                                 likes = document.createElement('div');    
                                 likes.setAttribute('class', 'conditionsfixed');
@@ -998,7 +998,7 @@ Version: 0.1; Sept 19th 2011
                                 likesl = document.createElement('label');
                                 likesl.setAttribute('for', 'likelist');
                                 likesl.setAttribute('style', 'margin-right: 5px;');
-                                likesl.innerHTML='Does it have';
+                                likesl.innerHTML='If it has';
 
 
                                 likelist = document.createElement('select');
@@ -1029,7 +1029,7 @@ Version: 0.1; Sept 19th 2011
                                 
                                 likesl2 = document.createElement('label');
                                 likesl2.setAttribute('for', 'likelist');
-                                likesl2.innerHTML='Likes?';
+                                likesl2.innerHTML='likes.';
 
 
                                 likes.appendChild(likesl);
@@ -1037,6 +1037,54 @@ Version: 0.1; Sept 19th 2011
                                 likes.appendChild(likestx);
                                 likes.appendChild(likesl2);
                                 newfcond.appendChild(likes);
+
+                                ///
+                                comments = document.createElement('div');    
+                                comments.setAttribute('class', 'conditionsfixed');
+                                
+                                commentsl = document.createElement('label');
+                                commentsl.setAttribute('for', 'likelist');
+                                commentsl.setAttribute('style', 'margin-right: 5px;');
+                                commentsl.innerHTML='If it has';
+
+
+                                commentlist = document.createElement('select');
+                                commentlist.setAttribute('id', 'likelist');                                
+                                commentlist.setAttribute('class', 'fonted');
+                                commentlist.setAttribute('style', 'margin-right: 5px;');
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("more than");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","1");
+                                commentlist.appendChild(theOption);
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("less than");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","2");
+                                commentlist.appendChild(theOption);
+
+
+                                commentstx = document.createElement('input');  
+                                commentstx.setAttribute('type', 'text');
+                                commentstx.setAttribute('size', '3'); 
+                                commentstx.setAttribute('maxlength', '3');
+                                commentstx.setAttribute('style', 'margin-right: 5px;');
+                                commentstx.setAttribute('class', 'fonted');
+                                
+                                
+                                commentsl2 = document.createElement('label');
+                                commentsl2.setAttribute('for', 'likelist');
+                                commentsl2.innerHTML='comments.';
+
+
+                                comments.appendChild(commentsl);
+                                comments.appendChild(commentlist);
+                                comments.appendChild(commentstx);
+                                comments.appendChild(commentsl2);
+                                newfcond.appendChild(comments);
+
                                 fconditions.appendChild(newfcond);
 
                             }
