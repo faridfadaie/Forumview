@@ -997,12 +997,19 @@ Version: 0.1; Sept 19th 2011
                                 
                                 var newfcond = document.createElement('div');
                                 var fconditions = document.getElementById('conditions_fixed');
-                                var likelist, likesin, likesl, likes, comments, date, attachment;
+                                var likelist, likestx, likesl, likes, comments, date, attachment;
                                 
                                 likes = document.createElement('div');    
                                 likes.setAttribute('class', 'conditionsfixed');
                                 
-                                likelist = document.createElement('select');                                
+                                likesl = document.createElement('label');
+                                likesl.setAttribute('for', 'likelist');
+                                likesl.innerHTML='How many likes it has';
+                                likes.appendChild(likesl);
+
+
+                                likelist = document.createElement('select');
+                                likelist.setAttribute('id', 'likelist');                                
                                 likelist.setAttribute('class', 'fonted');
 
                                 theOption = document.createElement("OPTION");
