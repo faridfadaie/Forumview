@@ -989,7 +989,6 @@ Version: 0.1; Sept 19th 2011
                         
                             function create_condition_fix(){
                                 
-                                //var newfcond = document.createElement('div');
                                 var fconditions = document.getElementById('conditions_fixed');
                                 var tag, tagtx, likes, likelist, likestx, likesl, likesl2, comments, commentlist, commentstx, commentsl, commentsl2;
                                 var dates, datesl2, datestx, datelist, datesl, attachs, attachsl, attachsin;
@@ -1164,8 +1163,6 @@ Version: 0.1; Sept 19th 2011
                                 
                                 fconditions.appendChild(attachs);
                                 
-                                //fconditions.appendChild(newfcond);
-
                             }
                             function create_condition(){
                                 var newcond = document.createElement('div');
@@ -1292,8 +1289,8 @@ Version: 0.1; Sept 19th 2011
                                                 s += '</select></p>';
                                                 s += '<div class="form-container"><form action="#" method="post"><div class="controlset"><label for="color1"><strong>Choose Label'+"'"+'s color</strong></label> <input id="color1" type="text" name="color1" value="#333399" /></div></form></div><p>&nbsp;</p>'
                                                 s += '<div id="conditions_container">';
-                                                s += '<div id="conditions_fixed"></div>'
-                                                s += '<div id="conditions"></div>'
+                                                s += '<div id="conditions_fixed" style="display: none;"></div>'
+                                                s += '<div id="conditions" style="display: none;"></div>'
                                                 s += '</div></div>';
                                                 document.getElementById('dialog-message').innerHTML = s;
                                                 $('#color1').colorPicker();
