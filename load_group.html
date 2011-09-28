@@ -336,17 +336,11 @@ Version: 0.1; Sept 19th 2011
             .datepicker tbody td.date.chosen { font-weight: bold; background-color: #ccffcc; }
             
             .conditionsfixed{
-                font-size: 11px;
-                font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
-                line-height: 1.28;            
-                margin: 5px 5px 15px;
-                vertical-align: middle;
-            }
-            
-            .fonted{
-                font-size: 11px;
-                font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
-                line-height: 1.28;            
+            font-size: 11px;
+            font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+            line-height: 1.28;            
+            margin: 5px 5px 15px;
+            vertical-align: middle;
             }
         </style>
         
@@ -990,32 +984,21 @@ Version: 0.1; Sept 19th 2011
                             function create_condition_fix(){
                                 var newfcond = document.createElement('div');
                                 var fconditions = document.getElementById('conditions_fixed');
-                                var likelist, likesin, likesl, likes, comments, date, attachment;
+                                var likesin, likesl, likes, comments, date, attachment;
                                 
                                 likes = document.createElement('div');    
                                 likes.setAttribute('class', 'conditionsfixed');
-                                
-                                likelist = document.createElement('select');                                
-                                likelist.setAttribute('class', 'fonted');
-
-                                theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("more than");
-                                theOption.appendChild(theText);
-                                theOption.setAttribute("value","1");
-                                likelist.appendChild(theOption);
-
-                                theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("less than");
-                                theOption.appendChild(theText);
-                                theOption.setAttribute("value","2");
-                                likelist.appendChild(theOption);
-                                
-                                likes.appendChild(likelist);
+                                likesin = document.createElement('input');
+                                likesin.setAttribute('id', 'howmanylikeit');
+                                likesin.setAttribute('type', 'checkbox');
+                                likes.appendChild(likesin);
+                                likesl = document.createElement('label');
+                                likesl.setAttribute('for', 'howmanylikeit');
+                                likesl.innerHTML='How many likes it has';
+                                likes.appendChild(likesl);
                                 newfcond.appendChild(likes);
                                 fconditions.appendChild(newfcond);
 
-
-                                
                             }
                             function create_condition(){
                                 var newcond = document.createElement('div');
@@ -1229,7 +1212,7 @@ Version: 0.1; Sept 19th 2011
                                                 s += '</div></div>';
                                                 document.getElementById('dialog-message').innerHTML = s;
                                                 $('#color1').colorPicker();
-                                                //create_condition_fix();
+                                                create_condition_fix();
                                                 create_condition();
                                                 //$('.datetextbox').simpleDatepicker();
                                                 });
