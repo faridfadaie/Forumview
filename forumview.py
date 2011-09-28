@@ -162,7 +162,9 @@ def create_label(env, start_response, args):
                                                             (label_id, NAME_DEL + args['name'], True), 
                                                             (label_id, NICK_DEL + args['nick'], True), 
                                                             (label_id, PARENT_DEL + args['parent'], True), 
-                                                            (label_id, RULE_DEL + args['rule'], True), 
+                                                            (label_id, RULE_DEL + args['rule'], True),
+                                                            ('owned', user['uid'], True),
+                                                            ('obj_id', obj_id.split(':')[0], True),
                                                             (label_id, COL_DEL + args['color'], True)])
         except:
             raise
