@@ -1015,18 +1015,37 @@ Version: 0.1; Sept 19th 2011
                             function create_condition_fix(){
                                 
                                 var fconditions = document.getElementById('conditions_fixed');
-                                var tag, tagtx, likes, likelist, likestx, likesl, likesl2, comments, commentlist, commentstx, commentsl, commentsl2;
+                                var tag, tagtx, taglist, likes, likelist, likestx, likesl, likesl2, comments, commentlist, commentstx, commentsl, commentsl2;
                                 var dates, datesl2, datestx, datelist, datesl, attachs, attachsl, attachsin;
                                 
                                 tag = document.createElement('div');    
                                 tag.setAttribute('class', 'conditionsfixed');
-                                tag.setAttribute('style', 'border-top: 1px solid rgb(204, 204, 204); padding-top: 5px; margin-top: 10px;');
+                                //tag.setAttribute('style', 'border-top: 1px solid rgb(204, 204, 204); padding-top: 5px; margin-top: 10px;');
 
                                 tagtx = document.createElement('p');
                                 tagtx.setAttribute('class', 'fonted');
-                                tagtx.innerHTML='Apply label with the following optional filters';
+                                tagtx.innerHTML='Apply label with the following filters';
+
+                                taglist = document.createElement('select');
+                                taglist.setAttribute('id', 'taglist');                                
+                                taglist.setAttribute('class', 'fonted');
+                                taglist.setAttribute('style', 'margin-left: 5px;');
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("all options (AND)");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","1");
+                                taglist.appendChild(theOption);
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("any option (OR)");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","2");
+                                taglist.appendChild(theOption);
+                                
                                 
                                 tag.appendChild(tagtx);
+                                tag.appendChild(tagtlist);
                                 fconditions.appendChild(tag);
 
 
