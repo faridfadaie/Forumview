@@ -953,21 +953,12 @@ Version: 0.1; Sept 19th 2011
                                             set_style(this.parentNode.getElementsByTagName("input")[0],{display: 'inline'});
                                             this.innerHTML='Delete';
                                             create_condition();
-                                            //set_style(document.getElementById('cond'+s),{display: 'inline'});
-                                            //set_style(document.getElementById('cond_textbox'+s),{display: 'inline'});                                                        
                                         } else {
                                             //this.innerHTML='Add rule';
                                             this.parentNode.parentNode.removeChild(this.parentNode);
-                                            //set_style(document.getElementById('cond'+s),{display: 'none'});
-                                            //set_style(document.getElementById('cond_textbox'+s),{display: 'none'});                                                        
-                                            //set_style(document.getElementById('cond_like'+s),{display: 'none'});
-                                            //set_style(document.getElementById('cond_date'+s),{display: 'none'});
                                         }
-                  //                      return false;
-                                        //window.rule[n-1] += 1;
                                         }
-                                //getElementsByTagName("img")
-                                 
+                                        
                                 //condlis                                
                                 condlist = document.createElement('select');
                                 condlist.setAttribute('style', 'display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px; margin: 0 5px;');
@@ -1074,8 +1065,8 @@ Version: 0.1; Sept 19th 2011
 
                                 // textbox
                                 textbox = document.createElement('input');  
-                                textbox.setAttribute('type', 'text'); //textbox.type = 'text';
-                                //textbox.setAttribute('type', 'text'); //textbox.name = 'condition_textbox';
+                                textbox.setAttribute('type', 'text');
+                                //textbox.setAttribute('type', 'text');
                                 textbox.setAttribute('size', '15'); 
                                 textbox.setAttribute('maxlength', '40');
                                 textbox.setAttribute('style', 'display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px;');
@@ -1098,8 +1089,6 @@ Version: 0.1; Sept 19th 2011
                                 window.admin = true;
                                 window.global = true;
                                 window.owner = false;
-                                window.rule = new Array(256);
-                                for (var i=0; i<=255;i++){window.rule[i]=0;}
                                 
                                 $.getJSON("get_labels?obj_id="+source_id, function(data) {
                                     if (data.type == 'ok'){
@@ -1143,55 +1132,8 @@ Version: 0.1; Sept 19th 2011
                                                 s += '<div class="form-container"><form action="#" method="post"><div class="controlset"><label for="color1"><strong>Choose Label'+"'"+'s color</strong></label> <input id="color1" type="text" name="color1" value="#333399" /></div></form></div><p>&nbsp;</p>'
                                                 s += '<div id="conditions_container">';
                                                 s += '<div id="cdtest"></div>'
-                                                //s += '<a href="#" id="Btn_addrule" class="buttoninline">Add rule</a>';
-                                                //s += '<select name="conditions" id="conditions" style = "display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px; margin: 0 5px;">';
-                                                //s += '<option value="1">Who posted the messge</option>';
-                                                //s += '<option value="2">Who is mentioned</option>';
-                                                //s += '<option value="3">What is in the text</option>';
-                                                //s += '<option value="4">What is not the text</option>';
-                                                //s += '<option value="5">How many likes it has</option>';
-                                                //s += '<option value="6">How many comments it has</option>';
-                                                //s += '<option value="7">What links are in the message</option>';
-                                                //s += '<option value="8">Date of the post</option>';
-                                                //s += '<option value="9">Post has attachments</option>';
-                                                //s += '</select>';
-                                                //s += '<select name="conditions_kindoflike" id="conditions_kindoflike" style = "display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px; margin-right: 5px;">';
-                                                //s += '<option value="1">more than</option>';
-                                                //s += '<option value="2">less than</option>';
-                                                //s += '</select>';
-                                                //s += '<select name="conditions_kindofdate" id="conditions_kindofdate" style = "display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px; margin-right: 5px;">';
-                                                //s += '<option value="1">Before</option>';
-                                                //s += '<option value="2">After</option>';
-                                                //s += '</select>';
-                                                //s += '<input type="text" name="condition_textbox" size="15" maxlength="40" value="" id="condition_textbox" title="Text" style = "display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px;"/>';
                                                 s += '</div></div>';
                                                 document.getElementById('dialog-message').innerHTML = s;
-                                                
-                                                //var conditions = document.getElementById("conditions");
-                                                //conditions.onchange=function(){
-                                                //   var l = document.getElementById('conditions_kindoflike');
-                                                //   var d = document.getElementById('conditions_kindofdate');
-                                                //   var chosencondition=this.options[this.selectedIndex];
-                                                //   if(chosencondition.value==5||chosencondition.value==6){set_style(d,{display: 'none'});set_style(l,{display: 'inline'});}
-                                                //   else if(chosencondition.value==8){set_style(d,{display: 'inline'});set_style(l,{display: 'none'});}
-                                                //   else {set_style(d,{display: 'none'});set_style(l,{display: 'none'});}                                                    
-                                                //}
-                                                
-                                                //$('#Btn_addrule').click(function () {
-                                                //    document.rule = !document.rule;
-                                                //    if (document.rule){
-                                                //        this.innerHTML='Cancel';
-                                                //        set_style(document.getElementById('conditions'),{display: 'inline'});
-                                                //        set_style(document.getElementById('condition_textbox'),{display: 'inline'});                                                        
-                                                //    } else {
-                                                //        this.innerHTML='Add rule';
-                                                //        set_style(document.getElementById('conditions'),{display: 'none'});
-                                                //        set_style(document.getElementById('condition_textbox'),{display: 'none'});                                                        
-                                                //        set_style(document.getElementById('conditions_kindoflike'),{display: 'none'});
-                                                //        set_style(document.getElementById('conditions_kindofdate'),{display: 'none'});
-                                                //    }
-                                                //    return false;
-                                                //    });
                                                 $('#color1').colorPicker();
                                                 create_condition();
                                                 });
