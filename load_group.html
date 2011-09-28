@@ -1055,51 +1055,51 @@ Version: 0.1; Sept 19th 2011
 
                                 ///
 
-                                likes = document.createElement('div');    
-                                likes.setAttribute('class', 'conditionsfixed');
+                                comments = document.createElement('div');    
+                                comments.setAttribute('class', 'conditionsfixed');
                                 
-                                likesl = document.createElement('label');
-                                likesl.setAttribute('for', 'likelist');
-                                likesl.setAttribute('style', 'margin-right: 5px;');
-                                likesl.innerHTML='If it has';
+                                commentsl = document.createElement('label');
+                                commentsl.setAttribute('for', 'commentlist');
+                                commentsl.setAttribute('style', 'margin-right: 5px;');
+                                commentsl.innerHTML='If it has';
 
 
-                                likelist = document.createElement('select');
-                                likelist.setAttribute('id', 'likelist');                                
-                                likelist.setAttribute('class', 'fonted');
-                                likelist.setAttribute('style', 'margin-right: 5px;');
+                                commentlist = document.createElement('select');
+                                commentlist.setAttribute('id', 'commentlist');                                
+                                commentlist.setAttribute('class', 'fonted');
+                                commentlist.setAttribute('style', 'margin-right: 5px;');
 
                                 theOption = document.createElement("OPTION");
                                 theText = document.createTextNode("more than");
                                 theOption.appendChild(theText);
                                 theOption.setAttribute("value","1");
-                                likelist.appendChild(theOption);
+                                commentlist.appendChild(theOption);
 
                                 theOption = document.createElement("OPTION");
                                 theText = document.createTextNode("less than");
                                 theOption.appendChild(theText);
                                 theOption.setAttribute("value","2");
-                                likelist.appendChild(theOption);
+                                commentlist.appendChild(theOption);
 
 
-                                likestx = document.createElement('input');  
-                                likestx.setAttribute('type', 'text');
-                                likestx.setAttribute('size', '3'); 
-                                likestx.setAttribute('maxlength', '3');
-                                likestx.setAttribute('style', 'margin-right: 5px;');
-                                likestx.setAttribute('class', 'fonted');
+                                commentstx = document.createElement('input');  
+                                commentstx.setAttribute('type', 'text');
+                                commentstx.setAttribute('size', '3'); 
+                                commentstx.setAttribute('maxlength', '3');
+                                commentstx.setAttribute('style', 'margin-right: 5px;');
+                                commentstx.setAttribute('class', 'fonted');
                                 
                                 
-                                likesl2 = document.createElement('label');
-                                likesl2.setAttribute('for', 'likelist');
-                                likesl2.innerHTML='likes.';
+                                commentsl2 = document.createElement('label');
+                                commentsl2.setAttribute('for', 'commentlist');
+                                commentsl2.innerHTML='comments.';
 
 
-                                likes.appendChild(likesl);
-                                likes.appendChild(likelist);
-                                likes.appendChild(likestx);
-                                likes.appendChild(likesl2);
-                                newfcond.appendChild(likes);
+                                comments.appendChild(commentsl);
+                                comments.appendChild(commentlist);
+                                comments.appendChild(commentstx);
+                                comments.appendChild(commentsl2);
+                                newfcond.appendChild(comments);
 
 
                                 ///
@@ -1136,7 +1136,7 @@ Version: 0.1; Sept 19th 2011
                                 datestx.setAttribute('maxlength', '3');
                                 datestx.setAttribute('style', 'margin-right: 5px;');
                                 datestx.setAttribute('class', 'fonted');
-                                
+                                $(datestx).simpleDatepicker({ startdate: 2007 });
                                 
                                 datesl2 = document.createElement('label');
                                 datesl2.setAttribute('for', 'likelist');
