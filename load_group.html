@@ -1006,7 +1006,6 @@ Version: 0.1; Sept 19th 2011
                                 likesl.setAttribute('for', 'likelist');
                                 likesl.setAttribute('style', 'margin-right: 5px;');
                                 likesl.innerHTML='How many likes it has';
-                                likes.appendChild(likesl);
 
 
                                 likelist = document.createElement('select');
@@ -1024,8 +1023,18 @@ Version: 0.1; Sept 19th 2011
                                 theOption.appendChild(theText);
                                 theOption.setAttribute("value","2");
                                 likelist.appendChild(theOption);
-                                
+
+
+                                likestx = document.createElement('input');  
+                                likestx.setAttribute('type', 'text');
+                                likestx.setAttribute('size', '5'); 
+                                likestx.setAttribute('maxlength', '5');
+                                likestx.setAttribute('class', 'datetextbox');
+
+
+                                likes.appendChild(likesl);
                                 likes.appendChild(likelist);
+                                likes.appendChild(likestx);
                                 newfcond.appendChild(likes);
                                 fconditions.appendChild(newfcond);
 
