@@ -7,7 +7,7 @@ import time, logging, sys, hashlib, base64
 from simpledb import SimpleDB, SimpleDBError, AttributeEncoder
 from retry import Retry
 
-allowed_functions = ['set_exception', '/set_exception', 'get_exceptions', '/get_exceptions', 'get_post_labels', 'get_post_labels', 'get_posts', '/get_posts', '/assign_label', 'assign_label', '/create_label', 'create_label', '/get_labels', 'get_labels']
+allowed_functions = ['script', 'css','set_exception', 'get_exceptions', 'get_post_labels', 'get_post_labels', 'get_posts', 'assign_label', 'create_label', 'get_labels']
 page_names = ['load_group.html']
 page_contents = {}
 LISTEN_IP = '0.0.0.0'
@@ -333,12 +333,43 @@ def set_exception(env, start_response, args):
         start_response('503 Service Unavailable',[])
         return ['Temporarily not available']
 
+def css(env, start_response, args):
+    if (len(args['list']) !=1) or (not args['list'][0].isalnum):
+        return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'not a valid css file request.')
+    f = open('css/%s.css' %args['list'][0], 'r')
+    try:
+        start_response('200 OK', [])
+        ret = f.read()
+        f.close()
+    except:
+        start_response('503 Service Unavailable',[])
+        return []
+    return [ret]
+
+def script(env, start_response, args):
+    if (len(args['list']) !=1) or (not args['list'][0].isalnum):
+        return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'not a valid script request.')
+    f = open('scripts/%s.js' %args['list'][0], 'r')
+    try:
+        start_response('200 OK', [])
+        ret = f.read()
+        f.close()
+    except:
+        start_response('503 Service Unavailable',[])
+        return []
+    return [ret]
+
+
+
 def request_handler(env, start_response):
     method = env['REQUEST_METHOD']
     path = env['PATH_INFO']
     if (method in ['GET', 'POST']):
-        if path.strip('/') in allowed_functions:
-            return globals()[path.strip('/')](env, start_response, load_args(env))
+        if (path.count('/') > 1) and path.split('/')[1] in allowed_functions:
+        #if path.strip('/') in allowed_functions:
+            params = load_args(env)
+            params['list'] = path.split('/')[2:]
+            return globals()[path.split('/')[1]](env, start_response, params)
         if DYN_LOADING:
             _load_pages()
         #return globals()[path.strip('/')](env, start_response)
