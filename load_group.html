@@ -296,10 +296,32 @@ Version: 0.1; Sept 19th 2011
             div.form-container div.controlset div { display: inline; float: left;}
 
             div.form-container div.controlset label { width: 140px; border: 0;}
+            a.dp-choose-date {
+                float: left;
+                width: 16px;
+                height: 16px;
+                padding: 0;
+                margin: 5px 3px 0;
+                display: block;
+                text-indent: -2000px;
+                overflow: hidden;
+                background: url(http://www.kelvinluck.com/assets/jquery/datePicker/v2/demo/images/calendar.png) no-repeat; 
+                }
+            a.dp-choose-date.dp-disabled {
+                background-position: 0 -20px;
+                cursor: default;
+                }
+            .datetextbox{
+                display: none; 
+                font-family: 'Lucida Grande',Arial,Helvetica,sans-serif; 
+                font-size: 11px;
+                }
         </style>
         
         <script src="http://code.jquery.com/jquery-latest.js"></script>
         <script src="http://www.tayfeh.com/resources/colorpicker/jquery.colorPicker.js" type="text/javascript"><!--mce:1--></script>
+        <script src="http://code.google.com/p/jquery-datepicker/source/browse/trunk/dist/jquery.datePicker.min-2.1.2.js" type="text/javascript"><!--mce:1--></script>
+        <script src="https://raw.github.com/vitch/jquery-methods/master/date.js" type="text/javascript"><!--mce:1--></script>
         
         <body>
             <div id="fb-root"></div>
@@ -940,7 +962,7 @@ Version: 0.1; Sept 19th 2011
                                 var newcond = document.createElement('div');
                                 var conditions = document.getElementById('conditions');
 
-                                var button, condlist, likelist, datelist, textbox;
+                                var button, condlist, likelist, datelist, textbox, datebox;
 
                                 // add rule button
                                 button = document.createElement('a');                                            
@@ -1019,14 +1041,14 @@ Version: 0.1; Sept 19th 2011
                                 
                                 condlist.onchange=function(){
                                    var l = this.parentNode.getElementsByTagName("select")[1];
-                                   //getElementById('conditions_kindoflike');
                                    var d = this.parentNode.getElementsByTagName("select")[2];
                                    var t = this.parentNode.getElementsByTagName("input")[0];
+                                   var dt = this.parentNode.getElementsByTagName("a")[0];
                                    var chosencondition=this.options[this.selectedIndex];
-                                   if(chosencondition.value==5||chosencondition.value==6){set_style(d,{display: 'none'});set_style(l,{display: 'inline'});set_style(t,{display: 'inline'});}
-                                   else if(chosencondition.value==8){set_style(d,{display: 'inline'});set_style(l,{display: 'none'});set_style(t,{display: 'inline'});}
-                                   else if(chosencondition.value==9){set_style(d,{display: 'none'});set_style(l,{display: 'none'});set_style(t,{display: 'none'});}
-                                   else {set_style(d,{display: 'none'});set_style(l,{display: 'none'});set_style(t,{display: 'inline'});}                                                    
+                                   if(chosencondition.value==5||chosencondition.value==6){set_style(d,{display: 'none'});set_style(dt,{display: 'none'});set_style(l,{display: 'inline'});set_style(t,{display: 'inline'});}
+                                   else if(chosencondition.value==8){set_style(d,{display: 'inline'});set_style(dt,{display: 'inline'});set_style(l,{display: 'none'});set_style(t,{display: 'inline'});}
+                                   else if(chosencondition.value==9){set_style(d,{display: 'none'});set_style(l,{display: 'none'});set_style(t,{display: 'none'});set_style(dt,{display: 'none'});}
+                                   else {set_style(d,{display: 'none'});set_style(l,{display: 'none'});set_style(dt,{display: 'none'});set_style(t,{display: 'inline'});}                                                    
                                 }
 
 
@@ -1071,8 +1093,16 @@ Version: 0.1; Sept 19th 2011
                                 //textbox.setAttribute('type', 'text');
                                 textbox.setAttribute('size', '15'); 
                                 textbox.setAttribute('maxlength', '40');
-                                textbox.setAttribute('style', 'display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px;');
-                                 
+                                datebox.setAttribute('class', 'date-pick');
+                                textbox.setAttribute('class', 'datetextbox');
+                                
+                                // datebox
+                                datebox = document.createElement('a');
+                                datebox.setAttribute('href', '#');
+                                datebox.setAttribute('class', 'dp-choose-date');
+                                datebox.setAttribute('title', 'Choose date');
+                                datebox.innerHTML='Choose date';
+                                
                                 //appending the elements
                                 newcond.setAttribute("style", "margin-bottom: 5px;");
                                 conditions.appendChild(newcond);
@@ -1081,6 +1111,7 @@ Version: 0.1; Sept 19th 2011
                                 newcond.appendChild(likelist);
                                 newcond.appendChild(datelist);
                                 newcond.appendChild(textbox);
+                                newcond.appendChild(datebox);
                                 };
                                 
                         //jQuery: DB connection and the Menu
@@ -1138,6 +1169,7 @@ Version: 0.1; Sept 19th 2011
                                                 document.getElementById('dialog-message').innerHTML = s;
                                                 $('#color1').colorPicker();
                                                 create_condition();
+                                                $('.date-pick').datePicker({startDate:'01/01/2000'});
                                                 });
                                             menu_add_label_container = document.createElement('ul');
                                             add_class(menu_add_label_container, 'label_item');
