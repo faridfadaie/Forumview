@@ -296,162 +296,10 @@ Version: 0.1; Sept 19th 2011
             div.form-container div.controlset div { display: inline; float: left;}
 
             div.form-container div.controlset label { width: 140px; border: 0;}
-            a.dp-choose-date {
-                float: right;
-                width: 16px;
-                height: 16px;
-                padding: 0;
-                margin: 5px 3px 0;
-                display: none;
-                text-indent: -2000px;
-                overflow: hidden;
-                background: url(http://www.kelvinluck.com/assets/jquery/datePicker/v2/demo/images/calendar.png) no-repeat; 
-                }
-            a.dp-choose-date.dp-disabled {
-                background-position: 0 -20px;
-                cursor: default;
-                }
-            .datetextbox{
-                display: none; 
-                font-family: 'Lucida Grande',Arial,Helvetica,sans-serif; 
-                font-size: 11px;
-                }
-/* from datePicker.css */
-
-
-            table.jCalendar {
-                    border: 1px solid #000;
-                    background: #aaa;
-                border-collapse: separate;
-                border-spacing: 2px;
-            }
-            table.jCalendar th {
-                    background: #333;
-                    color: #fff;
-                    font-weight: bold;
-                    padding: 3px 5px;
-            }
-
-            table.jCalendar td {
-                    background: #ccc;
-                    color: #000;
-                    padding: 3px 5px;
-                    text-align: center;
-            }
-            table.jCalendar td.other-month {
-                    background: #ddd;
-                    color: #aaa;
-            }
-            table.jCalendar td.today {
-                    background: #666;
-                    color: #fff;
-            }
-            table.jCalendar td.selected {
-                    background: #f66;
-                    color: #fff;
-            }
-            table.jCalendar td.selected.dp-hover {
-                    background: #f33;
-                    color: #fff;
-            }
-            table.jCalendar td.dp-hover,
-            table.jCalendar tr.activeWeekHover td {
-                    background: #fff;
-                    color: #000;
-            }
-            table.jCalendar tr.selectedWeek td {
-                    background: #f66;
-                    color: #fff;
-            }
-            table.jCalendar td.disabled, table.jCalendar td.disabled.dp-hover {
-                    background: #bbb;
-                    color: #888;
-            }
-            table.jCalendar td.unselectable,
-            table.jCalendar td.unselectable:hover,
-            table.jCalendar td.unselectable.dp-hover {
-                    background: #bbb;
-                    color: #888;
-            }
-
-            /* For the popup */
-
-            /* NOTE - you will probably want to style a.dp-choose-date - see how I did it in demo.css */
-
-            div.dp-popup {
-                    position: relative;
-                    background: #ccc;
-                    font-size: 10px;
-                    font-family: arial, sans-serif;
-                    padding: 2px;
-                    width: 171px;
-                    line-height: 1.2em;
-            }
-            div#dp-popup {
-                    position: absolute;
-                    z-index: 199;
-            }
-            div.dp-popup h2 {
-                    font-size: 12px;
-                    text-align: center;
-                    margin: 2px 0;
-                    padding: 0;
-            }
-            a#dp-close {
-                    font-size: 11px;
-                    padding: 4px 0;
-                    text-align: center;
-                    display: block;
-            }
-            a#dp-close:hover {
-                    text-decoration: underline;
-            }
-            div.dp-popup a {
-                    color: #000;
-                    text-decoration: none;
-                    padding: 3px 2px 0;
-            }
-            div.dp-popup div.dp-nav-prev {
-                    position: absolute;
-                    top: 2px;
-                    left: 4px;
-                    width: 100px;
-            }
-            div.dp-popup div.dp-nav-prev a {
-                    float: left;
-            }
-            /* Opera needs the rules to be this specific otherwise it doesn't change the cursor back to pointer after you have disabled and re-enabled a link */
-            div.dp-popup div.dp-nav-prev a, div.dp-popup div.dp-nav-next a {
-                    cursor: pointer;
-            }
-            div.dp-popup div.dp-nav-prev a.disabled, div.dp-popup div.dp-nav-next a.disabled {
-                    cursor: default;
-            }
-            div.dp-popup div.dp-nav-next {
-                    position: absolute;
-                    top: 2px;
-                    right: 4px;
-                    width: 100px;
-            }
-            div.dp-popup div.dp-nav-next a {
-                    float: right;
-            }
-            div.dp-popup a.disabled {
-                    cursor: default;
-                    color: #aaa;
-            }
-            div.dp-popup td {
-                    cursor: pointer;
-            }
-            div.dp-popup td.disabled {
-                    cursor: default;
-            }
         </style>
         
         <script src="http://code.jquery.com/jquery-latest.js"></script>
         <script src="http://www.tayfeh.com/resources/colorpicker/jquery.colorPicker.js" type="text/javascript"><!--mce:1--></script>
-        <script src="http://jquery-datepicker.googlecode.com/svn/trunk/dist/jquery.datePicker.min-2.1.2.js" type="text/javascript"><!--mce:1--></script>
-        <script src="https://raw.github.com/vitch/jquery-methods/master/date.js" type="text/javascript"><!--mce:1--></script>
         
         <body>
             <div id="fb-root"></div>
@@ -1092,7 +940,7 @@ Version: 0.1; Sept 19th 2011
                                 var newcond = document.createElement('div');
                                 var conditions = document.getElementById('conditions');
 
-                                var button, condlist, likelist, datelist, textbox, datebox;
+                                var button, condlist, likelist, datelist, textbox;
 
                                 // add rule button
                                 button = document.createElement('a');                                            
@@ -1173,12 +1021,11 @@ Version: 0.1; Sept 19th 2011
                                    var l = this.parentNode.getElementsByTagName("select")[1];
                                    var d = this.parentNode.getElementsByTagName("select")[2];
                                    var t = this.parentNode.getElementsByTagName("input")[0];
-                                   var dt = this.parentNode.getElementsByTagName("a")[1];
                                    var chosencondition=this.options[this.selectedIndex];
-                                   if(chosencondition.value==5||chosencondition.value==6){set_style(d,{display: 'none'});set_style(l,{display: 'inline'});set_style(t,{display: 'inline'});set_style(dt,{display: 'none'});}
-                                   else if(chosencondition.value==8){set_style(d,{display: 'inline'});set_style(l,{display: 'none'});set_style(t,{display: 'inline'});set_style(dt,{display: 'inline'});}
-                                   else if(chosencondition.value==9){set_style(d,{display: 'none'});set_style(l,{display: 'none'});set_style(t,{display: 'none'});set_style(dt,{display: 'none'});}
-                                   else {set_style(d,{display: 'none'});set_style(l,{display: 'none'});set_style(t,{display: 'inline'});set_style(dt,{display: 'none'});}
+                                   if(chosencondition.value==5||chosencondition.value==6){set_style(d,{display: 'none'});set_style(l,{display: 'inline'});set_style(t,{display: 'inline'});}
+                                   else if(chosencondition.value==8){set_style(d,{display: 'inline'});set_style(l,{display: 'none'});set_style(t,{display: 'inline'});}
+                                   else if(chosencondition.value==9){set_style(d,{display: 'none'});set_style(l,{display: 'none'});set_style(t,{display: 'none'});}
+                                   else {set_style(d,{display: 'none'});set_style(l,{display: 'none'});set_style(t,{display: 'inline'});}
                                 }
 
 
@@ -1223,13 +1070,7 @@ Version: 0.1; Sept 19th 2011
                                 textbox.setAttribute('size', '25'); 
                                 textbox.setAttribute('maxlength', '40');
                                 textbox.setAttribute('class', 'datetextbox');
-                                
-                                // datebox
-                                datebox = document.createElement('a');
-                                datebox.setAttribute('href', '#');
-                                datebox.setAttribute('class', 'dp-choose-date');
-                                datebox.setAttribute('title', 'Choose date');
-                                datebox.innerHTML='Choose date';
+
                                 
                                 //appending the elements
                                 newcond.setAttribute("style", "margin-bottom: 5px;");
@@ -1239,7 +1080,6 @@ Version: 0.1; Sept 19th 2011
                                 newcond.appendChild(likelist);
                                 newcond.appendChild(datelist);
                                 newcond.appendChild(textbox);
-                                newcond.appendChild(datebox);
                                 };
                                 
                         //jQuery: DB connection and the Menu
@@ -1297,7 +1137,6 @@ Version: 0.1; Sept 19th 2011
                                                 document.getElementById('dialog-message').innerHTML = s;
                                                 $('#color1').colorPicker();
                                                 create_condition();
-                                                $('.datetextbox').datePicker({startDate:'01/01/2000'});
                                                 });
                                             menu_add_label_container = document.createElement('ul');
                                             add_class(menu_add_label_container, 'label_item');
