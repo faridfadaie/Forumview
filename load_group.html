@@ -1043,12 +1043,12 @@ Version: 0.1; Sept 19th 2011
                                    var l = this.parentNode.getElementsByTagName("select")[1];
                                    var d = this.parentNode.getElementsByTagName("select")[2];
                                    var t = this.parentNode.getElementsByTagName("input")[0];
-                                   var dt = this.parentNode.getElementsByTagName("a")[0];
+                                   //var dt = this.parentNode.getElementsByTagName("a")[0];
                                    var chosencondition=this.options[this.selectedIndex];
-                                   if(chosencondition.value==5||chosencondition.value==6){set_style(d,{display: 'none'});set_style(dt,{display: 'none'});set_style(l,{display: 'inline'});set_style(t,{display: 'inline'});}
-                                   else if(chosencondition.value==8){set_style(d,{display: 'inline'});set_style(dt,{display: 'inline'});set_style(l,{display: 'none'});set_style(t,{display: 'inline'});}
-                                   else if(chosencondition.value==9){set_style(d,{display: 'none'});set_style(l,{display: 'none'});set_style(t,{display: 'none'});set_style(dt,{display: 'none'});}
-                                   else {set_style(d,{display: 'none'});set_style(l,{display: 'none'});set_style(dt,{display: 'none'});set_style(t,{display: 'inline'});}                                                    
+                                   if(chosencondition.value==5||chosencondition.value==6){set_style(d,{display: 'none'});set_style(l,{display: 'inline'});set_style(t,{display: 'inline'});} //set_style(dt,{display: 'none'});
+                                   else if(chosencondition.value==8){set_style(d,{display: 'inline'});set_style(l,{display: 'none'});set_style(t,{display: 'inline'});} //set_style(dt,{display: 'inline'});
+                                   else if(chosencondition.value==9){set_style(d,{display: 'none'});set_style(l,{display: 'none'});set_style(t,{display: 'none'});} //set_style(dt,{display: 'none'});
+                                   else {set_style(d,{display: 'none'});set_style(l,{display: 'none'});set_style(t,{display: 'inline'});} //set_style(dt,{display: 'none'});
                                 }
 
 
@@ -1097,11 +1097,11 @@ Version: 0.1; Sept 19th 2011
                                 textbox.setAttribute('class', 'datetextbox');
                                 
                                 // datebox
-                                datebox = document.createElement('a');
-                                datebox.setAttribute('href', '#');
-                                datebox.setAttribute('class', 'dp-choose-date');
-                                datebox.setAttribute('title', 'Choose date');
-                                datebox.innerHTML='Choose date';
+                                //datebox = document.createElement('a');
+                                //datebox.setAttribute('href', '#');
+                                //datebox.setAttribute('class', 'dp-choose-date');
+                                //datebox.setAttribute('title', 'Choose date');
+                                //datebox.innerHTML='Choose date';
                                 
                                 //appending the elements
                                 newcond.setAttribute("style", "margin-bottom: 5px;");
