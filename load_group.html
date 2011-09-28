@@ -1000,6 +1000,9 @@ Version: 0.1; Sept 19th 2011
                                 tagtx.setAttribute('style', 'text-decoration:none; font-weight: 700; text-transform: capitalize;');
                                 tagtx.setAttribute('href', '#');
                                 tagtx.innerHTML='more options...';
+                                tagtx.onclick = function(){
+                                    alert('clicked');
+                                }
                                 
                                 tag.appendChild(tagtx);
                                 fconditions.appendChild(tag);
