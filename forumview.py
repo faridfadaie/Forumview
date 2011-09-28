@@ -21,6 +21,7 @@ NAME_DEL = 'B:'
 NICK_DEL = 'C:'
 PARENT_DEL = 'D:'
 RULE_DEL = 'E:'
+COL_DEL = 'F:'
 
 config = {'FACEBOOK_SECRET': 'bba342dc751c88d7522ce822d4d30ab8', 'AWS_ACCESS_KEY': 'AKIAJ36DOHUEJB4QN5WA', 'FACEBOOK_KEY': '246575252046549', 'AWS_SECRET_ACCESS_KEY': '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'}
 #load_enc_conf('init.cfg.enc')
@@ -130,7 +131,7 @@ def create_label(env, start_response, args):
     user = _validate_fb(env)
     if user is None:
         return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_SESSION)
-    if ('obj_id' in args) and ('parent' in args) and ('name' in args) and ('nick' in args) and ('rule' in args):
+    if ('obj_id' in args) and ('parent' in args) and ('name' in args) and ('nick' in args) and ('rule' in args) and ('color' in args):
         try:
             obj_id = str(int(args['obj_id']))
         except:
@@ -161,7 +162,8 @@ def create_label(env, start_response, args):
                                                             (label_id, NAME_DEL + args['name'], True), 
                                                             (label_id, NICK_DEL + args['nick'], True), 
                                                             (label_id, PARENT_DEL + args['parent'], True), 
-                                                            (label_id, RULE_DEL + args['rule'], True)])
+                                                            (label_id, RULE_DEL + args['rule'], True), 
+                                                            (label_id, COL_DEL + args['color'], True)])
         except:
             raise
             start_response('503 Service Unavailable',[])
@@ -181,7 +183,10 @@ def _decode_label(lb):
             parent = j.strip(PARENT_DEL)
         if j.find(RULE_DEL) == 0:
             rule = j.strip(RULE_DEL)
-    return shared_status, name, nick, parent, rule
+        if j.find(COL_DEL) == 0:
+            color = j.strip(COL_DEL)
+
+    return shared_status, name, nick, parent, rule, color
 
 def _decode_post(ps):
     for j in ps:
@@ -265,12 +270,12 @@ def get_labels(env, start_response, args):
         labels = sdb.get_attributes(AWS_SDB_LABELS_DOMAIN, obj_id)
         easy_labels = {}
         for i in labels:
-            shared_status, name, nick, parent, rule = _decode_label(labels[i])
+            shared_status, name, nick, parent, rule, color = _decode_label(labels[i])
             if ((shared == 'shared') and (shared_status == 'shared'))\
             or ((shared == 'personal') and (shared_status in ['shared', 'personal'])) \
             or (shared == 'global'):
                 easy_labels[i] = {'parent' : parent, 'name' : name, 
-                                  'nick': nick, 'shared' : shared_status, 'rule' : rule}
+                                  'nick': nick, 'shared' : shared_status, 'rule' : rule, 'color' : color}
         return json_ok(env, start_response, easy_labels)
     except:
         raise
@@ -303,7 +308,7 @@ def set_exception(env, start_response, args):
         else:
             owner = labels[0].name.split(':')[1]
         obj_id = labels[0].name.split(':')[0]
-        shared_status, name, nick, parent, rule = _decode_label(labels[0].values()[0])
+        shared_status, name, nick, parent, rule, color = _decode_label(labels[0].values()[0])
         if str(to_id) != obj_id:
             return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'the label is not defined for this object.')
         is_admin = _is_admin(to_id, user)
