@@ -1124,7 +1124,7 @@ Version: 0.1; Sept 19th 2011
                                 datelist.appendChild(theOption);
 
                                 theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("fter");
+                                theText = document.createTextNode("after");
                                 theOption.appendChild(theText);
                                 theOption.setAttribute("value","2");
                                 datelist.appendChild(theOption);
@@ -1171,7 +1171,7 @@ Version: 0.1; Sept 19th 2011
                                 var newcond = document.createElement('div');
                                 var conditions = document.getElementById('conditions');
 
-                                var button, condlist, likelist, datelist, textbox, datetextbox;
+                                var button, condlist, textbox;
 
                                 // add rule button
                                 button = document.createElement('a');                                            
@@ -1192,7 +1192,7 @@ Version: 0.1; Sept 19th 2011
                                         
                                 //condlis                                
                                 condlist = document.createElement('select');
-                                condlist.setAttribute('style', 'display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px; margin: 0 5px;');
+                                condlist.setAttribute('class', 'fonted');
 
                                 theOption = document.createElement("OPTION");
                                 theText = document.createTextNode("Who posted the messge");
@@ -1219,81 +1219,10 @@ Version: 0.1; Sept 19th 2011
                                 condlist.appendChild(theOption);
 
                                 theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("How many likes it has");
+                                theText = document.createTextNode("What links are in the message");
                                 theOption.appendChild(theText);
                                 theOption.setAttribute("value","5");
                                 condlist.appendChild(theOption);
-
-                                theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("How many comments it has");
-                                theOption.appendChild(theText);
-                                theOption.setAttribute("value","6");
-                                condlist.appendChild(theOption);
-
-                                theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("What links are in the message");
-                                theOption.appendChild(theText);
-                                theOption.setAttribute("value","7");
-                                condlist.appendChild(theOption);
-
-                                theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("Date of the post");
-                                theOption.appendChild(theText);
-                                theOption.setAttribute("value","8");
-                                condlist.appendChild(theOption);
-
-                                theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("Post has attachments");
-                                theOption.appendChild(theText);
-                                theOption.setAttribute("value","9");
-                                condlist.appendChild(theOption);
-                                
-                                condlist.onchange=function(){
-                                   var l = this.parentNode.getElementsByTagName("select")[1];
-                                   var d = this.parentNode.getElementsByTagName("select")[2];
-                                   var t = this.parentNode.getElementsByTagName("input")[0];
-                                   var dt = this.parentNode.getElementsByTagName("input")[1];
-                                   var chosencondition=this.options[this.selectedIndex];
-                                   if(chosencondition.value==5||chosencondition.value==6){set_style(d,{display: 'none'});set_style(l,{display: 'inline'});set_style(t,{display: 'inline'});set_style(dt,{display: 'none'});}
-                                   else if(chosencondition.value==8){set_style(d,{display: 'inline'});set_style(l,{display: 'none'});set_style(t,{display: 'none'});set_style(dt,{display: 'inline'});}
-                                   else if(chosencondition.value==9){set_style(d,{display: 'none'});set_style(l,{display: 'none'});set_style(t,{display: 'none'});set_style(dt,{display: 'none'});}
-                                   else {set_style(d,{display: 'none'});set_style(l,{display: 'none'});set_style(t,{display: 'inline'});set_style(dt,{display: 'none'});}
-                                }
-
-
-                                //likelist                                
-                                likelist = document.createElement('select');
-                                likelist.setAttribute('style', 'display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px; margin-right: 5px;');
-
-                                theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("more than");
-                                theOption.appendChild(theText);
-                                theOption.setAttribute("value","1");
-                                likelist.appendChild(theOption);
-
-                                theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("less than");
-                                theOption.appendChild(theText);
-                                theOption.setAttribute("value","2");
-                                likelist.appendChild(theOption);
-
-
-                                //datelist                                
-                                datelist = document.createElement('select');
-                                //condlist.setAttribute('id', 'conditions'); 
-                                datelist.setAttribute('style', 'display:none; font-family: '+"'"+'Lucida Grande'+"'"+',Arial,Helvetica,sans-serif; font-size:11px; margin-right: 5px;');
-
-                                theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("before");
-                                theOption.appendChild(theText);
-                                theOption.setAttribute("value","1");
-                                datelist.appendChild(theOption);
-
-                                theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("after");
-                                theOption.appendChild(theText);
-                                theOption.setAttribute("value","2");
-                                datelist.appendChild(theOption);
 
 
                                 // textbox
@@ -1302,26 +1231,14 @@ Version: 0.1; Sept 19th 2011
                                 textbox.setAttribute('size', '25'); 
                                 textbox.setAttribute('maxlength', '40');
                                 textbox.setAttribute('class', 'datetextbox');
-                                
-                                
-                                // textbox
-                                datetextbox = document.createElement('input');  
-                                datetextbox.setAttribute('type', 'text');
-                                datetextbox.setAttribute('size', '25'); 
-                                datetextbox.setAttribute('maxlength', '40');
-                                datetextbox.setAttribute('class', 'datetextbox');
-                                $(datetextbox).simpleDatepicker({ startdate: 2007 });
-                                
+                                                                
                                 
                                 //appending the elements
                                 newcond.setAttribute("style", "margin-bottom: 5px;");
                                 conditions.appendChild(newcond);
                                 newcond.appendChild(button);
                                 newcond.appendChild(condlist);
-                                newcond.appendChild(likelist);
-                                newcond.appendChild(datelist);
                                 newcond.appendChild(textbox);
-                                newcond.appendChild(datetextbox);
                                 };
                                 
                         //jQuery: DB connection and the Menu
