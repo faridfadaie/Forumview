@@ -9,6 +9,7 @@ Version: 0.1; Sept 19th 2011
         <link rel="stylesheet" type="text/css" href="http://www.tayfeh.com/resources/css/text.css" media="screen" /> -->
         <link rel="stylesheet" type="text/css" href="http://www.tayfeh.com/resources/css/960.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="http://www.tayfeh.com/resources/colorpicker/colorPicker.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="http://teddevito.com/demos/calendar.css" media="screen" />
         <!--<link rel="stylesheet" type="text/css" href="http://www.tayfeh.com/resources/css/layout.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="http://www.tayfeh.com/resources/css/nav.css" media="screen" /> -->
         
@@ -306,7 +307,7 @@ Version: 0.1; Sept 19th 2011
         
         <script src="http://code.jquery.com/jquery-latest.js"></script>
         <script src="http://www.tayfeh.com/resources/colorpicker/jquery.colorPicker.js" type="text/javascript"><!--mce:1--></script>
-        
+        <script src="http://teddevito.com/demos/cal.js" type="text/javascript"><!--mce:1--></script>
         <body>
             <div id="fb-root"></div>
             
@@ -1143,6 +1144,7 @@ Version: 0.1; Sept 19th 2011
                                                 document.getElementById('dialog-message').innerHTML = s;
                                                 $('#color1').colorPicker();
                                                 create_condition();
+                                                $('.datetextbox').simpleDatepicker();
                                                 });
                                             menu_add_label_container = document.createElement('ul');
                                             add_class(menu_add_label_container, 'label_item');
