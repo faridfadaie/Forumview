@@ -938,7 +938,7 @@ Version: 0.1; Sept 19th 2011
                         
                             function create_condition(){
                                 var newcond = document.createElement('div');
-                                var conditions = document.getElementById('cdtest');
+                                var conditions = document.getElementById('conditions');
 
                                 var button, condlist, likelist, datelist, textbox;
 
@@ -1131,7 +1131,7 @@ Version: 0.1; Sept 19th 2011
                                                 s += '</select></p>';
                                                 s += '<div class="form-container"><form action="#" method="post"><div class="controlset"><label for="color1"><strong>Choose Label'+"'"+'s color</strong></label> <input id="color1" type="text" name="color1" value="#333399" /></div></form></div><p>&nbsp;</p>'
                                                 s += '<div id="conditions_container">';
-                                                s += '<div id="cdtest"></div>'
+                                                s += '<div id="conditions"></div>'
                                                 s += '</div></div>';
                                                 document.getElementById('dialog-message').innerHTML = s;
                                                 $('#color1').colorPicker();
