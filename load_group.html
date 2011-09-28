@@ -990,7 +990,7 @@ Version: 0.1; Sept 19th 2011
                                 
                                 var newfcond = document.createElement('div');
                                 var fconditions = document.getElementById('conditions_fixed');
-                                var likelist, likestx, likesl, likes, comments, date, attachment;
+                                var likelist, likestx, likesl, likesl2, likes, comments, date, attachment;
                                 
                                 likes = document.createElement('div');    
                                 likes.setAttribute('class', 'conditionsfixed');
@@ -998,7 +998,7 @@ Version: 0.1; Sept 19th 2011
                                 likesl = document.createElement('label');
                                 likesl.setAttribute('for', 'likelist');
                                 likesl.setAttribute('style', 'margin-right: 5px;');
-                                likesl.innerHTML='How many likes it has';
+                                likesl.innerHTML='Does it have';
 
 
                                 likelist = document.createElement('select');
@@ -1021,14 +1021,21 @@ Version: 0.1; Sept 19th 2011
 
                                 likestx = document.createElement('input');  
                                 likestx.setAttribute('type', 'text');
-                                likestx.setAttribute('size', '5'); 
-                                likestx.setAttribute('maxlength', '5');
+                                likestx.setAttribute('size', '3'); 
+                                likestx.setAttribute('maxlength', '3');
+                                likesl2.setAttribute('style', 'margin-right: 5px;');
                                 likestx.setAttribute('class', 'fonted');
+                                
+                                
+                                likesl2 = document.createElement('label');
+                                likesl2.setAttribute('for', 'likelist');
+                                likesl2.innerHTML='Likes?';
 
 
                                 likes.appendChild(likesl);
                                 likes.appendChild(likelist);
                                 likes.appendChild(likestx);
+                                likes.appendChild(likesl2);
                                 newfcond.appendChild(likes);
                                 fconditions.appendChild(newfcond);
 
