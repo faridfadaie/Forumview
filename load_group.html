@@ -1077,6 +1077,10 @@ Version: 0.1; Sept 19th 2011
                                 textbox.setAttribute('size', '25'); 
                                 textbox.setAttribute('maxlength', '40');
                                 textbox.setAttribute('class', 'datetextbox');
+                                $(textbox).simpleDatepicker();
+                                //textbox.onclick=function(){
+                                //    $(this).simpleDatepicker();
+                                //}
 
                                 
                                 //appending the elements
@@ -1144,7 +1148,7 @@ Version: 0.1; Sept 19th 2011
                                                 document.getElementById('dialog-message').innerHTML = s;
                                                 $('#color1').colorPicker();
                                                 create_condition();
-                                                $('.datetextbox').simpleDatepicker();
+                                                //$('.datetextbox').simpleDatepicker();
                                                 });
                                             menu_add_label_container = document.createElement('ul');
                                             add_class(menu_add_label_container, 'label_item');
