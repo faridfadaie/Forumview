@@ -297,12 +297,12 @@ Version: 0.1; Sept 19th 2011
 
             div.form-container div.controlset label { width: 140px; border: 0;}
             a.dp-choose-date {
-                float: left;
+                float: right;
                 width: 16px;
                 height: 16px;
                 padding: 0;
                 margin: 5px 3px 0;
-                display: block;
+                display: none;
                 text-indent: -2000px;
                 overflow: hidden;
                 background: url(http://www.kelvinluck.com/assets/jquery/datePicker/v2/demo/images/calendar.png) no-repeat; 
@@ -1043,7 +1043,7 @@ Version: 0.1; Sept 19th 2011
                                    var l = this.parentNode.getElementsByTagName("select")[1];
                                    var d = this.parentNode.getElementsByTagName("select")[2];
                                    var t = this.parentNode.getElementsByTagName("input")[0];
-                                   var dt = this.parentNode.getElementsByTagName("a")[0];
+                                   var dt = this.parentNode.getElementsByTagName("a")[1];
                                    var chosencondition=this.options[this.selectedIndex];
                                    if(chosencondition.value==5||chosencondition.value==6){set_style(d,{display: 'none'});set_style(l,{display: 'inline'});set_style(t,{display: 'inline'});set_style(dt,{display: 'none'});}
                                    else if(chosencondition.value==8){set_style(d,{display: 'inline'});set_style(l,{display: 'none'});set_style(t,{display: 'inline'});set_style(dt,{display: 'inline'});}
@@ -1109,7 +1109,7 @@ Version: 0.1; Sept 19th 2011
                                 newcond.appendChild(likelist);
                                 newcond.appendChild(datelist);
                                 newcond.appendChild(textbox);
-                                //newcond.appendChild(datebox);
+                                newcond.appendChild(datebox);
                                 };
                                 
                         //jQuery: DB connection and the Menu
