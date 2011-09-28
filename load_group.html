@@ -990,8 +990,20 @@ Version: 0.1; Sept 19th 2011
                                 
                                 var newfcond = document.createElement('div');
                                 var fconditions = document.getElementById('conditions_fixed');
-                                var likes, likelist, likestx, likesl, likesl2, comments, commentlist, commentstx, commentsl, commentsl2;
+                                var tag, tagtx, likes, likelist, likestx, likesl, likesl2, comments, commentlist, commentstx, commentsl, commentsl2;
                                 
+                                tag = document.createElement('div');    
+                                tag.setAttribute('class', 'conditionsfixed');
+
+                                tagtx = document.createElement('p');
+                                tagtx.setAttribute('class', 'fonted');
+                                tagtx.innerHTML='Apply label with the following filters';
+                                
+                                tag.appendChild(tagtx);
+                                newfcond.appendChild(tag);
+
+
+
                                 likes = document.createElement('div');    
                                 likes.setAttribute('class', 'conditionsfixed');
                                 
@@ -1098,12 +1110,12 @@ Version: 0.1; Sept 19th 2011
                                 button = document.createElement('a');                                            
                                 button.setAttribute('class', 'buttoninline'); 
                                 button.setAttribute('href', '#');
-                                button.innerHTML='Add rule';
+                                button.innerHTML='more';
                                 button.onclick = function () {
-                                        if (this.innerHTML=='Add rule'){
+                                        if (this.innerHTML=='more'){
                                             set_style(this.parentNode.getElementsByTagName("select")[0],{display: 'inline'});
                                             set_style(this.parentNode.getElementsByTagName("input")[0],{display: 'inline'});
-                                            this.innerHTML='Delete';
+                                            this.innerHTML='delete';
                                             create_condition();
                                         } else {
                                             //this.innerHTML='Add rule';
