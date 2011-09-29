@@ -996,6 +996,7 @@ Version: 0.1; Sept 19th 2011
                                 tag.setAttribute('style', 'border-top: 1px solid rgb(204, 204, 204); padding-top: 5px; margin-top: 10px;');
 
                                 tagtx = document.createElement('a');
+                                tagtx.setAttribute('id', 'optionsbutton');
                                 tagtx.setAttribute('class', 'fonted');
                                 tagtx.setAttribute('style', 'text-decoration:none; font-weight: 700; text-transform: capitalize;');
                                 tagtx.setAttribute('href', '#');
@@ -1086,6 +1087,7 @@ Version: 0.1; Sept 19th 2011
 
                                 likestx = document.createElement('input');  
                                 likestx.setAttribute('type', 'text');
+                                likestx.setAttribute('id', 'liketext');
                                 likestx.setAttribute('size', '3'); 
                                 likestx.setAttribute('maxlength', '3');
                                 likestx.setAttribute('style', 'margin-right: 5px;');
@@ -1464,10 +1466,20 @@ Version: 0.1; Sept 19th 2011
                 label2alert.nick = $("#description_label").val();
                 label2alert.parent = parent_id;
                 label2alert.color = document.getElementById('color1').value;
+                if(document.getElementById('optionsbutton').innerHTML == "more options..."){
+                    // no options
+                    label2alert.rule=[];
+                } else {
+                    // options maybe active
+                    //if (document.getElementById('liketext').value != '')
+                    //label2alert.rule
+                }
+                
                 // epoch: var d = new Date(); d.getTime()-d.getMilliseconds())/1000
                 
                 var jsonText = JSON.stringify(label2alert);    
-                alert (jsonText);    
+                //alert (jsonText);    
+                alert('Result: ' + parseInt('') + ' <-');
                 
                                         //$.post("create_label",{obj_id: source_id, name: $("#name_label").val(), nick: $("#description_label").val(), parent: parent_id},
                                         //function(result) {
