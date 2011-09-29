@@ -1503,7 +1503,7 @@ Version: 0.1; Sept 19th 2011
                     // date field
                     if (!isNaN(parseInt(document.getElementById('datetext').value)) || (document.getElementById('timelist').value != 25)){
                         bool = document.getElementById('datetext').value == 'ture';
-                        date = new Date(parseInt(document.getElementById('datetext').value));
+                        date = new Date(document.getElementById('datetext').value);
                         if (document.getElementById('timelist').value != 25){
                             date.setHours(document.getElementById('timelist').value);
                         }
