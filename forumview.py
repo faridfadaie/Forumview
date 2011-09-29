@@ -365,10 +365,13 @@ def request_handler(env, start_response):
     method = env['REQUEST_METHOD']
     path = env['PATH_INFO']
     if (method in ['GET', 'POST']):
-        if (path.count('/') > 1) and path.split('/')[1] in allowed_functions:
+        if (path.count('/') > 0) and path.split('/')[1] in allowed_functions:
         #if path.strip('/') in allowed_functions:
             params = load_args(env)
-            params['list'] = path.split('/')[2:]
+            if path.count('/') > 1:
+                params['list'] = path.split('/')[2:]
+            else:
+                params['list'] = []
             return globals()[path.split('/')[1]](env, start_response, params)
         if DYN_LOADING:
             _load_pages()
