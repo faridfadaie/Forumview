@@ -1193,6 +1193,12 @@ Version: 0.1; Sept 19th 2011
                                 timelist.setAttribute('class', 'fonted');
                                 timelist.setAttribute('style', 'margin-right: 5px;');
 
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value",25);
+                                timelist.appendChild(theOption);
+
                                 for (var d=0;d<=23;d++){
                                     theOption = document.createElement("OPTION");
                                     theText = document.createTextNode(d+":00");
