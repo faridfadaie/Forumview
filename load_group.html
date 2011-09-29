@@ -1480,8 +1480,9 @@ Version: 0.1; Sept 19th 2011
                         cond = {};
                         cond.id = 1;
                         cond.oper = oper;
-                        cond.params[1] = bool;
-                        cond.params[2] = intgr;
+                        cond.params = [];
+                        cond.params[0] = bool;
+                        cond.params[1] = intgr;
                         
                         label2alert.rule.push(cond);
                     }
