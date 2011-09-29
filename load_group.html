@@ -1545,26 +1545,25 @@ Version: 0.1; Sept 19th 2011
                 
                 // -> at the end, change the first oper to 0
                                 
-                var jsonText = JSON.stringify(label2alert);    
-                alert (jsonText);
-                //alert('Result -> ' + date.toUTCString() + ' <-');
+                //var jsonText = JSON.stringify(label2alert);    
+                //alert (jsonText);
                 
-                                        //$.post("create_label",{obj_id: source_id, name: $("#name_label").val(), nick: $("#description_label").val(), parent: parent_id},
-                                        //function(result) {
-                                         //   
-                                         //   if (result["type"]=="ok"){
-                                         //       if (parent_id == '0'){
-                                         //           window.labels[result["data"]] = create_label($("#name_label").val(), result["data"], function(){alert('click')});
-                                         //           document.getElementById('lable_container_ul').appendChild(window.labels[result["data"]]);
-                                         //           
-                                         //           } else {
-                                         //           window.labels[parent_id].add_child($("#name_label").val(), result["data"], function(){alert('click')});
-                                         //           }
-                                         //       //$("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
-                                         //       } else {
-                                         //       alert("An error occured, no lable culd be made, please try again!")
-                                         //      }
-                                         //   });
+                                        $.post("create_label",label2alert,
+                                        function(result) {
+                                            
+                                            if (result["type"]=="ok"){
+                                                if (parent_id == '0'){
+                                                    window.labels[result["data"]] = create_label($("#name_label").val(), result["data"], function(){alert('click')});
+                                                    document.getElementById('lable_container_ul').appendChild(window.labels[result["data"]]);
+                                                    
+                                                    } else {
+                                                    window.labels[parent_id].add_child($("#name_label").val(), result["data"], function(){alert('click')});
+                                                    }
+                                                //$("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
+                                                } else {
+                                                alert("An error occured, no lable culd be made, please try again!")
+                                               }
+                                            });
                                         $('#dialog-overlay, #dialog-box').hide();
                                         return false;
                                         });
