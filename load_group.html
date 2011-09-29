@@ -1507,7 +1507,7 @@ Version: 0.1; Sept 19th 2011
                         if (document.getElementById('timelist').value != 25){
                             date.setHours(document.getElementById('timelist').value);
                         }
-                        intgr = date.getTime()-date.getMilliseconds()/1000;
+                        intgr = date.getTime()/1000;
                         cond = {};
                         cond.id = 3;
                         cond.oper = oper;
