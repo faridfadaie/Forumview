@@ -1270,31 +1270,31 @@ Version: 0.1; Sept 19th 2011
                                 theOption = document.createElement("OPTION");
                                 theText = document.createTextNode("Who posted the messge");
                                 theOption.appendChild(theText);
-                                theOption.setAttribute("value","1");
+                                theOption.setAttribute("value","5");
                                 condlist.appendChild(theOption);
 
                                 theOption = document.createElement("OPTION");
                                 theText = document.createTextNode("Who is mentioned");
                                 theOption.appendChild(theText);
-                                theOption.setAttribute("value","2");
+                                theOption.setAttribute("value","6");
                                 condlist.appendChild(theOption);
 
                                 theOption = document.createElement("OPTION");
                                 theText = document.createTextNode("What is in the text");
                                 theOption.appendChild(theText);
-                                theOption.setAttribute("value","3");
+                                theOption.setAttribute("value","7");
                                 condlist.appendChild(theOption);
 
                                 theOption = document.createElement("OPTION");
                                 theText = document.createTextNode("What is not in the text");
                                 theOption.appendChild(theText);
-                                theOption.setAttribute("value","4");
+                                theOption.setAttribute("value","8");
                                 condlist.appendChild(theOption);
 
                                 theOption = document.createElement("OPTION");
                                 theText = document.createTextNode("What links are in the message");
                                 theOption.appendChild(theText);
-                                theOption.setAttribute("value","5");
+                                theOption.setAttribute("value","9");
                                 condlist.appendChild(theOption);
 
 
@@ -1527,13 +1527,24 @@ Version: 0.1; Sept 19th 2011
                         cond.params[0] = bool;
                         label2alert.rule.push(cond);
                         }
+                        
+                     conddiv = document.getElementById('conditions');
+                     conditionsdiv=conddiv.getElementsByTagName('div');
+                     for (i=1;i<=conditionsdiv.length-1;i++){
+                         if (conditionsdiv[i-1].getElementsByTagName('input')[0].value != ''){
+                             cond = {};
+                             cond.id = conditionsdiv[i-1].getElementsByTagName('select')[0].value;
+                             cond.oper = oper;
+                             cond.params = [];
+                             cond.params[0] = conditionsdiv[i-1].getElementsByTagName('input')[0].value;
+                             label2alert.rule.push(cond);
+                         }
+                     }
 
                 }
                 
                 // -> at the end, change the first oper to 0
-                
-                // epoch: var d = new Date(); (d.getTime()-d.getMilliseconds())/1000
-                
+                                
                 var jsonText = JSON.stringify(label2alert);    
                 alert (jsonText);
                 //alert('Result -> ' + date.toUTCString() + ' <-');
