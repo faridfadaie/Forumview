@@ -1451,12 +1451,15 @@ Version: 0.1; Sept 19th 2011
 
                                     $('#Btn_labeldialog_addlabel').click(function () {
                                         var parent_id = '0';
+                                        var name_label = $("#name_label").val();
                                         if (window.forum){
                                             window.forum.destroy(); window.forum.stop_timer();
                                             }
-                                        if ($("#name_label").val()==''){
-                                            alert('Please enter a name for the label.')
-                                            return false;
+                                        if (name_label==''){
+                                            name_label=prompt("Please enter a name for the label","");
+                                            
+                                            //alert('Please enter a name for the label.')
+                                            if(name_label==''){return false;}
                                         }
                                         set_style(document.getElementById('posts_container'),{display: 'block'})
                                         var parent = new Object();
@@ -1468,7 +1471,7 @@ Version: 0.1; Sept 19th 2011
                                             }
                 var label2alert = {};
                 label2alert.obj_id = source_id;
-                label2alert.name = $("#name_label").val();
+                label2alert.name = name_label;
                 label2alert.nick = $("#description_label").val();
                 label2alert.parent = parent_id;
                 label2alert.color = document.getElementById('color1').value;
@@ -1557,11 +1560,11 @@ Version: 0.1; Sept 19th 2011
                                             
                                             if (result["type"]=="ok"){
                                                 if (parent_id == '0'){
-                                                    window.labels[result["data"]] = create_label($("#name_label").val(), result["data"], function(){alert('click')});
+                                                    window.labels[result["data"]] = create_label(name_label, result["data"], function(){alert('click')});
                                                     document.getElementById('lable_container_ul').appendChild(window.labels[result["data"]]);
                                                     
                                                     } else {
-                                                    window.labels[parent_id].add_child($("#name_label").val(), result["data"], function(){alert('click')});
+                                                    window.labels[parent_id].add_child(name_label, result["data"], function(){alert('click')});
                                                     }
                                                 //$("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
                                                 } else {
