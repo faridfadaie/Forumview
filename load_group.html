@@ -1478,11 +1478,11 @@ Version: 0.1; Sept 19th 2011
                 label2alert.nick = $("#description_label").val();
                 label2alert.parent = parent_id;
                 label2alert.color = document.getElementById('color1').value;
-                label2alert.rule=[];
+                var rule=[];
                 oper = document.getElementById('taglist').value;
                 if(document.getElementById('optionsbutton').innerHTML == "more options..."){
                     // no options
-                    label2alert.rule=[];
+                    rule=[];
                 } else {
                     // options maybe active
                     // likes field
@@ -1495,7 +1495,7 @@ Version: 0.1; Sept 19th 2011
                         cond.params = [];
                         cond.params[0] = bool;
                         cond.params[1] = intgr;
-                        label2alert.rule.push(cond);
+                        rule.push(cond);
                         }
                     // comments field
                     if (!isNaN(parseInt(document.getElementById('commenttext').value))){
@@ -1507,7 +1507,7 @@ Version: 0.1; Sept 19th 2011
                         cond.params = [];
                         cond.params[0] = bool;
                         cond.params[1] = intgr;
-                        label2alert.rule.push(cond);
+                        rule.push(cond);
                         }
                         
                     // date field
@@ -1524,7 +1524,7 @@ Version: 0.1; Sept 19th 2011
                         cond.params = [];
                         cond.params[0] = bool;
                         cond.params[1] = intgr;
-                        label2alert.rule.push(cond);
+                        rule.push(cond);
                         }
 
                     // comments field
@@ -1535,7 +1535,7 @@ Version: 0.1; Sept 19th 2011
                         cond.oper = oper;
                         cond.params = [];
                         cond.params[0] = bool;
-                        label2alert.rule.push(cond);
+                        rule.push(cond);
                         }
                         
                      conddiv = document.getElementById('conditions');
@@ -1547,14 +1547,15 @@ Version: 0.1; Sept 19th 2011
                              cond.oper = oper;
                              cond.params = [];
                              cond.params[0] = conditionsdiv[i-1].getElementsByTagName('input')[0].value;
-                             label2alert.rule.push(cond);
+                             rule.push(cond);
                          }
                      }
 
                 }
                 
                 // -> at the end, change the first oper to 0
-                                
+                
+                label2alert.rule = JSON.stringify(rule);
                 //var jsonText = JSON.stringify(label2alert);    
                 //alert (jsonText);
                 
