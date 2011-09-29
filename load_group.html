@@ -1173,18 +1173,19 @@ Version: 0.1; Sept 19th 2011
                                 theOption = document.createElement("OPTION");
                                 theText = document.createTextNode("before");
                                 theOption.appendChild(theText);
-                                theOption.setAttribute("value","1");
+                                theOption.setAttribute("value","true");
                                 datelist.appendChild(theOption);
 
                                 theOption = document.createElement("OPTION");
                                 theText = document.createTextNode("after");
                                 theOption.appendChild(theText);
-                                theOption.setAttribute("value","2");
+                                theOption.setAttribute("value","false");
                                 datelist.appendChild(theOption);
 
 
-                                datestx = document.createElement('input');  
+                                datestx = document.createElement('input');
                                 datestx.setAttribute('type', 'text');
+                                datestx.setAttribute('id', 'datetext');
                                 datestx.setAttribute('size', '10'); 
                                 datestx.setAttribute('maxlength', '10');
                                 datestx.setAttribute('style', 'margin-right: 5px;');
@@ -1499,6 +1500,20 @@ Version: 0.1; Sept 19th 2011
                         label2alert.rule.push(cond);
                         }
                         
+                    // date field
+                    if (!isNaN(parseInt(document.getElementById('datetext').value)) || (document.getElementById('timelist').value != 25)){
+                        //bool = document.getElementById('datetext').value == 'ture';
+                        //date = new Date(parseInt(document.getElementById('datetext').value));
+                        //intgr = 9;
+                        //cond = {};
+                        //cond.id = 2;
+                        //cond.oper = oper;
+                        //cond.params = [];
+                        //cond.params[0] = bool;
+                        //cond.params[1] = intgr;
+                        //label2alert.rule.push(cond);
+                        }
+                        
                 }
                 
                 // -> at the end, change the first oper to 0
@@ -1506,8 +1521,9 @@ Version: 0.1; Sept 19th 2011
                 // epoch: var d = new Date(); d.getTime()-d.getMilliseconds())/1000
                 
                 var jsonText = JSON.stringify(label2alert);    
-                alert (jsonText);    
-                 //alert('Result -> ' + parseInt(document.getElementById('liketext').value) + ' <-');
+                // alert (jsonText);
+                date = new Date(parseInt(document.getElementById('datetext').value));
+                 alert('Result -> ' + date.getTime()-date.getMilliseconds())/1000 + ' <-');
                 
                                         //$.post("create_label",{obj_id: source_id, name: $("#name_label").val(), nick: $("#description_label").val(), parent: parent_id},
                                         //function(result) {
