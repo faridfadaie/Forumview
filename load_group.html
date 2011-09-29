@@ -1456,10 +1456,12 @@ Version: 0.1; Sept 19th 2011
                                             window.forum.destroy(); window.forum.stop_timer();
                                             }
                                         if (name_label==''){
-                                            var name_label_new = prompt("Please enter a name for the label","");
+                                            window.name_label_new = prompt("Please enter a name for the label","");
                                         }
                                         //alert("->"+name_labe+"<-");
                                         if(window.name_label_new === undefined){return false;}
+                                        else if (window.name_label_new == ''){return false;}
+                                        name_label = window.name_label_new;
                                         set_style(document.getElementById('posts_container'),{display: 'block'})
                                         var parent = new Object();
                                         for (var i in window.labels){
