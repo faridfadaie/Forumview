@@ -1075,13 +1075,13 @@ Version: 0.1; Sept 19th 2011
                                 theOption = document.createElement("OPTION");
                                 theText = document.createTextNode("more than");
                                 theOption.appendChild(theText);
-                                theOption.setAttribute("value","1");
+                                theOption.setAttribute("value","ture");
                                 likelist.appendChild(theOption);
 
                                 theOption = document.createElement("OPTION");
                                 theText = document.createTextNode("less than");
                                 theOption.appendChild(theText);
-                                theOption.setAttribute("value","2");
+                                theOption.setAttribute("value","false");
                                 likelist.appendChild(theOption);
 
 
@@ -1460,26 +1460,42 @@ Version: 0.1; Sept 19th 2011
                                                 parent = window.labels[i];
                                                 }
                                             }
-                var label2alert = new Object();
+                var label2alert = {};
                 label2alert.obj_id = source_id;
                 label2alert.name = $("#name_label").val();
                 label2alert.nick = $("#description_label").val();
                 label2alert.parent = parent_id;
                 label2alert.color = document.getElementById('color1').value;
+                label2alert.rule=[];
+                oper = document.getElementById('taglist').value;
                 if(document.getElementById('optionsbutton').innerHTML == "more options..."){
                     // no options
                     label2alert.rule=[];
                 } else {
                     // options maybe active
-                    //if (document.getElementById('liketext').value != '')
-                    //label2alert.rule
+                    if (parseInt(document.getElementById('liketext').value) != NaN){
+                        bool = document.getElementById('likelist').value == 'ture';
+                        intgr = parseInt(document.getElementById('liketext').value);
+                        
+                        cond = {};
+                        cond.id = 1;
+                        cond.oper = oper;
+                        cond.params = [];
+                        cond.params[1] = bool;
+                        cond.params[2] = intgr;
+                        
+                        label2alert.rule.push(cond);
+                    }
+                        
                 }
+                
+                // -> at the end, change the first oper to 0
                 
                 // epoch: var d = new Date(); d.getTime()-d.getMilliseconds())/1000
                 
                 var jsonText = JSON.stringify(label2alert);    
-                //alert (jsonText);    
-                alert('Result: ' + parseInt('') + ' <-');
+                alert (jsonText);    
+                // alert('Result -> ' + parseInt('') + ' <-');
                 
                                         //$.post("create_label",{obj_id: source_id, name: $("#name_label").val(), nick: $("#description_label").val(), parent: parent_id},
                                         //function(result) {
