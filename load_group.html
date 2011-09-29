@@ -1193,30 +1193,22 @@ Version: 0.1; Sept 19th 2011
                                 timelist.setAttribute('class', 'fonted');
                                 timelist.setAttribute('style', 'margin-right: 5px;');
 
-                                for (var d=1,d<=24,d++){
-                                theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("before");
-                                theOption.appendChild(theText);
-                                theOption.setAttribute("value","1");
-                                timelist.appendChild(theOption);
+                                for (var d=1;d<=24;d++){
+                                    theOption = document.createElement("OPTION");
+                                    theText = document.createTextNode(d+":00");
+                                    theOption.appendChild(theText);
+                                    theOption.setAttribute("value",d);
+                                    timelist.appendChild(theOption);
                                 }
-
-                                theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("after");
-                                theOption.appendChild(theText);
-                                theOption.setAttribute("value","2");
-                                timelist.appendChild(theOption);
-
-                                
-                                
                                 
                                 datesl2 = document.createElement('label');
                                 datesl2.setAttribute('for', 'likelist');
-                                datesl2.innerHTML='(date).';
+                                datesl2.innerHTML='(date and time).';
 
                                 dates.appendChild(datesl);
                                 dates.appendChild(datelist);
                                 dates.appendChild(datestx);
+                                dates.appendChild(timelist);
                                 dates.appendChild(datesl2);
                                 fconditions.appendChild(dates);
 
