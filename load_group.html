@@ -1516,7 +1516,18 @@ Version: 0.1; Sept 19th 2011
                         cond.params[1] = intgr;
                         label2alert.rule.push(cond);
                         }
-                        
+
+                    // comments field
+                    if (document.getElementById('hasattachments').checked){
+                        bool = true;
+                        cond = {};
+                        cond.id = 4;
+                        cond.oper = oper;
+                        cond.params = [];
+                        cond.params[0] = bool;
+                        label2alert.rule.push(cond);
+                        }
+
                 }
                 
                 // -> at the end, change the first oper to 0
