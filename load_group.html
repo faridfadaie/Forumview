@@ -1507,14 +1507,13 @@ Version: 0.1; Sept 19th 2011
                         if (document.getElementById('timelist').value != 25){
                             date.setHours(document.getElementById('timelist').value);
                         }
-                        alert(date.getTime())
-                        var epoche = date.getTime()/1000;
+                        intgr = date.getTime()/1000;
                         cond = {};
                         cond.id = 3;
                         cond.oper = oper;
                         cond.params = [];
                         cond.params[0] = bool;
-                        cond.params[1] = epoche;
+                        cond.params[1] = intgr;
                         label2alert.rule.push(cond);
                         }
                         
@@ -1525,7 +1524,7 @@ Version: 0.1; Sept 19th 2011
                 // epoch: var d = new Date(); (d.getTime()-d.getMilliseconds())/1000
                 
                 var jsonText = JSON.stringify(label2alert);    
-                //alert (jsonText);
+                alert (jsonText);
                 //alert('Result -> ' + date.toUTCString() + ' <-');
                 
                                         //$.post("create_label",{obj_id: source_id, name: $("#name_label").val(), nick: $("#description_label").val(), parent: parent_id},
