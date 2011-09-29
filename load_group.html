@@ -1473,7 +1473,7 @@ Version: 0.1; Sept 19th 2011
                     label2alert.rule=[];
                 } else {
                     // options maybe active
-                    if (parseInt(document.getElementById('liketext').value) != 'NaN'){
+                    if (!isNaN(parseInt(document.getElementById('liketext').value))){
                         bool = document.getElementById('likelist').value == 'ture';
                         intgr = parseInt(document.getElementById('liketext').value);
                         
@@ -1494,8 +1494,8 @@ Version: 0.1; Sept 19th 2011
                 // epoch: var d = new Date(); d.getTime()-d.getMilliseconds())/1000
                 
                 var jsonText = JSON.stringify(label2alert);    
-                //alert (jsonText);    
-                 alert('Result -> ' + parseInt(document.getElementById('liketext').value) + ' <-');
+                alert (jsonText);    
+                 //alert('Result -> ' + parseInt(document.getElementById('liketext').value) + ' <-');
                 
                                         //$.post("create_label",{obj_id: source_id, name: $("#name_label").val(), nick: $("#description_label").val(), parent: parent_id},
                                         //function(result) {
