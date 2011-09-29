@@ -1522,8 +1522,9 @@ Version: 0.1; Sept 19th 2011
                 
                 var jsonText = JSON.stringify(label2alert);    
                 // alert (jsonText);
-                var date = new Date(document.getElementById('datetext').value);
-                 alert('Result -> ' + date.getTime()-date.getMilliseconds())/1000 + ' <-');
+                date = new Date(document.getElementById('datetext').value);
+                dn = date.getTime()-date.getMilliseconds())/1000;
+                 alert('Result -> ' + dn.toString + ' <-');
                 
                                         //$.post("create_label",{obj_id: source_id, name: $("#name_label").val(), nick: $("#description_label").val(), parent: parent_id},
                                         //function(result) {
