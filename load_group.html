@@ -1124,18 +1124,19 @@ Version: 0.1; Sept 19th 2011
                                 theOption = document.createElement("OPTION");
                                 theText = document.createTextNode("more than");
                                 theOption.appendChild(theText);
-                                theOption.setAttribute("value","1");
+                                theOption.setAttribute("value","true");
                                 commentlist.appendChild(theOption);
 
                                 theOption = document.createElement("OPTION");
                                 theText = document.createTextNode("less than");
                                 theOption.appendChild(theText);
-                                theOption.setAttribute("value","2");
+                                theOption.setAttribute("value","false");
                                 commentlist.appendChild(theOption);
 
 
                                 commentstx = document.createElement('input');  
                                 commentstx.setAttribute('type', 'text');
+                                commentstx.setAttribute('id', 'commenttext');
                                 commentstx.setAttribute('size', '3'); 
                                 commentstx.setAttribute('maxlength', '3');
                                 commentstx.setAttribute('style', 'margin-right: 5px;');
@@ -1473,19 +1474,30 @@ Version: 0.1; Sept 19th 2011
                     label2alert.rule=[];
                 } else {
                     // options maybe active
+                    // likes field
                     if (!isNaN(parseInt(document.getElementById('liketext').value))){
                         bool = document.getElementById('likelist').value == 'ture';
                         intgr = parseInt(document.getElementById('liketext').value);
-                        
                         cond = {};
                         cond.id = 1;
                         cond.oper = oper;
                         cond.params = [];
                         cond.params[0] = bool;
                         cond.params[1] = intgr;
-                        
                         label2alert.rule.push(cond);
-                    }
+                        }
+                    // comments field
+                    if (!isNaN(parseInt(document.getElementById('commenttext').value))){
+                        bool = document.getElementById('commenttext').value == 'ture';
+                        intgr = parseInt(document.getElementById('commenttext').value);
+                        cond = {};
+                        cond.id = 2;
+                        cond.oper = oper;
+                        cond.params = [];
+                        cond.params[0] = bool;
+                        cond.params[1] = intgr;
+                        label2alert.rule.push(cond);
+                        }
                         
                 }
                 
