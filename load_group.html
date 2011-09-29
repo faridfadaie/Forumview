@@ -1023,7 +1023,7 @@ Version: 0.1; Sept 19th 2011
                                 
                                 var fconditions = document.getElementById('conditions_fixed');
                                 var tag, tagtx, taglist, likes, likelist, likestx, likesl, likesl2, comments, commentlist, commentstx, commentsl, commentsl2;
-                                var dates, datesl2, datestx, datelist, datesl, attachs, attachsl, attachsin;
+                                var dates, datesl2, datestx, datelist, datesl, attachs, attachsl, attachsin, timelist;
                                 
                                 tag = document.createElement('div');    
                                 tag.setAttribute('class', 'conditionsfixed');
@@ -1163,7 +1163,7 @@ Version: 0.1; Sept 19th 2011
 
 
                                 datelist = document.createElement('select');
-                                datelist.setAttribute('id', 'likelist');                                
+                                datelist.setAttribute('id', 'datelist');                                
                                 datelist.setAttribute('class', 'fonted');
                                 datelist.setAttribute('style', 'margin-right: 5px;');
 
@@ -1187,6 +1187,28 @@ Version: 0.1; Sept 19th 2011
                                 datestx.setAttribute('style', 'margin-right: 5px;');
                                 datestx.setAttribute('class', 'fonted');
                                 $(datestx).simpleDatepicker({ startdate: 2007 , y: -200});
+                                
+                                timelist = document.createElement('select');
+                                timelist.setAttribute('id', 'timelist');                                
+                                timelist.setAttribute('class', 'fonted');
+                                timelist.setAttribute('style', 'margin-right: 5px;');
+
+                                for (var d=1,d<=24,d++){
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("before");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","1");
+                                timelist.appendChild(theOption);
+                                }
+
+                                theOption = document.createElement("OPTION");
+                                theText = document.createTextNode("after");
+                                theOption.appendChild(theText);
+                                theOption.setAttribute("value","2");
+                                timelist.appendChild(theOption);
+
+                                
+                                
                                 
                                 datesl2 = document.createElement('label');
                                 datesl2.setAttribute('for', 'likelist');
