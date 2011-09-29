@@ -1502,29 +1502,31 @@ Version: 0.1; Sept 19th 2011
                         
                     // date field
                     if (!isNaN(parseInt(document.getElementById('datetext').value)) || (document.getElementById('timelist').value != 25)){
-                        //bool = document.getElementById('datetext').value == 'ture';
-                        //date = new Date(parseInt(document.getElementById('datetext').value));
-                        //intgr = 9;
-                        //cond = {};
-                        //cond.id = 2;
-                        //cond.oper = oper;
-                        //cond.params = [];
-                        //cond.params[0] = bool;
-                        //cond.params[1] = intgr;
-                        //label2alert.rule.push(cond);
+                        bool = document.getElementById('datetext').value == 'ture';
+                        date = new Date(parseInt(document.getElementById('datetext').value));
+                        if (document.getElementById('timelist').value != 25){
+                            date.setHours(document.getElementById('timelist').value);
+                        }
+                        intgr = (date.UTC()-date.getMilliseconds())/1000;
+                        cond = {};
+                        cond.id = 3;
+                        cond.oper = oper;
+                        cond.params = [];
+                        cond.params[0] = bool;
+                        cond.params[1] = intgr;
+                        label2alert.rule.push(cond);
                         }
                         
                 }
                 
                 // -> at the end, change the first oper to 0
                 
-                // epoch: var d = new Date(); d.getTime()-d.getMilliseconds())/1000
+                // epoch: var d = new Date(); (d.getTime()-d.getMilliseconds())/1000
                 
                 var jsonText = JSON.stringify(label2alert);    
-                // alert (jsonText);
-                date = new Date(document.getElementById('datetext').value);
-                //dn = date.getTime()-date.getMilliseconds()/1000;
-                 alert('Result -> ' + date.toUTCString() + ' <-');
+                alert (jsonText);
+                
+                //alert('Result -> ' + date.toUTCString() + ' <-');
                 
                                         //$.post("create_label",{obj_id: source_id, name: $("#name_label").val(), nick: $("#description_label").val(), parent: parent_id},
                                         //function(result) {
