@@ -272,12 +272,13 @@ def get_labels(env, start_response, args):
         labels = sdb.get_attributes(AWS_SDB_LABELS_DOMAIN, obj_id)
         easy_labels = {}
         for i in labels:
-            shared_status, name, nick, parent, rule, color = _decode_label(labels[i])
-            if ((shared == 'shared') and (shared_status == 'shared'))\
-            or ((shared == 'personal') and (shared_status in ['shared', 'personal'])) \
-            or (shared == 'global'):
-                easy_labels[i] = {'parent' : parent, 'name' : name, 
-                                  'nick': nick, 'shared' : shared_status, 'rule' : rule, 'color' : color}
+            if i not in ['obj_id','owned']:
+                shared_status, name, nick, parent, rule, color = _decode_label(labels[i])
+                if ((shared == 'shared') and (shared_status == 'shared'))\
+                or ((shared == 'personal') and (shared_status in ['shared', 'personal'])) \
+                or (shared == 'global'):
+                    easy_labels[i] = {'parent' : parent, 'name' : name, 
+                                      'nick': nick, 'shared' : shared_status, 'rule' : rule, 'color' : color}
         return json_ok(env, start_response, easy_labels)
     except:
         raise
