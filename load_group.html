@@ -1353,16 +1353,21 @@ Version: 0.1; Sept 19th 2011
 
                                         if(window.admin && window.global){
                                             var menu_add_label = create_label('Add label','creat_label', function(){
-                                                document.rule = false;
+                                                // document.rule = false;
                                                 set_style(document.getElementById('dialog-box'), {display : 'block'});
                                                 set_style(document.getElementById('posts_container'), {display : 'none'});
                                                 set_style(document.getElementById('post_comment_container'), {display : 'none'});
-                                                var s = '<div><h2> New Label </h2><p>Please enter a name for the new label: </p><input type="text" name="name_label" size="26" maxlength="25" value="" id="name_label" title="Name of the label" class="conditionsfixed"/><p>Please enter a description: </p><textarea id="description_label" rows="2" cols="50" class="conditionsfixed"></textarea><p>Nest label under: <select name="list_labels" id="list_labels" class="conditionsfixed"><option value="0">Root</option>';
+                                                var s = '<div><h2> New Label </h2><p>Please enter a name for the new label: </p>';
+                                                s += '<input type="text" name="name_label" size="26" maxlength="25" value="" id="name_label" title="Name of the label" class="conditionsfixed"/>';
+                                                s += '<p>Please enter a description: </p><textarea id="description_label" rows="2" cols="50" class="conditionsfixed"></textarea>';
+                                                s += '<p>Nest label under: <select name="list_labels" id="list_labels" class="conditionsfixed"><option value="0">Root</option>';
                                                 for (var i in window.labels){
                                                     s += '<option value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
                                                     }
                                                 s += '</select></p>';
-                                                s += '<div class="form-container"><form action="#" method="post"><div class="controlset"><label for="color1"><strong>Choose Label'+"'"+'s color</strong></label> <input id="color1" type="text" name="color1" value="#333399" /></div></form></div><p>&nbsp;</p>'
+                                                s += '<div class="form-container"><form action="#" method="post"><div class="controlset">';
+                                                s += '<label for="color1"><strong>Choose Label'+"'"+'s color</strong></label> <input id="color1" type="text" name="color1" value="#333399" />';
+                                                s += '</div></form></div><p>&nbsp;</p>';
                                                 s += '<div id="conditions_container">';
                                                 s += '<div id="conditions_if"></div>'
                                                 s += '<div id="conditions_fixed" style="display: none;"></div>'
