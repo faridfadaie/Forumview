@@ -1226,16 +1226,16 @@ Version: 0.1; Sept 19th 2011
                                 attachs = document.createElement('div');    
                                 attachs.setAttribute('class', 'conditionsfixed');
 
-                                attachsl = document.createElement('label');
-                                attachsl.setAttribute('for', 'hasattachments');
-                                attachsl.innerHTML='If it has attachments';
-                                attachs.appendChild(attachsl);
-
                                 attachsin = document.createElement('input');
                                 attachsin.setAttribute('id', 'hasattachments');
                                 attachsin.setAttribute('type', 'checkbox');
                                 attachs.appendChild(attachsin);
                                 
+                                attachsl = document.createElement('label');
+                                attachsl.setAttribute('for', 'hasattachments');
+                                attachsl.innerHTML='If it has attachments';
+                                attachs.appendChild(attachsl);
+
                                 fconditions.appendChild(attachs);
                                 
                             }
@@ -1364,7 +1364,7 @@ Version: 0.1; Sept 19th 2011
                                                 for (var i in window.labels){
                                                     s += '<option value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
                                                     }
-                                                s += '</select></p>';
+                                                s += '</select><label><input type="checkbox" id="sharecheckbox" /> Share This Label</label></p>';
                                                 s += '<div class="form-container"><form action="#" method="post"><div class="controlset">';
                                                 s += '<label for="color1"><strong>Choose Label'+"'"+'s color</strong></label> <input id="color1" type="text" name="color1" value="#333399" />';
                                                 s += '</div></form></div><p>&nbsp;</p>';
