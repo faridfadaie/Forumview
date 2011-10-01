@@ -985,7 +985,18 @@ Version: 0.1; Sept 19th 2011
                             menu_div.innerHTML = txt;
                             add_class(menu_div, 'categories');
                             document.getElementById('lable_container').appendChild(menu_div);
-                            };
+                        };
+                        
+                        function create_tag_linked(id,txt,link){
+                            var menu_div = document.createElement('div');
+                            menu_div.uid = id;
+                            //menu_div.innerHTML = txt;
+                            add_class(menu_div, 'categories');
+                            a = menu_div.createElement('a');
+                            a.innerHTML = txt;
+                            a.setAttribute('href', link);
+                            document.getElementById('lable_container').appendChild(menu_div);
+                        };
                         
                             function create_condition_if(){
                                 var fconditions = document.getElementById('conditions_if');
@@ -1326,10 +1337,10 @@ Version: 0.1; Sept 19th 2011
                                 $.getJSON("get_labels?obj_id="+source_id, function(data) {
                                     if (data.type == 'ok'){
                                         if (window.global) {
-                                            create_tag('info_personal','Personal View');
+                                            pv = create_tag_linked('info_personal','Personal View',"#");
                                             }
                                         else{
-                                            create_tag('info_global','Global View');
+                                            create_tag_linked('info_global','Global View',"#");
                                             }
                                         create_tag('label_category','Labels');
                                         list = data.data;
