@@ -992,9 +992,10 @@ Version: 0.1; Sept 19th 2011
                             menu_div.uid = id;
                             //menu_div.innerHTML = txt;
                             add_class(menu_div, 'categories');
-                            a = menu_div.createElement('a');
+                            var a = document.createElement('a');
                             a.innerHTML = txt;
                             a.setAttribute('href', link);
+                            menu_div.appendChild(a);
                             document.getElementById('lable_container').appendChild(menu_div);
                         };
                         
