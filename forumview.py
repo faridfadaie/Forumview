@@ -158,12 +158,16 @@ def create_label(env, start_response, args):
                 if not parent.has_key(args['parent']) or parent[args['parent']] is None:
                     return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER,'parent label_id is not passed.')
             label_id = hashlib.sha1(str(args['name']) + str(time.time())).hexdigest()
+            if admin and (shared == 'gloabl'):
+                owned = 'admin'
+            else:
+                owned = user['uid']
             sdb.put_attributes(AWS_SDB_LABELS_DOMAIN, obj_id, [(label_id, SHARE_DEL + shared, True), 
                                                             (label_id, NAME_DEL + args['name'], True), 
                                                             (label_id, NICK_DEL + args['nick'], True), 
                                                             (label_id, PARENT_DEL + args['parent'], True), 
                                                             (label_id, RULE_DEL + args['rule'], True),
-                                                            ('owned', user['uid'], True),
+                                                            ('owned', owned, True),
                                                             ('obj_id', obj_id.split(':')[0], True),
                                                             (label_id, COL_DEL + args['color'], True)])
         except:
@@ -206,11 +210,18 @@ def get_exceptions(env, start_response, args):
     user = _validate_fb(env)
     if user is None:
         return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_SESSION)
+    if 'uid' in args:
+        try:
+            uid = str(int(args['uid']))
+        except:
+            return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'not a valid uid.')
+    else:
+        uid = user['uid']
     if 'label_id' in args:
         sdb = Retry(SimpleDB, RETRY_LIMIT, ['select', 'put_attributes', 'get_attributes'], AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
         try:
             print 'select excluded, post_id from %s where label_id="%s"' %(AWS_SDB_EXCEPTIONS_DOMAIN, args['label_id'])
-            exceptions = sdb.select(AWS_SDB_EXCEPTIONS_DOMAIN, 'select excluded, post_id from %s where label_id="%s"' %(AWS_SDB_EXCEPTIONS_DOMAIN, args['label_id']) )
+            exceptions = sdb.select(AWS_SDB_EXCEPTIONS_DOMAIN, 'select excluded, post_id from %s where label_id="%s" and creator in ("%s", "%s", "admin")' %(AWS_SDB_EXCEPTIONS_DOMAIN, args['label_id'], user['uid'], uid) )
             post_list = {}
             for i in exceptions:
                 post_list[i['post_id']] = i['excluded']
@@ -228,7 +239,7 @@ def get_exceptions(env, start_response, args):
         for i in args['post_id'].split(','):
             post_id = post_id + ',"%s"' %i
         post_id = post_id.strip(',')
-        exceptions = sdb.select(AWS_SDB_EXCEPTIONS_DOMAIN, 'select excluded, post_id, label_id from %s where post_id in (%s)' %(AWS_SDB_EXCEPTIONS_DOMAIN, post_id) )
+        exceptions = sdb.select(AWS_SDB_EXCEPTIONS_DOMAIN, 'select excluded, post_id, label_id from %s where post_id in (%s) and creator in ("%s", "%s", "admin")' %(AWS_SDB_EXCEPTIONS_DOMAIN, post_id, user['uid'], uid) )
         for i in exceptions:
             post_list[i['post_id']] = {'excluded' : i['excluded'], 'label_id' : i['label_id']}
         return json_ok(env, start_response, post_list)
@@ -269,16 +280,16 @@ def get_labels(env, start_response, args):
         uid = str(user['uid'])
     try:
         sdb = Retry(SimpleDB, RETRY_LIMIT, ['select', 'put_attributes', 'get_attributes'], AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
-        labels = sdb.get_attributes(AWS_SDB_LABELS_DOMAIN, obj_id)
+        labels = sdb.select(AWS_SDB_LABELS_DOMAIN, "select * from %s where obj_id='%s' and owned in ('%s', '%s', 'admin')" %(AWS_SDB_LABELS_DOMAIN, obj_id.split(':')[0], user['uid'], uid))
         easy_labels = {}
         for i in labels:
-            if i not in ['obj_id','owned']:
-                shared_status, name, nick, parent, rule, color = _decode_label(labels[i])
-                if ((shared == 'shared') and (shared_status == 'shared'))\
-                or ((shared == 'personal') and (shared_status in ['shared', 'personal'])) \
-                or (shared == 'global'):
-                    easy_labels[i] = {'parent' : parent, 'name' : name, 
+            for j in i:
+                if j not in ['obj_id', 'owned']:
+                    shared_status, name, nick, parent, rule, color = _decode_label(i[j])
+                    if (i['owned']=='admin') or (i['owned'] == user['uid']) or (shared_status == 'shared'):
+                        easy_labels[j] = {'parent' : parent, 'name' : name, 'owner' : i['owned'],
                                       'nick': nick, 'shared' : shared_status, 'rule' : rule, 'color' : color}
+                        
         return json_ok(env, start_response, easy_labels)
     except:
         raise
@@ -324,10 +335,14 @@ def set_exception(env, start_response, args):
             excluded = '1'
         else:
             excluded = '0'
+        if is_admin and (shared_status == 'global'):
+            creator = 'admin'
+        else:
+            creator = str(user['uid'])
         sdb.put_attributes(AWS_SDB_EXCEPTIONS_DOMAIN, itm, [('excluded', excluded, True),
                                                       ('label_id', args['label_id'], True),
                                                       ('post_id', args['post_id'], True),
-                                                      ('creator', str(user['uid']), True)])
+                                                      ('creator', creator, True)])
         return json_ok(env, start_response, {})
     except:
         raise
