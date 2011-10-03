@@ -688,7 +688,7 @@ Version: 0.1; Sept 19th 2011
                             var li = document.createElement('li');
                             li.uid = uid;
                             li.txt = txt;
-                            li.innerHTML = '<div style="float:left"><img src="http://tayfeh.com/resources/img/Share_gray.png" width="15" height="16" alt="Share this lable" style="margin-right: 5px;"/></div><a href="javascript:void(0)">' + txt + '</a>';
+                            li.innerHTML = '<div style="float:left"><img src="http://tayfeh.com/resources/img/Not_shared.png" width="15" height="16" alt="Share this lable" style="margin-right: 5px;"/></div><a href="javascript:void(0)">' + txt + '</a>';
                             add_class(li.getElementsByTagName('a')[0], 'labels');
                             li.add_child = function(t_txt, t_uid, t_onclick){
                                 if (!li.cn){var c = document.createElement('ul'); li.appendChild(c); li.cn = c; add_class(c, 'label_item');}
