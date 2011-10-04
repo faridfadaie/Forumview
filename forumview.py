@@ -47,15 +47,12 @@ if PROTOCOL not in ['https', 'http']:
     raise SystemExit 
 
 
+
 def _load_pages():
     for i in page_names:
         f = open(i, 'r')
         page_contents[i] = f.read()
         f.close()
-
-def load_group(name, env, start_response):
-    start_response('200 OK',[])
-    return [page_contents['load_group.html']]
 
 def _validate_fb(env):
     cookies = []
@@ -68,7 +65,15 @@ def _validate_fb(env):
 
 def _detect_obj_type(obj_id, user):
     graph = facebook.GraphAPI(user["access_token"])
-    obj = graph.get_object("%s" %obj_id)
+    try:
+        obj = graph.get_object("%s" %obj_id)
+    except:
+        groups = graph.get_connections("me", "groups")
+        group_ids = [x['id'] for x in groups['data']]
+        gid = graph.fql('select gid from group where gid IN (%s) AND email="%s@groups.facebook.com"' %(','.join(group_ids), obj_id))
+        if len(gid) == 0:
+            return None, None
+        obj = graph.get_object("%s" %gid[0]['gid'])
     if not obj.has_key('id'):
         return None, None
     if obj.has_key('owner'):
@@ -122,6 +127,33 @@ def _get_post_info(post_id, user):
     if obj.has_key('updated_time'):
         updated_time = obj['updated_time']
     return from_id, to_id, created_time, updated_time
+
+def view_obj(env, start_response, params):
+    user = _validate_fb(env)
+    if user is None:
+        start_response('200 OK', [])
+        return ['<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Redirecting to Facebook</title><meta http-equiv="REFRESH" content="0;url=https://graph.facebook.com/oauth/authorize?client_id=246575252046549&redirect_uri=http%3A%2F%2Fffadaie.dyndns.org%3A20000%2F'+'%2F'.join(params['list'])+'&scope=publish_stream%2Cread_stream%2Cuser_groups"></HEAD><BODY></BODY></HTML>']
+    if len(params['list']) == 1:
+        start_response('200 OK', [])
+        return ['<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Redirecting to Facebook</title><meta http-equiv="REFRESH" content="0;url=http://ffadaie.dyndns.org:20000/'+params['list'][0]+'/'+str(user['uid'])+'"></HEAD><BODY></BODY></HTML>']
+    view_obj_kind, fb_uid = _detect_obj_type(params['list'][1], user)
+    if view_obj_kind != 'profile':
+        return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'The view should be a facebook user.')
+    kind, id = _detect_obj_type(params['list'][0], user)
+    admin = _is_admin(params['list'][0], user)
+    if admin is None:
+        return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'object not supported or you do not have access.')
+    start_response('200 OK',[])
+    ret = page_contents['load_group.html']
+    if admin:
+        ret = ret.replace('XXX_ADMIN_XXX', 'true')
+    else:
+        ret = ret.replace('XXX_ADMIN_XXX', 'false')
+    ret = ret.replace('XXX_KIND_XXX', kind)
+    ret = ret.replace('XXX_OBJ_ID_XXX', id)
+    ret = ret.replace('XXX_VIEW_ID_XXX', fb_uid)
+    return [ret]
+
 
 def create_label(env, start_response, args):
     method = env['REQUEST_METHOD']
@@ -443,9 +475,8 @@ def request_handler(env, start_response):
     method = env['REQUEST_METHOD']
     path = env['PATH_INFO']
     if (method in ['GET', 'POST']):
+        params = load_args(env)
         if (path.count('/') > 0) and path.split('/')[1] in allowed_functions:
-        #if path.strip('/') in allowed_functions:
-            params = load_args(env)
             if path.count('/') > 1:
                 params['list'] = path.split('/')[2:]
             else:
@@ -453,8 +484,11 @@ def request_handler(env, start_response):
             return globals()[path.split('/')[1]](env, start_response, params)
         if DYN_LOADING:
             _load_pages()
-        #return globals()[path.strip('/')](env, start_response)
-        return load_group(path.strip('/'), env, start_response)
+        if path.count('/') > 0:
+            params['list'] = path.split('/')[1:]
+        else:
+            params['list'] = []
+        return view_obj(env, start_response, params)
     logging.info('Invalid method and/or path from: %s'%(
         env['REMOTE_ADDR'],
         ))
