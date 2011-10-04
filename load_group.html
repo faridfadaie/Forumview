@@ -688,14 +688,14 @@ Version: 0.1; Sept 19th 2011
                             var li = document.createElement('li');
                             li.uid = uid;
                             li.txt = txt;
-                            li.innerHTML = '<div style="float:left"><a href="javascript:void(0)"><img src="http://tayfeh.com/resources/img/Not_shared.png" width="15" height="16" alt="Share this lable" style="margin-right: 5px;"/></a></div><a href="javascript:void(0)">' + txt + '</a>';
+                            li.innerHTML = '<div style="float:left"><a href="javascript:void(0)"><img src="http://tayfeh.com/resources/img/Shareit_disabled.png" width="15" height="16" alt="Share this lable" style="margin-right: 5px;"/></a></div><a href="javascript:void(0)">' + txt + '</a>';
                             add_class(li.getElementsByTagName('a')[1], 'labels');
                             li.add_child = function(t_txt, t_uid, t_onclick){
                                 if (!li.cn){var c = document.createElement('ul'); li.appendChild(c); li.cn = c; add_class(c, 'label_item');}
-                                var child = create_label(t_txt, t_uid, t_onclick);
+                                var child = create_label_iconed(t_txt, t_uid, t_onclick);
                                 li.cn.appendChild(child);
                                 }
-                            addEvent(li.getElementsByTagName('a')[0], 'click', function(){this.getElementsByTagName('img')[0].src="http://tayfeh.com/resources/img/Shared.png"});
+                            addEvent(li.getElementsByTagName('a')[0], 'click', function(){this.getElementsByTagName('img')[0].src="http://tayfeh.com/resources/img/Shareit_abled.png"});
                             addEvent(li.getElementsByTagName('a')[1], 'click', onclick);
                             return li
                             }
@@ -1384,7 +1384,7 @@ Version: 0.1; Sept 19th 2011
                                                 window.labels[list[i].parent].add_child(list[i].name, list[i].id, function(){alert('click')});
                                                 }
                                             else{
-                                                var l = create_label(list[i].name, list[i].id, function(){alert('click')})
+                                                var l = create_label_iconed(list[i].name, list[i].id, function(){alert('click')})
                                                 window.labels[i] = l;
                                                 label_list.appendChild(l)
                                                 }
