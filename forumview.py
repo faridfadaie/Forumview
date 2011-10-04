@@ -8,7 +8,7 @@ from simpledb import SimpleDB, SimpleDBError, AttributeEncoder
 from retry import Retry
 
 allowed_functions = ['update_label', 'script', 'css','set_exception', 'get_exceptions', 'get_post_labels', 'get_post_labels', 'get_posts', 'assign_label', 'create_label', 'get_labels']
-page_names = ['load_group.html']
+page_names = ['load_group.html', 'home.html']
 page_contents = {}
 LISTEN_IP = '0.0.0.0'
 LISTEN_PORT = 20000
@@ -131,8 +131,19 @@ def _get_post_info(post_id, user):
 def view_obj(env, start_response, params):
     user = _validate_fb(env)
     if user is None:
+        if len(params['list']) == 0:
+              start_response('200 OK', [])
+              return [page_contents['home.html']]
         start_response('200 OK', [])
         return ['<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Redirecting to Facebook</title><meta http-equiv="REFRESH" content="0;url=https://graph.facebook.com/oauth/authorize?client_id=246575252046549&redirect_uri=http%3A%2F%2Fffadaie.dyndns.org%3A20000%2F'+'%2F'.join(params['list'])+'&scope=publish_stream%2Cread_stream%2Cuser_groups"></HEAD><BODY></BODY></HTML>']
+    ret = page_contents['load_group.html']
+    if len(params['list']) == 0:
+        ret = ret.replace('XXX_ADMIN_XXX', 'true')
+        ret = ret.replace('XXX_KIND_XXX', 'home')
+        ret = ret.replace('XXX_OBJ_ID_XXX', user['uid'])
+        ret = ret.replace('XXX_VIEW_ID_XXX', user['uid'])
+        start_response('200 OK',[])
+        return [ret]
     if len(params['list']) == 1:
         start_response('200 OK', [])
         return ['<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Redirecting to Facebook</title><meta http-equiv="REFRESH" content="0;url=http://ffadaie.dyndns.org:20000/'+params['list'][0]+'/'+str(user['uid'])+'"></HEAD><BODY></BODY></HTML>']
@@ -144,7 +155,6 @@ def view_obj(env, start_response, params):
     if admin is None:
         return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'object not supported or you do not have access.')
     start_response('200 OK',[])
-    ret = page_contents['load_group.html']
     if admin:
         ret = ret.replace('XXX_ADMIN_XXX', 'true')
     else:
@@ -484,7 +494,7 @@ def request_handler(env, start_response):
             return globals()[path.split('/')[1]](env, start_response, params)
         if DYN_LOADING:
             _load_pages()
-        if path.count('/') > 0:
+        if (path.count('/') > 0) and (path != '/'):
             params['list'] = path.split('/')[1:]
         else:
             params['list'] = []
