@@ -1006,11 +1006,11 @@ Version: 0.1; Sept 19th 2011
                             //}
                             var menu_div = document.createElement('div');
                             menu_div.uid = id;
+                            menu_div.innerHTML = txt;
+                            add_class(menu_div, 'categories');
                             //if (logo != ''){
                                 menu_div.appendChild(icon_div);
                             //}
-                            menu_div.innerHTML = txt;
-                            add_class(menu_div, 'categories');
                             document.getElementById('lable_container').appendChild(menu_div);
                         };
                         
