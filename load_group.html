@@ -695,7 +695,14 @@ Version: 0.1; Sept 19th 2011
                                 var child = create_label_iconed(t_txt, t_uid, t_onclick);
                                 li.cn.appendChild(child);
                                 }
-                            addEvent(li.getElementsByTagName('a')[0], 'click', function(){this.getElementsByTagName('img')[0].src="http://tayfeh.com/resources/img/Shareit_abled.png"});
+                            addEvent(li.getElementsByTagName('a')[0], 'click', function(){
+                                if (this.getElementsByTagName('img')[0].src == 'http://tayfeh.com/resources/img/Shareit_disabled.png'){
+                                    this.getElementsByTagName('img')[0].src = "http://tayfeh.com/resources/img/Shareit_abled.png"
+                                } else {
+                                    this.getElementsByTagName('img')[0].src = 'http://tayfeh.com/resources/img/Shareit_disabled.png';
+                                }
+                                    
+                            });
                             addEvent(li.getElementsByTagName('a')[1], 'click', onclick);
                             return li
                             }
@@ -1381,6 +1388,7 @@ Version: 0.1; Sept 19th 2011
                                         add_class(label_list, 'label_item');
                                         for (var i in list){
                                             if (list[i].parent in window.labels){
+                                                //window.labels[list[i].parent].add_child(list[i].name, list[i].id, function(){alert('click')});
                                                 window.labels[list[i].parent].add_child(list[i].name, list[i].id, function(){alert('click')});
                                                 }
                                             else{
