@@ -9,7 +9,7 @@ from simpledb import SimpleDB, SimpleDBError, AttributeEncoder
 from retry import Retry
 
 allowed_functions = ['update_label', 'script', 'css','set_exception', 'get_exceptions', 'get_post_labels', 'get_post_labels', 'get_posts', 'assign_label', 'create_label', 'get_labels']
-page_names = ['fb_cookie.html', 'load_group.html', 'home.html']
+page_names = ['load_group.html', 'home.html']
 page_contents = {}
 LISTEN_IP = '0.0.0.0'
 LISTEN_PORT = 20000
@@ -31,6 +31,7 @@ FACEBOOK_SECRET = config['FACEBOOK_SECRET']
 AWS_ACCESS_KEY = config['AWS_ACCESS_KEY'] 
 AWS_SECRET_ACCESS_KEY = config['AWS_SECRET_ACCESS_KEY'] 
 AWS_SDB_LABELS_DOMAIN = 'labels'
+AWS_SDB_SESSION_DOMAIN = 'session'
 AWS_SDB_EXCEPTIONS_DOMAIN = 'exceptions'
 AWS_SDB_POST_DOMAIN = 'test2'
 for i in sys.argv:
@@ -130,16 +131,23 @@ def _get_post_info(post_id, user):
     return from_id, to_id, created_time, updated_time
 
 def view_obj(env, start_response, params):
-    user = _validate_fb(env)
+    if params.has_key('code'):
+        file = urllib2.urlopen('https://graph.facebook.com/oauth/access_token?client_id=246575252046549&redirect_uri=http%3A%2F%2Fffadaie.dyndns.org%3A20000%2F'+'%2F'.join(params['list'])+'&client_secret=bba342dc751c88d7522ce822d4d30ab8&code='+params['code'])
+        try: response = file.read()
+        finally: file.close()
+        response = dict([a.split('=') for a in response.split('&')])
+        graph = facebook.GraphAPI(response["access_token"])
+        user = graph.get_object("me")
+        user['uid'] = user['id']
+        user['access_token'] = response["access_token"]
+    else:
+        user = _validate_fb(env)
     if user is None:
-        if params.has_key('code'):
-            start_response('200 OK', [])
-            return [page_contents['fb_cookie.html']]
         if len(params['list']) == 0:
             start_response('200 OK', [])
             return [page_contents['home.html']]
         start_response('200 OK', [])
-        return ['<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Redirecting to Facebook</title><meta http-equiv="REFRESH" content="0;url=https://graph.facebook.com/oauth/authorize?client_id=246575252046549&redirect_uri=http%3A%2F%2Fffadaie.dyndns.org%3A'+str(LISTEN_PORT)+'%2F'+'%2F'.join(params['list'])+'&scope=publish_stream%2Cread_stream%2Cuser_groups"></HEAD><BODY></BODY></HTML>']
+        return ['<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Redirecting to Facebook</title><meta http-equiv="REFRESH" content="0;url=https://graph.facebook.com/oauth/authorize?client_id=246575252046549&redirect_uri=http%3A%2F%2Fffadaie.dyndns.org%3A20000%2F'+'%2F'.join(params['list'])+'&scope=publish_stream%2Cread_stream%2Cuser_groups"></HEAD><BODY></BODY></HTML>']
     ret = page_contents['load_group.html']
     if len(params['list']) == 0:
         ret = ret.replace('XXX_ADMIN_XXX', 'true')
@@ -150,7 +158,7 @@ def view_obj(env, start_response, params):
         return [ret]
     if len(params['list']) == 1:
         start_response('200 OK', [])
-        return ['<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Redirecting to Facebook</title><meta http-equiv="REFRESH" content="0;url=http://ffadaie.dyndns.org:'+str(LISTEN_PORT)+'/'+params['list'][0]+'/'+str(user['uid'])+'"></HEAD><BODY></BODY></HTML>']
+        return ['<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Redirecting to Facebook</title><meta http-equiv="REFRESH" content="0;url=http://ffadaie.dyndns.org:20000/'+params['list'][0]+'/'+str(user['uid'])+'"></HEAD><BODY></BODY></HTML>']
     view_obj_kind, fb_uid = _detect_obj_type(params['list'][1], user)
     if view_obj_kind != 'profile':
         return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'The view should be a facebook user.')
@@ -499,7 +507,7 @@ def request_handler(env, start_response):
         if DYN_LOADING:
             _load_pages()
         if (path.count('/') > 0) and (path != '/'):
-            params['list'] = [x for x in path.split('/')[1:] if x!='']
+            params['list'] = [x for x in path.split('/')[1:] if x!= '']
         else:
             params['list'] = []
         return view_obj(env, start_response, params)
