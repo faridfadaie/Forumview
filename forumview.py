@@ -139,7 +139,7 @@ def view_obj(env, start_response, params):
             start_response('200 OK', [])
             return [page_contents['home.html']]
         start_response('200 OK', [])
-        return ['<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Redirecting to Facebook</title><meta http-equiv="REFRESH" content="0;url=https://graph.facebook.com/oauth/authorize?client_id=246575252046549&redirect_uri=http%3A%2F%2Fffadaie.dyndns.org%3A20000%2F'+'%2F'.join(params['list'])+'&scope=publish_stream%2Cread_stream%2Cuser_groups"></HEAD><BODY></BODY></HTML>']
+        return ['<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Redirecting to Facebook</title><meta http-equiv="REFRESH" content="0;url=https://graph.facebook.com/oauth/authorize?client_id=246575252046549&redirect_uri=http%3A%2F%2Fffadaie.dyndns.org%3A'+str(LISTEN_PORT)+'%2F'+'%2F'.join(params['list'])+'&scope=publish_stream%2Cread_stream%2Cuser_groups"></HEAD><BODY></BODY></HTML>']
     ret = page_contents['load_group.html']
     if len(params['list']) == 0:
         ret = ret.replace('XXX_ADMIN_XXX', 'true')
@@ -150,7 +150,7 @@ def view_obj(env, start_response, params):
         return [ret]
     if len(params['list']) == 1:
         start_response('200 OK', [])
-        return ['<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Redirecting to Facebook</title><meta http-equiv="REFRESH" content="0;url=http://ffadaie.dyndns.org:20000/'+params['list'][0]+'/'+str(user['uid'])+'"></HEAD><BODY></BODY></HTML>']
+        return ['<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Redirecting to Facebook</title><meta http-equiv="REFRESH" content="0;url=http://ffadaie.dyndns.org:'+str(LISTEN_PORT)+'/'+params['list'][0]+'/'+str(user['uid'])+'"></HEAD><BODY></BODY></HTML>']
     view_obj_kind, fb_uid = _detect_obj_type(params['list'][1], user)
     if view_obj_kind != 'profile':
         return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'The view should be a facebook user.')
