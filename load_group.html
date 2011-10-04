@@ -1370,7 +1370,7 @@ Version: 0.1; Sept 19th 2011
                                 window.global = true;
                                 window.owner = false;
                                 
-                                $.getJSON("\get_labels?obj_id="+source_id, function(data) {
+                                $.getJSON("http://ffadaie.dyndns.org:10000/get_labels?obj_id="+source_id, function(data) {
                                     if (data.type == 'ok'){
                                         if (window.global) {
                                             pv = create_tag_linked('info_personal','Personal View',"#");
