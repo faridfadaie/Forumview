@@ -994,8 +994,8 @@ Version: 0.1; Sept 19th 2011
                             $('#dialog-message').html(message);
                             };
                         
-                        function create_tag(id,txt,kind,logo){
-                            if (kind == "iconed"){
+                        function create_tag(id,txt,logo){
+                            if (logo != ''){
                                 //<a href="javascript:void(0)"><img src="http://tayfeh.com/resources/img/Not_shared.png" width="15" height="16" alt="Share this lable" style="margin-right: 5px;"/></a>
                                 var icon_div = document.createElement('div');
                                 set_style(icon_div,{float: 'left'});
@@ -1006,7 +1006,7 @@ Version: 0.1; Sept 19th 2011
                             }
                             var menu_div = document.createElement('div');
                             menu_div.uid = id;
-                            if (kind == "iconed"){menu_div.appendChild(icon_div);}
+                            if (logo != ''){menu_div.appendChild(icon_div);}
                             menu_div.innerHTML = txt;
                             add_class(menu_div, 'categories');
                             document.getElementById('lable_container').appendChild(menu_div);
@@ -1369,7 +1369,7 @@ Version: 0.1; Sept 19th 2011
                                         else{
                                             create_tag_linked('info_global','Global View',"#");
                                             }
-                                        create_tag('label_category','Shared Labels','iconed','http://tayfeh.com/resources/img/Not_shared.png');
+                                        create_tag('label_category','Shared Labels','http://tayfeh.com/resources/img/Not_shared.png');
                                         list = data.data;
                                         window.labels = {}
                                         var label_list = document.createElement('ul');
