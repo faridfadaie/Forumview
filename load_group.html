@@ -995,7 +995,7 @@ Version: 0.1; Sept 19th 2011
                             };
                         
                         function create_tag(id,txt,logo){
-                            //if (logo != ''){
+                            if (logo != ''){
                                 //<a href="javascript:void(0)"><img src="http://tayfeh.com/resources/img/Not_shared.png" width="15" height="16" alt="Share this lable" style="margin-right: 5px;"/></a>
                                 var icon_div = document.createElement('div');
                                 set_style(icon_div,{float: 'left'});
@@ -1003,14 +1003,14 @@ Version: 0.1; Sept 19th 2011
                                 icon_pic.src = logo;
                                 set_style(icon_pic,{"margin-right": '5px'});
                                 icon_div.appendChild(icon_pic);
-                            //}
+                            }
                             var menu_div = document.createElement('div');
                             menu_div.uid = id;
                             menu_div.innerHTML = txt;
                             add_class(menu_div, 'categories');
-                            //if (logo != ''){
+                            if (logo != ''){
                                 menu_div.appendChild(icon_div);
-                            //}
+                            }
                             document.getElementById('lable_container').appendChild(menu_div);
                         };
                         
