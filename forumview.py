@@ -7,8 +7,8 @@ import time, logging, sys, hashlib, base64
 from simpledb import SimpleDB, SimpleDBError, AttributeEncoder
 from retry import Retry
 
-allowed_functions = ['script', 'css','set_exception', 'get_exceptions', 'get_post_labels', 'get_post_labels', 'get_posts', 'assign_label', 'create_label', 'get_labels']
-page_names = ['load_group.html']
+allowed_functions = ['update_label', 'script', 'css','set_exception', 'get_exceptions', 'get_post_labels', 'get_post_labels', 'get_posts', 'assign_label', 'create_label', 'get_labels']
+page_names = ['load_group.html', 'home.html']
 page_contents = {}
 LISTEN_IP = '0.0.0.0'
 LISTEN_PORT = 10000
@@ -47,15 +47,12 @@ if PROTOCOL not in ['https', 'http']:
     raise SystemExit 
 
 
+
 def _load_pages():
     for i in page_names:
         f = open(i, 'r')
         page_contents[i] = f.read()
         f.close()
-
-def load_group(name, env, start_response):
-    start_response('200 OK',[])
-    return [page_contents['load_group.html']]
 
 def _validate_fb(env):
     cookies = []
@@ -68,7 +65,15 @@ def _validate_fb(env):
 
 def _detect_obj_type(obj_id, user):
     graph = facebook.GraphAPI(user["access_token"])
-    obj = graph.get_object("%s" %obj_id)
+    try:
+        obj = graph.get_object("%s" %obj_id)
+    except:
+        groups = graph.get_connections("me", "groups")
+        group_ids = [x['id'] for x in groups['data']]
+        gid = graph.fql('select gid from group where gid IN (%s) AND email="%s@groups.facebook.com"' %(','.join(group_ids), obj_id))
+        if len(gid) == 0:
+            return None, None
+        obj = graph.get_object("%s" %gid[0]['gid'])
     if not obj.has_key('id'):
         return None, None
     if obj.has_key('owner'):
@@ -123,6 +128,43 @@ def _get_post_info(post_id, user):
         updated_time = obj['updated_time']
     return from_id, to_id, created_time, updated_time
 
+def view_obj(env, start_response, params):
+    user = _validate_fb(env)
+    if user is None:
+        if len(params['list']) == 0:
+              start_response('200 OK', [])
+              return [page_contents['home.html']]
+        start_response('200 OK', [])
+        return ['<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Redirecting to Facebook</title><meta http-equiv="REFRESH" content="0;url=https://graph.facebook.com/oauth/authorize?client_id=246575252046549&redirect_uri=http%3A%2F%2Fffadaie.dyndns.org%3A20000%2F'+'%2F'.join(params['list'])+'&scope=publish_stream%2Cread_stream%2Cuser_groups"></HEAD><BODY></BODY></HTML>']
+    ret = page_contents['load_group.html']
+    if len(params['list']) == 0:
+        ret = ret.replace('XXX_ADMIN_XXX', 'true')
+        ret = ret.replace('XXX_KIND_XXX', 'home')
+        ret = ret.replace('XXX_OBJ_ID_XXX', user['uid'])
+        ret = ret.replace('XXX_VIEW_ID_XXX', user['uid'])
+        start_response('200 OK',[])
+        return [ret]
+    if len(params['list']) == 1:
+        start_response('200 OK', [])
+        return ['<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Redirecting to Facebook</title><meta http-equiv="REFRESH" content="0;url=http://ffadaie.dyndns.org:20000/'+params['list'][0]+'/'+str(user['uid'])+'"></HEAD><BODY></BODY></HTML>']
+    view_obj_kind, fb_uid = _detect_obj_type(params['list'][1], user)
+    if view_obj_kind != 'profile':
+        return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'The view should be a facebook user.')
+    kind, id = _detect_obj_type(params['list'][0], user)
+    admin = _is_admin(params['list'][0], user)
+    if admin is None:
+        return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'object not supported or you do not have access.')
+    start_response('200 OK',[])
+    if admin:
+        ret = ret.replace('XXX_ADMIN_XXX', 'true')
+    else:
+        ret = ret.replace('XXX_ADMIN_XXX', 'false')
+    ret = ret.replace('XXX_KIND_XXX', kind)
+    ret = ret.replace('XXX_OBJ_ID_XXX', id)
+    ret = ret.replace('XXX_VIEW_ID_XXX', fb_uid)
+    return [ret]
+
+
 def create_label(env, start_response, args):
     method = env['REQUEST_METHOD']
     #if method != 'POST':
@@ -136,13 +178,11 @@ def create_label(env, start_response, args):
             obj_id = str(int(args['obj_id']))
         except:
             return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'obj_id is not valid.')
-        layer_id = str(user['uid'])
         admin = _is_admin(obj_id, user)
         if admin is None:
             return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_PERMISSION, 'access to the object is denied or the object is not supported.')
         if admin:
             shared = 'global'
-            layer_id = '0'
         elif ('personal' not in args) or (str(args['personal']) != '1'):
             return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'the personal view should be selected.')
         if ('personal' in args) and (str(args['personal']) == '1'):
@@ -158,12 +198,18 @@ def create_label(env, start_response, args):
                 if not parent.has_key(args['parent']) or parent[args['parent']] is None:
                     return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER,'parent label_id is not passed.')
             label_id = hashlib.sha1(str(args['name']) + str(time.time())).hexdigest()
+            if admin and (shared == 'gloabl'):
+                owned = 'admin'
+            elif admin:
+                owned = 'owner'
+            else:
+                owned = user['uid']
             sdb.put_attributes(AWS_SDB_LABELS_DOMAIN, obj_id, [(label_id, SHARE_DEL + shared, True), 
                                                             (label_id, NAME_DEL + args['name'], True), 
                                                             (label_id, NICK_DEL + args['nick'], True), 
                                                             (label_id, PARENT_DEL + args['parent'], True), 
                                                             (label_id, RULE_DEL + args['rule'], True),
-                                                            ('owned', user['uid'], True),
+                                                            ('owned', owned, True),
                                                             ('obj_id', obj_id.split(':')[0], True),
                                                             (label_id, COL_DEL + args['color'], True)])
         except:
@@ -206,11 +252,17 @@ def get_exceptions(env, start_response, args):
     user = _validate_fb(env)
     if user is None:
         return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_SESSION)
+    if 'uid' in args:
+        try:
+            uid = str(int(args['uid']))
+        except:
+            return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'not a valid uid.')
+    else:
+        uid = user['uid']
     if 'label_id' in args:
         sdb = Retry(SimpleDB, RETRY_LIMIT, ['select', 'put_attributes', 'get_attributes'], AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
         try:
-            print 'select excluded, post_id from %s where label_id="%s"' %(AWS_SDB_EXCEPTIONS_DOMAIN, args['label_id'])
-            exceptions = sdb.select(AWS_SDB_EXCEPTIONS_DOMAIN, 'select excluded, post_id from %s where label_id="%s"' %(AWS_SDB_EXCEPTIONS_DOMAIN, args['label_id']) )
+            exceptions = sdb.select(AWS_SDB_EXCEPTIONS_DOMAIN, 'select excluded, post_id from %s where label_id="%s" and creator in ("%s", "%s", "admin")' %(AWS_SDB_EXCEPTIONS_DOMAIN, args['label_id'], user['uid'], uid) )
             post_list = {}
             for i in exceptions:
                 post_list[i['post_id']] = i['excluded']
@@ -228,10 +280,73 @@ def get_exceptions(env, start_response, args):
         for i in args['post_id'].split(','):
             post_id = post_id + ',"%s"' %i
         post_id = post_id.strip(',')
-        exceptions = sdb.select(AWS_SDB_EXCEPTIONS_DOMAIN, 'select excluded, post_id, label_id from %s where post_id in (%s)' %(AWS_SDB_EXCEPTIONS_DOMAIN, post_id) )
+        exceptions = sdb.select(AWS_SDB_EXCEPTIONS_DOMAIN, 'select excluded, post_id, label_id from %s where post_id in (%s) and creator in ("%s", "%s", "admin")' %(AWS_SDB_EXCEPTIONS_DOMAIN, post_id, user['uid'], uid) )
         for i in exceptions:
             post_list[i['post_id']] = {'excluded' : i['excluded'], 'label_id' : i['label_id']}
         return json_ok(env, start_response, post_list)
+    except:
+        raise
+        start_response('503 Service Unavailable',[])
+        return ['Temporarily not available']
+def update_label(env, start_response, args):
+    method = env['REQUEST_METHOD']
+    #if method != 'GET':
+    #    start_response('501 Not Implemented', [])
+    #    return ['Unsupported']
+    user = _validate_fb(env)
+    if user is None:
+        return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_SESSION)
+    if 'label_id' not in args:
+        return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'label_id not passed.')
+    sdb = Retry(SimpleDB, RETRY_LIMIT, ['select', 'put_attributes', 'get_attributes'], AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
+    try:
+        label = sdb.select(AWS_SDB_LABELS_DOMAIN, 'select `%s` from %s' %(args['label_id'], AWS_SDB_LABELS_DOMAIN))
+        if len(label) == 0:
+            return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'label_id does not exist.')
+        for i in label:
+            con_obj_id = i.name
+            obj_id = i.name.split(':')[0]
+            if i.name.count(':') == 0:
+                owner = 'admin'
+            else:
+                owner = i.name.split(':')[1]
+            shared_status, name, nick, parent, rule, color = _decode_label(i[args['label_id']])
+            admin = _is_admin(obj_id, user)
+            if admin is None:
+                return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_PERMISSION, 'access to the object is denied or the object is not supported.')
+            if (not admin) and (owner != str(user['uid'])):
+                return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'the label does not belong to the user.')
+        if 'parent' in args:
+             if str(args['parent']) == '0':
+                 parent = '0'
+             elif str(args['parent']) == args['label_id']:
+                 return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER,'parent_id is not valid.')
+             else:
+                 parent = sdb.get_attributes(AWS_SDB_LABELS_DOMAIN, con_obj_id, [args['parent']])
+                 if not parent.has_key(args['parent']) or parent[args['parent']] is None:
+                     return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER,'parent_id is not valid.')
+        if 'name' in args:
+             name = args['name']
+        if 'nick' in args:
+             nick = args['nick']
+        if 'rule' in args:
+             rule = args['rule']
+        if 'color' in args:
+             color = args['color']
+        shared = shared_status
+        if ('personal' in args) and (str(args['personal']) == '0') and admin:
+            shared = 'global'
+        if ('personal' in args) and (str(args['personal']) == '1'):
+            shared = 'personal'
+            if ('shared' in args) and (str(args['shared']) == '1'):
+                shared = 'shared'
+        sdb.put_attributes(AWS_SDB_LABELS_DOMAIN, con_obj_id, [(args['label_id'], SHARE_DEL + shared, True),
+                                                        (args['label_id'], NAME_DEL + name, True),
+                                                        (args['label_id'], NICK_DEL + nick, True),
+                                                        (args['label_id'], PARENT_DEL + parent, True),
+                                                        (args['label_id'], RULE_DEL + rule, True),
+                                                        (args['label_id'], COL_DEL + color, True)])
+        return json_ok(env, start_response, {})
     except:
         raise
         start_response('503 Service Unavailable',[])
@@ -269,16 +384,16 @@ def get_labels(env, start_response, args):
         uid = str(user['uid'])
     try:
         sdb = Retry(SimpleDB, RETRY_LIMIT, ['select', 'put_attributes', 'get_attributes'], AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
-        labels = sdb.get_attributes(AWS_SDB_LABELS_DOMAIN, obj_id)
+        labels = sdb.select(AWS_SDB_LABELS_DOMAIN, "select * from %s where obj_id='%s' and owned in ('%s', '%s', 'admin', 'owner')" %(AWS_SDB_LABELS_DOMAIN, obj_id.split(':')[0], user['uid'], uid))
         easy_labels = {}
         for i in labels:
-            if i not in ['obj_id','owned']:
-                shared_status, name, nick, parent, rule, color = _decode_label(labels[i])
-                if ((shared == 'shared') and (shared_status == 'shared'))\
-                or ((shared == 'personal') and (shared_status in ['shared', 'personal'])) \
-                or (shared == 'global'):
-                    easy_labels[i] = {'parent' : parent, 'name' : name, 
+            for j in i:
+                if j not in ['obj_id', 'owned']:
+                    shared_status, name, nick, parent, rule, color = _decode_label(i[j])
+                    if (i['owned']=='admin') or (i['owned'] == user['uid']) or (shared_status == 'shared') or ((i['owned'] == 'owner') and admin):
+                        easy_labels[j] = {'parent' : parent, 'name' : name, 'owner' : i['owned'],
                                       'nick': nick, 'shared' : shared_status, 'rule' : rule, 'color' : color}
+                        
         return json_ok(env, start_response, easy_labels)
     except:
         raise
@@ -324,10 +439,14 @@ def set_exception(env, start_response, args):
             excluded = '1'
         else:
             excluded = '0'
+        if is_admin and (shared_status == 'global'):
+            creator = 'admin'
+        else:
+            creator = str(user['uid'])
         sdb.put_attributes(AWS_SDB_EXCEPTIONS_DOMAIN, itm, [('excluded', excluded, True),
                                                       ('label_id', args['label_id'], True),
                                                       ('post_id', args['post_id'], True),
-                                                      ('creator', str(user['uid']), True)])
+                                                      ('creator', creator, True)])
         return json_ok(env, start_response, {})
     except:
         raise
@@ -366,9 +485,8 @@ def request_handler(env, start_response):
     method = env['REQUEST_METHOD']
     path = env['PATH_INFO']
     if (method in ['GET', 'POST']):
+        params = load_args(env)
         if (path.count('/') > 0) and path.split('/')[1] in allowed_functions:
-        #if path.strip('/') in allowed_functions:
-            params = load_args(env)
             if path.count('/') > 1:
                 params['list'] = path.split('/')[2:]
             else:
@@ -376,8 +494,11 @@ def request_handler(env, start_response):
             return globals()[path.split('/')[1]](env, start_response, params)
         if DYN_LOADING:
             _load_pages()
-        #return globals()[path.strip('/')](env, start_response)
-        return load_group(path.strip('/'), env, start_response)
+        if (path.count('/') > 0) and (path != '/'):
+            params['list'] = path.split('/')[1:]
+        else:
+            params['list'] = []
+        return view_obj(env, start_response, params)
     logging.info('Invalid method and/or path from: %s'%(
         env['REMOTE_ADDR'],
         ))
