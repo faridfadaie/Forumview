@@ -1619,7 +1619,7 @@ Version: 0.1; Sept 19th 2011
                                             
                                             if (result["type"]=="ok"){
                                                 if (parent_id == '0'){
-                                                    window.labels[result["data"]] = create_label(name_label, result["data"], function(){alert('click')});
+                                                    window.labels[result["data"]] = create_label_iconed(name_label, result["data"], function(){alert('click')});
                                                     document.getElementById('lable_container_ul').appendChild(window.labels[result["data"]]);
                                                     
                                                     } else {
