@@ -1614,7 +1614,7 @@ Version: 0.1; Sept 19th 2011
                 //var jsonText = JSON.stringify(label2alert);    
                 //alert (jsonText);
                 
-                                        $.post("create_label",label2alert,
+                                        $.post("http://ffadaie.dyndns.org:10000/create_label",label2alert,
                                         function(result) {
                                             
                                             if (result["type"]=="ok"){
