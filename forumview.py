@@ -3,12 +3,13 @@ import facebook
 #from crm import load_enc_conf
 from _gevent_helper import *
 import gevent.pywsgi
+import urllib2
 import time, logging, sys, hashlib, base64
 from simpledb import SimpleDB, SimpleDBError, AttributeEncoder
 from retry import Retry
 
 allowed_functions = ['update_label', 'script', 'css','set_exception', 'get_exceptions', 'get_post_labels', 'get_post_labels', 'get_posts', 'assign_label', 'create_label', 'get_labels']
-page_names = ['load_group.html', 'home.html']
+page_names = ['fb_cookie.html', 'load_group.html', 'home.html']
 page_contents = {}
 LISTEN_IP = '0.0.0.0'
 LISTEN_PORT = 20000
@@ -131,9 +132,12 @@ def _get_post_info(post_id, user):
 def view_obj(env, start_response, params):
     user = _validate_fb(env)
     if user is None:
+        if params.has_key('code'):
+            start_response('200 OK', [])
+            return [page_contents['fb_cookie.html']]
         if len(params['list']) == 0:
-              start_response('200 OK', [])
-              return [page_contents['home.html']]
+            start_response('200 OK', [])
+            return [page_contents['home.html']]
         start_response('200 OK', [])
         return ['<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Redirecting to Facebook</title><meta http-equiv="REFRESH" content="0;url=https://graph.facebook.com/oauth/authorize?client_id=246575252046549&redirect_uri=http%3A%2F%2Fffadaie.dyndns.org%3A20000%2F'+'%2F'.join(params['list'])+'&scope=publish_stream%2Cread_stream%2Cuser_groups"></HEAD><BODY></BODY></HTML>']
     ret = page_contents['load_group.html']
@@ -495,7 +499,7 @@ def request_handler(env, start_response):
         if DYN_LOADING:
             _load_pages()
         if (path.count('/') > 0) and (path != '/'):
-            params['list'] = path.split('/')[1:]
+            params['list'] = [x for x in path.split('/')[1:] if x!='']
         else:
             params['list'] = []
         return view_obj(env, start_response, params)
