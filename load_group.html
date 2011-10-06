@@ -693,7 +693,6 @@ Version: 0.1; Sept 19th 2011
                             set_style(div1,{float: 'left'});
                             a1 = document.createElement('a');
                             a1.href = 'javascript:void(0)';
-                            a1.uid = uid;
                             img1 = document.createElement('img');
                             img1.width = 15;
                             img1.height = 16;
@@ -718,23 +717,32 @@ Version: 0.1; Sept 19th 2011
                                 }
                             addEvent(a1, 'click', function(){
                                 if (this.getElementsByTagName('img')[0].src == 'http://tayfeh.com/resources/img/Shareit_disabled.png'){
-                                    alert(this.parentNode.parentNode.uid);
-                                    //var label2update = {};
-                                    //label2update.label_id = label_id;
-                                    //label2update.shared = shared;
-                                    //$.post("http://ffadaie.dyndns.org:10000/update_label",label2update,
-                                    //    function(result) {
-                                    //        if (result["type"]=="ok"){
-                                    //            this.getElementsByTagName('img')[0].src = "http://tayfeh.com/resources/img/Shareit_abled.png"
-                                    //        } else {
-                                    //            alert('problem i DB connection, please try later.');
-                                    //        });
+                                    var label2update = {};
+                                    label2update.label_id = this.parentNode.parentNode.uid;
+                                    label2update.shared = 'shared';
+                                    $.post("http://ffadaie.dyndns.org:10000/update_label",label2update,
+                                        function(result) {
+                                            if (result["type"]=="ok"){
+                                                this.getElementsByTagName('img')[0].src = "http://tayfeh.com/resources/img/Shareit_abled.png"
+                                            } else {
+                                                alert('problem in database connection, please try later.');
+                                            }});
+                                            
                                 } else {
-                                    this.getElementsByTagName('img')[0].src = 'http://tayfeh.com/resources/img/Shareit_disabled.png';
+                                    var label2update = {};
+                                    label2update.label_id = this.parentNode.parentNode.uid;
+                                    label2update.shared = 'personal';
+                                    $.post("http://ffadaie.dyndns.org:10000/update_label",label2update,
+                                        function(result) {
+                                            if (result["type"]=="ok"){
+                                                this.getElementsByTagName('img')[0].src = "http://tayfeh.com/resources/img/Shareit_disabled.png"
+                                            } else {
+                                                alert('problem in database connection, please try later.');
+                                            }});
                                 }
                                     
                             });
-                            addEvent(li.getElementsByTagName('a')[1], 'click', onclick);
+                            addEvent(a2, 'click', onclick);
                             return li
                             }
                         function create_label(txt, uid, onclick){
