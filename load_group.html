@@ -1429,7 +1429,7 @@ Version: 0.1; Sept 19th 2011
                                         for (var i in list){
                                             if (list[i].parent in window.labels){
                                                 //window.labels[list[i].parent].add_child(list[i].name, list[i].id, function(){alert('click')});
-                                                window.labels[list[i].parent].add_child(list[i].name, list[i].id, function(){alert('click')});
+                                                window.labels[list[i].parent].add_child(list[i].name, i, function(){alert('click')});
                                                 }
                                             else{
                                                 var l = create_label_iconed(list[i].name, i, list[i].shared, function(){alert('click')})
