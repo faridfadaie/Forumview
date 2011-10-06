@@ -689,18 +689,38 @@ Version: 0.1; Sept 19th 2011
                             var li = document.createElement('li');
                             li.uid = uid;
                             li.txt = txt;
+                            div1 = document.createElement('div');
+                            set_style(div1,{float: 'left'});
+                            a1 = document.createElement('a');
+                            a1.href = 'javascript:void(0)';
+                            img1 = document.createElement('img');
+                            img1.width = 15;
+                            img1.height = 16;
                             if (shared == 'personal') {
-                                li.innerHTML = '<div style="float:left"><a href="javascript:void(0)"><img src="http://tayfeh.com/resources/img/Shareit_disabled.png" width="15" height="16" alt="Share this lable"/></a></div><a href="javascript:void(0)">' + txt + '</a>';
+                                img1.src = "http://tayfeh.com/resources/img/Shareit_disabled.png";
                             } else {
-                                li.innerHTML = '<div style="float:left"><a href="javascript:void(0)"><img src="http://tayfeh.com/resources/img/Shareit_abled.png" width="15" height="16" alt="Share this lable"/></a></div><a href="javascript:void(0)">' + txt + '</a>';
+                                img1.src = "http://tayfeh.com/resources/img/Shareit_abled.png";
                             }
-                            add_class(li.getElementsByTagName('a')[1], 'labels');
+                            a1.appendChild(img1);
+                            div1.appendChild(a1);
+                            li.appendChild(div1);
+                            a2 = document.createElement('a');
+                            a2.href = "javascript:void(0)";
+                            a2.innerHTML = txt;
+                            add_class(a2, 'labels');
+                            li.appendChild(a2);
+                            //if (shared == 'personal') {
+                            //    li.innerHTML = '<div style="float:left"><a href="javascript:void(0)"><img src="http://tayfeh.com/resources/img/Shareit_disabled.png" width="15" height="16" alt="Share this lable"/></a></div>'+
+                            //    '<a href="javascript:void(0)">' + txt + '</a>';
+                            //} else {
+                            //    li.innerHTML = '<div style="float:left"><a href="javascript:void(0)"><img src="http://tayfeh.com/resources/img/Shareit_abled.png" width="15" height="16" alt="Share this lable"/></a></div><a href="javascript:void(0)">' + txt + '</a>';
+                            //}
                             li.add_child = function(t_txt, t_uid, t_onclick){
                                 if (!li.cn){var c = document.createElement('ul'); li.appendChild(c); li.cn = c; add_class(c, 'label_item');}
                                 var child = create_label_iconed(t_txt, t_uid, t_onclick);
                                 li.cn.appendChild(child);
                                 }
-                            addEvent(li.getElementsByTagName('a')[0], 'click', function(li){
+                            addEvent(li.getElementsByTagName('a')[0], 'click', function(){
                                 if (this.getElementsByTagName('img')[0].src == 'http://tayfeh.com/resources/img/Shareit_disabled.png'){
                                     //update_label(personal=1&shared=1)
                                     alert(li.uid);
