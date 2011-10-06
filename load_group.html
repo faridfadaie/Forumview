@@ -1424,7 +1424,7 @@ Version: 0.1; Sept 19th 2011
                                                 window.labels[list[i].parent].add_child(list[i].name, list[i].id, function(){alert('click')});
                                                 }
                                             else{
-                                                var l = create_label_iconed(list[i].name, list[i].id, list[i].shared, function(){alert('click')})
+                                                var l = create_label_iconed(list[i].name, i, list[i].shared, function(){alert('click')})
                                                 window.labels[i] = l;
                                                 label_list.appendChild(l)
                                                 }
