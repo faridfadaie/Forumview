@@ -709,6 +709,7 @@ Version: 0.1; Sept 19th 2011
                             a2.innerHTML = txt;
                             add_class(a2, 'labels');
                             li.appendChild(a2);
+
                             //if (shared == 'personal') {
                             //    li.innerHTML = '<div style="float:left"><a href="javascript:void(0)"><img src="http://tayfeh.com/resources/img/Shareit_disabled.png" width="15" height="16" alt="Share this lable"/></a></div>'+
                             //    '<a href="javascript:void(0)">' + txt + '</a>';
@@ -720,13 +721,18 @@ Version: 0.1; Sept 19th 2011
                                 var child = create_label_iconed(t_txt, t_uid, t_onclick);
                                 li.cn.appendChild(child);
                                 }
-                            addEvent(li.getElementsByTagName('a')[0], 'click', function(){
+                            addEvent(a1, 'click', function(){
                                 if (this.getElementsByTagName('img')[0].src == 'http://tayfeh.com/resources/img/Shareit_disabled.png'){
                                     //update_label(personal=1&shared=1)
                                     alert(li.uid);
                                     //alert(this.parentNode.parentNode.uid);
                                     //var label2update = JSON.stringify([this.parent.uid: {"shared": "shared"}]);
                                     //{"244154cb55abb18703674dfada5475733e186f5e": {"name": "Farid", "parent": "411a1173d81d5f74066d5d34ff330930c3e215ca", "color": "#333399", "rule": "[]", "nick": "", "owner": "owner", "shared": "global"}}
+                                    
+                                    //var label2update = {};
+                                    //label2alert.label_id = source_id;
+                                    //label2alert.shared = shared;
+
                                     //$.post("http://ffadaie.dyndns.org:10000/update_label",label2update,
                                     //    function(result) {
                                     //        if (result["type"]=="ok"){
