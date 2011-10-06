@@ -685,11 +685,15 @@ Version: 0.1; Sept 19th 2011
                                 });
                             }
                         
-                        function create_label_iconed(txt, uid, onclick){
+                        function create_label_iconed(txt, uid, shared, onclick){
                             var li = document.createElement('li');
                             li.uid = uid;
                             li.txt = txt;
-                            li.innerHTML = '<div style="float:left"><a href="javascript:void(0)"><img src="http://tayfeh.com/resources/img/Shareit_disabled.png" width="15" height="16" alt="Share this lable"/></a></div><a href="javascript:void(0)">' + txt + '</a>';
+                            if (shared == 'personal') {
+                                li.innerHTML = '<div style="float:left"><a href="javascript:void(0)"><img src="http://tayfeh.com/resources/img/Shareit_disabled.png" width="15" height="16" alt="Share this lable"/></a></div><a href="javascript:void(0)">' + txt + '</a>';
+                            } else {
+                                li.innerHTML = '<div style="float:left"><a href="javascript:void(0)"><img src="http://tayfeh.com/resources/img/Shareit_abled.png" width="15" height="16" alt="Share this lable"/></a></div><a href="javascript:void(0)">' + txt + '</a>';
+                            }
                             add_class(li.getElementsByTagName('a')[1], 'labels');
                             li.add_child = function(t_txt, t_uid, t_onclick){
                                 if (!li.cn){var c = document.createElement('ul'); li.appendChild(c); li.cn = c; add_class(c, 'label_item');}
@@ -698,7 +702,15 @@ Version: 0.1; Sept 19th 2011
                                 }
                             addEvent(li.getElementsByTagName('a')[0], 'click', function(){
                                 if (this.getElementsByTagName('img')[0].src == 'http://tayfeh.com/resources/img/Shareit_disabled.png'){
-                                    this.getElementsByTagName('img')[0].src = "http://tayfeh.com/resources/img/Shareit_abled.png"
+                                    //update_label(personal=1&shared=1)
+                                    var label2update = JSON.stringify({this.parent.uid: {"shared": "shared"}});
+                                    $.post("http://ffadaie.dyndns.org:10000/update_label",label2update,
+                                        function(result) {
+                                            if (result["type"]=="ok"){
+                                                this.getElementsByTagName('img')[0].src = "http://tayfeh.com/resources/img/Shareit_abled.png"
+                                            } else {
+                                                alert('problem i DB connection, please try later.');
+                                            });
                                 } else {
                                     this.getElementsByTagName('img')[0].src = 'http://tayfeh.com/resources/img/Shareit_disabled.png';
                                 }
@@ -1394,7 +1406,7 @@ Version: 0.1; Sept 19th 2011
                                                 window.labels[list[i].parent].add_child(list[i].name, list[i].id, function(){alert('click')});
                                                 }
                                             else{
-                                                var l = create_label_iconed(list[i].name, list[i].id, function(){alert('click')})
+                                                var l = create_label_iconed(list[i].name, list[i].id, list[i].shared, function(){alert('click')})
                                                 window.labels[i] = l;
                                                 label_list.appendChild(l)
                                                 }
@@ -1622,7 +1634,7 @@ Version: 0.1; Sept 19th 2011
                                             
                                             if (result["type"]=="ok"){
                                                 if (parent_id == '0'){
-                                                    window.labels[result["data"]] = create_label_iconed(name_label, result["data"], function(){alert('click')});
+                                                    window.labels[result["data"]] = create_label_iconed(name_label, result["data"], 'personal', function(){alert('click')});
                                                     document.getElementById('lable_container_ul').appendChild(window.labels[result["data"]]);
                                                     
                                                     } else {
