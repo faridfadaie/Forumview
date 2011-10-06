@@ -1012,7 +1012,8 @@ Version: 0.1; Sept 19th 2011
                                 icon_div.appendChild(icon_pic);
                             }
                             var menu_div = document.createElement('div');
-                            menu_div.uid = id;
+                            //menu_div.uid = id;
+                            menu_div.id = id;
                             menu_div.innerHTML = txt;
                             add_class(menu_div, 'categories');
                             if (logo != ''){
