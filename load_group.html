@@ -703,14 +703,16 @@ Version: 0.1; Sept 19th 2011
                             addEvent(li.getElementsByTagName('a')[0], 'click', function(){
                                 if (this.getElementsByTagName('img')[0].src == 'http://tayfeh.com/resources/img/Shareit_disabled.png'){
                                     //update_label(personal=1&shared=1)
-                                    var label2update = JSON.stringify({this.parent.uid: {"shared": "shared"}});
-                                    $.post("http://ffadaie.dyndns.org:10000/update_label",label2update,
-                                        function(result) {
-                                            if (result["type"]=="ok"){
-                                                this.getElementsByTagName('img')[0].src = "http://tayfeh.com/resources/img/Shareit_abled.png"
-                                            } else {
-                                                alert('problem i DB connection, please try later.');
-                                            });
+                                    alert(this.parentNode.parentNode.uid);
+                                    //var label2update = JSON.stringify([this.parent.uid: {"shared": "shared"}]);
+                                    //{"244154cb55abb18703674dfada5475733e186f5e": {"name": "Farid", "parent": "411a1173d81d5f74066d5d34ff330930c3e215ca", "color": "#333399", "rule": "[]", "nick": "", "owner": "owner", "shared": "global"}}
+                                    //$.post("http://ffadaie.dyndns.org:10000/update_label",label2update,
+                                    //    function(result) {
+                                    //        if (result["type"]=="ok"){
+                                    //            this.getElementsByTagName('img')[0].src = "http://tayfeh.com/resources/img/Shareit_abled.png"
+                                    //        } else {
+                                    //            alert('problem i DB connection, please try later.');
+                                    //        });
                                 } else {
                                     this.getElementsByTagName('img')[0].src = 'http://tayfeh.com/resources/img/Shareit_disabled.png';
                                 }
