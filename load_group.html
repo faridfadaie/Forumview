@@ -696,10 +696,10 @@ Version: 0.1; Sept 19th 2011
                             img1 = document.createElement('img');
                             img1.width = 15;
                             img1.height = 16;
-                            if (shared == 'personal') {
-                                img1.src = "http://tayfeh.com/resources/img/Shareit_disabled.png";
-                            } else {
+                            if (shared == 'shared') {
                                 img1.src = "http://tayfeh.com/resources/img/Shareit_abled.png";
+                            } else {
+                                img1.src = "http://tayfeh.com/resources/img/Shareit_disabled.png";
                             }
                             a1.appendChild(img1);
                             div1.appendChild(a1);
@@ -728,11 +728,11 @@ Version: 0.1; Sept 19th 2011
                                             } else {
                                                 okay = false;
                                             }});
-                                     if (okay) {
+                                     //if (okay) {
                                          this.getElementsByTagName('img')[0].src = "http://tayfeh.com/resources/img/Shareit_abled.png"
-                                         } else {
-                                             alert('problem in database connection, please try later.');
-                                         }
+                                     //    } else {
+                                     //        alert('problem in database connection, please try later.');
+                                     //    }
                                 } else {
                                     var label2update = {};
                                     label2update.label_id = this.parentNode.parentNode.uid;
@@ -744,11 +744,11 @@ Version: 0.1; Sept 19th 2011
                                             } else {
                                                 okay = false;
                                             }});
-                                     if (okay) {
+                                     //if (okay) {
                                          this.getElementsByTagName('img')[0].src = "http://tayfeh.com/resources/img/Shareit_disabled.png"
-                                         } else {
-                                             alert('problem in database connection, please try later.');
-                                         }
+                                     //    } else {
+                                     //        alert('problem in database connection, please try later.');
+                                     //    }
                                 }
                                     
                             });
