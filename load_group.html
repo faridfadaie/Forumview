@@ -722,7 +722,7 @@ Version: 0.1; Sept 19th 2011
                                     label2update.label_id = this.parentNode.parentNode.uid;
                                     label2update.shared = 1;
                                     label2update.personal = 1;
-                                    $.post("http://ffadaie.dyndns.org:10000/update_label",label2update,
+                                    $.post("/update_label",label2update,
                                         function(result) {
                                             if (result["type"]=="ok"){
                                                 okay = true; 
@@ -739,7 +739,7 @@ Version: 0.1; Sept 19th 2011
                                     label2update.label_id = this.parentNode.parentNode.uid;
                                     label2update.shared = 0;
                                     label2update.personal = 1;                                    
-                                    $.post("http://ffadaie.dyndns.org:10000/update_label",label2update,
+                                    $.post("/update_label",label2update,
                                         function(result) {
                                             if (result["type"]=="ok"){
                                                 okay = true; 
@@ -1422,7 +1422,7 @@ Version: 0.1; Sept 19th 2011
                                 window.global = true;
                                 window.owner = false;
                                 
-                                $.getJSON("http://ffadaie.dyndns.org:10000/get_labels?obj_id="+source_id, function(data) {
+                                $.getJSON("/get_labels?obj_id="+source_id, function(data) {
                                     if (data.type == 'ok'){
                                         if (window.global) {
                                             pv = create_tag_linked('info_personal','Personal View',"#");
@@ -1676,7 +1676,7 @@ Version: 0.1; Sept 19th 2011
                                         //var jsonText = JSON.stringify(label2alert);    
                                         //alert (jsonText);
                                         
-                                        $.post("http://ffadaie.dyndns.org:10000/create_label",label2alert,
+                                        $.post("/create_label",label2alert,
                                         function(result) {
                                             
                                             if (result["type"]=="ok"){
