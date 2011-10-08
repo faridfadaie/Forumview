@@ -132,7 +132,7 @@ def _get_post_info(post_id, user):
 
 def view_obj(env, start_response, params):
     if params.has_key('code'):
-        file = urllib2.urlopen('https://graph.facebook.com/oauth/access_token?client_id=246575252046549&redirect_uri=http%3A%2F%2Fffadaie.dyndns.org%3A'+str(LISTEN_PORT)+'%2F'+'%2F'.join(params['list'])+'&client_secret=bba342dc751c88d7522ce822d4d30ab8&code='+params['code'])
+        file = urllib2.urlopen('https://graph.facebook.com/oauth/access_token?client_id=246575252046549&redirect_uri=http%3A%2F%2F'+env['HTTP_HOST'].split(':')[0]+'%3A'+str(LISTEN_PORT)+'%2F'+'%2F'.join(params['list'])+'&client_secret=bba342dc751c88d7522ce822d4d30ab8&code='+params['code'])
         try: response = file.read()
         finally: file.close()
         response = dict([a.split('=') for a in response.split('&')])
@@ -147,7 +147,7 @@ def view_obj(env, start_response, params):
             start_response('200 OK', [])
             return [page_contents['home.html']]
         start_response('200 OK', [])
-        return ['<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Redirecting to Facebook</title><meta http-equiv="REFRESH" content="0;url=https://graph.facebook.com/oauth/authorize?client_id=246575252046549&redirect_uri=http%3A%2F%2Fffadaie.dyndns.org%3A'+str(LISTEN_PORT)+'%2F'+'%2F'.join(params['list'])+'&scope=publish_stream%2Cread_stream%2Cuser_groups"></HEAD><BODY></BODY></HTML>']
+        return ['<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Redirecting to Facebook</title><meta http-equiv="REFRESH" content="0;url=https://graph.facebook.com/oauth/authorize?client_id=246575252046549&redirect_uri=http%3A%2F%2F'+env['HTTP_HOST'].split(':')[0]+'%3A'+str(LISTEN_PORT)+'%2F'+'%2F'.join(params['list'])+'&scope=publish_stream%2Cread_stream%2Cuser_groups"></HEAD><BODY></BODY></HTML>']
     ret = page_contents['load_group.html']
     if len(params['list']) == 0:
         ret = ret.replace('XXX_ADMIN_XXX', 'true')
@@ -158,7 +158,7 @@ def view_obj(env, start_response, params):
         return [ret]
     if len(params['list']) == 1:
         start_response('200 OK', [])
-        return ['<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Redirecting to Facebook</title><meta http-equiv="REFRESH" content="0;url=http://ffadaie.dyndns.org:'+str(LISTEN_PORT)+'/'+params['list'][0]+'/'+str(user['uid'])+'"></HEAD><BODY></BODY></HTML>']
+        return ['<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Redirecting to Facebook</title><meta http-equiv="REFRESH" content="0;url=http://'+env['HTTP_HOST'].split(':')[0]+':'+str(LISTEN_PORT)+'/'+params['list'][0]+'/'+str(user['uid'])+'"></HEAD><BODY></BODY></HTML>']
     view_obj_kind, fb_uid = _detect_obj_type(params['list'][1], user)
     if view_obj_kind != 'profile':
         return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'The view should be a facebook user.')
@@ -497,6 +497,7 @@ def request_handler(env, start_response):
     method = env['REQUEST_METHOD']
     path = env['PATH_INFO']
     if (method in ['GET', 'POST']):
+        print path.split('/')[1]
         params = load_args(env)
         if (path.count('/') > 0) and path.split('/')[1] in allowed_functions:
             if path.count('/') > 1:
