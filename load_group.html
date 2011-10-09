@@ -1141,13 +1141,13 @@ Version: 0.1; Sept 19th 2011
                                 theOption = document.createElement("OPTION");
                                 theText = document.createTextNode("all options (AND)");
                                 theOption.appendChild(theText);
-                                theOption.setAttribute("value","1");
+                                theOption.setAttribute("value","and");
                                 taglist.appendChild(theOption);
 
                                 theOption = document.createElement("OPTION");
                                 theText = document.createTextNode("any option (OR)");
                                 theOption.appendChild(theText);
-                                theOption.setAttribute("value","2");
+                                theOption.setAttribute("value","or");
                                 taglist.appendChild(theOption);
                                 
                                 
@@ -1369,32 +1369,32 @@ Version: 0.1; Sept 19th 2011
                                 theOption = document.createElement("OPTION");
                                 theText = document.createTextNode("Who posted the messge");
                                 theOption.appendChild(theText);
-                                theOption.setAttribute("value","5");
+                                theOption.setAttribute("value","1");
                                 condlist.appendChild(theOption);
 
                                 theOption = document.createElement("OPTION");
                                 theText = document.createTextNode("Who is mentioned");
                                 theOption.appendChild(theText);
-                                theOption.setAttribute("value","6");
+                                theOption.setAttribute("value","2");
                                 condlist.appendChild(theOption);
 
                                 theOption = document.createElement("OPTION");
                                 theText = document.createTextNode("What is in the text");
                                 theOption.appendChild(theText);
-                                theOption.setAttribute("value","7");
+                                theOption.setAttribute("value","31");
                                 condlist.appendChild(theOption);
 
                                 theOption = document.createElement("OPTION");
                                 theText = document.createTextNode("What is not in the text");
                                 theOption.appendChild(theText);
-                                theOption.setAttribute("value","8");
+                                theOption.setAttribute("value","32");
                                 condlist.appendChild(theOption);
 
-                                theOption = document.createElement("OPTION");
+                                /*theOption = document.createElement("OPTION");
                                 theText = document.createTextNode("What links are in the message");
                                 theOption.appendChild(theText);
                                 theOption.setAttribute("value","9");
-                                condlist.appendChild(theOption);
+                                condlist.appendChild(theOption); */
 
 
                                 // textbox
@@ -1588,27 +1588,30 @@ Version: 0.1; Sept 19th 2011
                                         label2alert.parent = parent_id;
                                         label2alert.color = document.getElementById('color1').value;
                                         
-                                        // categories:
+                                        /*
+										// categories:
                                         if (document.labelcategory == 1) {
                                             label2laert.shared = 'shared';
                                             label2alert.owner = 'owner';
                                         } 
                                         // else if (){}
-                                        
+                                        */
+										
                                         var rule=[];
-                                        oper = document.getElementById('taglist').value;
+                                        opt = document.getElementById('taglist').value;
                                         if(document.getElementById('optionsbutton').innerHTML == "more options..."){
                                             // no options
                                             rule=[];
                                         } else {
                                             // options maybe active
+											/*
                                             // likes field
                                             if (!isNaN(parseInt(document.getElementById('liketext').value))){
                                                 bool = document.getElementById('likelist').value == 'ture';
                                                 intgr = parseInt(document.getElementById('liketext').value);
                                                 cond = {};
                                                 cond.id = 1;
-                                                cond.oper = oper;
+                                                cond.opt = opt;
                                                 cond.params = [];
                                                 cond.params[0] = bool;
                                                 cond.params[1] = intgr;
@@ -1620,13 +1623,14 @@ Version: 0.1; Sept 19th 2011
                                                 intgr = parseInt(document.getElementById('commenttext').value);
                                                 cond = {};
                                                 cond.id = 2;
-                                                cond.oper = oper;
+                                                cond.opt = opt;
                                                 cond.params = [];
                                                 cond.params[0] = bool;
                                                 cond.params[1] = intgr;
                                                 rule.push(cond);
                                                 }
-                                                
+                                            */
+											
                                             // date field
                                             if (!isNaN(parseInt(document.getElementById('datetext').value)) || (document.getElementById('timelist').value != 25)){
                                                 bool = document.getElementById('datetext').value == 'ture';
@@ -1636,22 +1640,22 @@ Version: 0.1; Sept 19th 2011
                                                 }
                                                 intgr = date.getTime()/1000;
                                                 cond = {};
-                                                cond.id = 3;
-                                                cond.oper = oper;
+                                                cond.id = 5;
+                                                cond.opt = opt;
                                                 cond.params = [];
-                                                cond.params[0] = bool;
-                                                cond.params[1] = intgr;
+                                                cond.params[0] = intgr;
+                                                cond.params[1] = bool;
                                                 rule.push(cond);
                                                 }
                         
                                             // comments field
                                             if (document.getElementById('hasattachments').checked){
-                                                bool = true;
+                                                // bool = true;
                                                 cond = {};
                                                 cond.id = 4;
-                                                cond.oper = oper;
+                                                cond.opt = opt;
                                                 cond.params = [];
-                                                cond.params[0] = bool;
+                                                // cond.params[0] = bool;
                                                 rule.push(cond);
                                                 }
                                                 
@@ -1661,16 +1665,25 @@ Version: 0.1; Sept 19th 2011
                                                  if (conditionsdiv[i-1].getElementsByTagName('input')[0].value != ''){
                                                      cond = {};
                                                      cond.id = conditionsdiv[i-1].getElementsByTagName('select')[0].value;
-                                                     cond.oper = oper;
+                                                     cond.opt = opt;
                                                      cond.params = [];
                                                      cond.params[0] = conditionsdiv[i-1].getElementsByTagName('input')[0].value;
+													 if (cond.id == 31) {
+														cond.id = 3;
+														cond.params[1] = true;
+														} else if (cond.id == 31) {
+															cond.id = 3;
+															cond.params[2] = false;
+															} else {
+																cond.params[0] = parseInt(cond.params[0]);
+																{
                                                      rule.push(cond);
                                                  }
                                              }
                         
                                         }
                                         
-                                        // -> at the end, change the first oper to 0
+                                        // -> at the end, change the first opt to 0
                                         
                                         label2alert.rule = JSON.stringify(rule);
                                         //var jsonText = JSON.stringify(label2alert);    
