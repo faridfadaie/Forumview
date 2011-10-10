@@ -1488,7 +1488,7 @@ Version: 0.1; Sept 19th 2011
 													p = document.getElementById('options_row');
 													l1 = document.createElement('label');
 													l1.setAttribute('style', 'margin-left: 15px;');
-													theText = document.createTextNode("|  This label is ");
+													theText = document.createTextNode("This label is ");
 													l1.appendChild(theText);
 													//l1.innerHTML = 'This label is';
 													
@@ -1510,8 +1510,11 @@ Version: 0.1; Sept 19th 2011
 													s1.appendChild(theOption);
 
 													s1.onchange = function () {
-														alert(this.val());
-														// document.getElementById('options_row')
+														if (this.value == 1) {
+															set_style(document.getElementById('shared_label'),{display: 'none'});
+														} else {
+															set_style(document.getElementById('shared_label'),{display: 'inline'});
+														}
 													}
 													
 													l1.appendChild(s1);
@@ -1519,9 +1522,12 @@ Version: 0.1; Sept 19th 2011
 												}
 												
 												p = document.getElementById('options_row');
+												//d2 = document.createElement('div');
+												//d2.setAttribute('style', 'display: inline;');
 												l2 = document.createElement('label');
 												l2.setAttribute('style', 'margin-left: 15px;');
-												theText = document.createTextNode("|  Share this label ");
+												l2.setAttribute('id', 'shared_label');
+												theText = document.createTextNode("Share this label ");
 												l2.appendChild(theText);
 												c1 = document.createElement('input');
 												c1.setAttribute('type', 'checkbox');
