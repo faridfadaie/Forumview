@@ -1485,15 +1485,16 @@ Version: 0.1; Sept 19th 2011
                                                 $('#color1').colorPicker();
 												
 												if (XXX_ADMIN_XXX) {
-													var p = document.getElementById('options_row');
-													var l1 = document.createElement('label');
+													p = document.getElementById('options_row');
+													l1 = document.createElement('label');
 													l1.setAttribute('style', 'margin-left: 15px;');
-													theText = document.createTextNode("This label is ");
+													theText = document.createTextNode("|  This label is ");
 													l1.appendChild(theText);
 													//l1.innerHTML = 'This label is';
 													
 													s1 = document.createElement('select');
 													s1.setAttribute('class', 'fonted');
+													s1.setAttribute('id', 'personal_select');
 													// condlist.setAttribute('style', 'display: none; margin-left: 5px; margin-right: 5px;');
 
 													theOption = document.createElement("OPTION");
@@ -1508,16 +1509,29 @@ Version: 0.1; Sept 19th 2011
 													theOption.setAttribute("value",2);
 													s1.appendChild(theOption);
 
-													s1.onchange = function () {alert('changed');}
+													s1.onchange = function () {
+														alert(this.val());
+														// document.getElementById('options_row')
+													}
 													
 													l1.appendChild(s1);
 													p.appendChild(l1);
-													// var c1 = document.createElement('input');
-													// check1.setAttribute('type', 'checkbox');
-													// textbox.setAttribute('size', '25'); 
-													// textbox.setAttribute('maxlength', '40');
-													// textbox.setAttribute('class', 'datetextbox');
 												}
+												
+												p = document.getElementById('options_row');
+												l2 = document.createElement('label');
+												l2.setAttribute('style', 'margin-left: 15px;');
+												theText = document.createTextNode("|  Share this label ");
+												l2.appendChild(theText);
+												c1 = document.createElement('input');
+												c1.setAttribute('type', 'checkbox');
+												c1.setAttribute('id', 'shared_checkbox');
+												l2.appendChild(c1);
+												p.appendChild(l2);
+												
+												//if (XXX_ADMIN_XXX) {
+												//	set_style(l2,{display: 'none'});
+												//}
 												
                                                 create_condition_if();
                                                 create_condition_fix();
