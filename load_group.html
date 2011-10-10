@@ -1488,7 +1488,7 @@ Version: 0.1; Sept 19th 2011
 													var p = document.getElementById('options_row');
 													var l1 = document.createElement('label');
 													l1.setAttribute('style', 'margin-left: 15px;');
-													theText = document.createTextNode("This label is");
+													theText = document.createTextNode("This label is ");
 													l1.appendChild(theText);
 													//l1.innerHTML = 'This label is';
 													
@@ -1508,7 +1508,7 @@ Version: 0.1; Sept 19th 2011
 													theOption.setAttribute("value",2);
 													s1.appendChild(theOption);
 
-													s1.onChange = function () {alert('changed');}
+													s1.onchange = function () {alert('changed');}
 													
 													l1.appendChild(s1);
 													p.appendChild(l1);
