@@ -1086,332 +1086,225 @@ Version: 0.1; Sept 19th 2011
                             document.getElementById('lable_container').appendChild(menu_div);
                         };
                         
-                            function create_condition_if(){
-                                var fconditions = document.getElementById('conditions_if');
-                                var tag, tagtx;
-                                
-                                tag = document.createElement('div');    
-                                tag.setAttribute('class', 'conditionsfixed');
-                                tag.setAttribute('style', 'border-top: 1px solid rgb(204, 204, 204); padding-top: 5px; margin-top: 10px;');
+                        function create_condition_if(){
+                            var fconditions = document.getElementById('conditions_if');
+                            var tag, tagtx;
+                            
+                            tag = document.createElement('div');    
+                            tag.setAttribute('class', 'conditionsfixed');
+                            tag.setAttribute('style', 'border-top: 1px solid rgb(204, 204, 204); padding-top: 5px; margin-top: 10px;');
 
-                                tagtx = document.createElement('a');
-                                tagtx.setAttribute('id', 'optionsbutton');
-                                tagtx.setAttribute('class', 'fonted');
-                                tagtx.setAttribute('style', 'text-decoration:none; font-weight: 700; text-transform: capitalize;');
-                                tagtx.setAttribute('href', '#');
-                                tagtx.innerHTML='more options...';
-                                tagtx.onclick = function(){
-                                    //alert('clicked');
-                                    if (this.innerHTML == 'more options...'){
-                                        this.innerHTML='cancel options...';
-                                        set_style(document.getElementById('conditions_fixed'),{display: 'block'});
-                                        set_style(document.getElementById('conditions'),{display: 'block'});
-                                    } else {
-                                        this.innerHTML='more options...';
-                                        set_style(document.getElementById('conditions_fixed'),{display: 'none'});
-                                        set_style(document.getElementById('conditions'),{display: 'none'});                                        
-                                    }
+                            tagtx = document.createElement('a');
+                            tagtx.setAttribute('id', 'optionsbutton');
+                            tagtx.setAttribute('class', 'fonted');
+                            tagtx.setAttribute('style', 'text-decoration:none; font-weight: 700; text-transform: capitalize;');
+                            tagtx.setAttribute('href', '#');
+                            tagtx.innerHTML='more options...';
+                            tagtx.onclick = function(){
+                                //alert('clicked');
+                                if (this.innerHTML == 'more options...'){
+                                    this.innerHTML='cancel options...';
+                                    set_style(document.getElementById('conditions_fixed'),{display: 'block'});
+                                    set_style(document.getElementById('conditions'),{display: 'block'});
+                                } else {
+                                    this.innerHTML='more options...';
+                                    set_style(document.getElementById('conditions_fixed'),{display: 'none'});
+                                    set_style(document.getElementById('conditions'),{display: 'none'});                                        
                                 }
-                                
-                                tag.appendChild(tagtx);
-                                fconditions.appendChild(tag);
-                                
-                                
                             }
                             
-                            function create_condition_fix(){
-                                
-                                var fconditions = document.getElementById('conditions_fixed');
-                                var tag, tagtx, taglist, likes, likelist, likestx, likesl, likesl2, comments, commentlist, commentstx, commentsl, commentsl2;
-                                var dates, datesl2, datestx, datelist, datesl, attachs, attachsl, attachsin, timelist;
-                                
-                                tag = document.createElement('div');    
-                                tag.setAttribute('class', 'conditionsfixed');
-                                //tag.setAttribute('style', 'border-top: 1px solid rgb(204, 204, 204); padding-top: 5px; margin-top: 10px;');
+                            tag.appendChild(tagtx);
+                            fconditions.appendChild(tag);
+                            
+                            
+                        }
+                            
+                        function create_condition_fix(){
+                            
+                            var fconditions = document.getElementById('conditions_fixed');
+                            var tag, tagtx, taglist, likes, likelist, likestx, likesl, likesl2, comments, commentlist, commentstx, commentsl, commentsl2;
+                            var dates, datesl2, datestx, datelist, datesl, attachs, attachsl, attachsin, timelist;
+                            
+                            tag = document.createElement('div');    
+                            tag.setAttribute('class', 'conditionsfixed');
+                            //tag.setAttribute('style', 'border-top: 1px solid rgb(204, 204, 204); padding-top: 5px; margin-top: 10px;');
 
-                                tagtx = document.createElement('p');
-                                tagtx.setAttribute('class', 'fonted');
-                                tagtx.innerHTML='Apply label with the following filters';
+                            tagtx = document.createElement('p');
+                            tagtx.setAttribute('class', 'fonted');
+                            tagtx.innerHTML='Apply label with the following filters';
 
-                                taglist = document.createElement('select');
-                                taglist.setAttribute('id', 'taglist');                                
-                                taglist.setAttribute('class', 'fonted');
-                                taglist.setAttribute('style', 'margin-left: 5px;');
+                            taglist = document.createElement('select');
+                            taglist.setAttribute('id', 'taglist');                                
+                            taglist.setAttribute('class', 'fonted');
+                            taglist.setAttribute('style', 'margin-left: 5px;');
 
+                            theOption = document.createElement("OPTION");
+                            theText = document.createTextNode("all options (AND)");
+                            theOption.appendChild(theText);
+                            theOption.setAttribute("value","and");
+                            taglist.appendChild(theOption);
+
+                            theOption = document.createElement("OPTION");
+                            theText = document.createTextNode("any option (OR)");
+                            theOption.appendChild(theText);
+                            theOption.setAttribute("value","or");
+                            taglist.appendChild(theOption);                                
+                            
+                            tagtx.appendChild(taglist);
+                            tag.appendChild(tagtx);
+                            fconditions.appendChild(tag);
+
+                            ///
+                            dates = document.createElement('div');    
+                            dates.setAttribute('class', 'conditionsfixed');
+                            
+                            datesl = document.createElement('label');
+                            datesl.setAttribute('for', 'likelist');
+                            datesl.setAttribute('style', 'margin-right: 5px;');
+                            datesl.innerHTML='If it has been posted';
+
+
+                            datelist = document.createElement('select');
+                            datelist.setAttribute('id', 'datelist');                                
+                            datelist.setAttribute('class', 'fonted');
+                            datelist.setAttribute('style', 'margin-right: 5px;');
+
+                            theOption = document.createElement("OPTION");
+                            theText = document.createTextNode("before");
+                            theOption.appendChild(theText);
+                            theOption.setAttribute("value","true");
+                            datelist.appendChild(theOption);
+
+                            theOption = document.createElement("OPTION");
+                            theText = document.createTextNode("after");
+                            theOption.appendChild(theText);
+                            theOption.setAttribute("value","false");
+                            datelist.appendChild(theOption);
+
+
+                            datestx = document.createElement('input');
+                            datestx.setAttribute('type', 'text');
+                            datestx.setAttribute('id', 'datetext');
+                            datestx.setAttribute('size', '10'); 
+                            datestx.setAttribute('maxlength', '10');
+                            datestx.setAttribute('style', 'margin-right: 5px;');
+                            datestx.setAttribute('class', 'fonted');
+                            $(datestx).simpleDatepicker({ startdate: 2007 , y: -200});
+                            
+                            timelist = document.createElement('select');
+                            timelist.setAttribute('id', 'timelist');                                
+                            timelist.setAttribute('class', 'fonted');
+                            timelist.setAttribute('style', 'margin-right: 5px;');
+
+                            theOption = document.createElement("OPTION");
+                            theText = document.createTextNode("");
+                            theOption.appendChild(theText);
+                            theOption.setAttribute("value",25);
+                            timelist.appendChild(theOption);
+
+                            for (var d=0;d<=23;d++){
                                 theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("all options (AND)");
+                                theText = document.createTextNode(d+":00");
                                 theOption.appendChild(theText);
-                                theOption.setAttribute("value","and");
-                                taglist.appendChild(theOption);
-
-                                theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("any option (OR)");
-                                theOption.appendChild(theText);
-                                theOption.setAttribute("value","or");
-                                taglist.appendChild(theOption);
-                                
-                                
-                                tagtx.appendChild(taglist);
-                                tag.appendChild(tagtx);
-                                fconditions.appendChild(tag);
-
-
-
-                                /* likes = document.createElement('div');    
-                                likes.setAttribute('class', 'conditionsfixed');
-                                
-                                likesl = document.createElement('label');
-                                likesl.setAttribute('for', 'likelist');
-                                likesl.setAttribute('style', 'margin-right: 5px;');
-                                likesl.innerHTML='If it has';
-
-
-                                likelist = document.createElement('select');
-                                likelist.setAttribute('id', 'likelist');                                
-                                likelist.setAttribute('class', 'fonted');
-                                likelist.setAttribute('style', 'margin-right: 5px;');
-
-                                theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("more than");
-                                theOption.appendChild(theText);
-                                theOption.setAttribute("value","ture");
-                                likelist.appendChild(theOption);
-
-                                theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("less than");
-                                theOption.appendChild(theText);
-                                theOption.setAttribute("value","false");
-                                likelist.appendChild(theOption);
-
-
-                                likestx = document.createElement('input');  
-                                likestx.setAttribute('type', 'text');
-                                likestx.setAttribute('id', 'liketext');
-                                likestx.setAttribute('size', '3'); 
-                                likestx.setAttribute('maxlength', '3');
-                                likestx.setAttribute('style', 'margin-right: 5px;');
-                                likestx.setAttribute('class', 'fonted');
-                                
-                                
-                                likesl2 = document.createElement('label');
-                                likesl2.setAttribute('for', 'likelist');
-                                likesl2.innerHTML='likes.';
-
-
-                                likes.appendChild(likesl);
-                                likes.appendChild(likelist);
-                                likes.appendChild(likestx);
-                                likes.appendChild(likesl2);
-                                fconditions.appendChild(likes);
-
-                                ///
-
-                                comments = document.createElement('div');    
-                                comments.setAttribute('class', 'conditionsfixed');
-                                
-                                commentsl = document.createElement('label');
-                                commentsl.setAttribute('for', 'commentlist');
-                                commentsl.setAttribute('style', 'margin-right: 5px;');
-                                commentsl.innerHTML='If it has';
-
-
-                                commentlist = document.createElement('select');
-                                commentlist.setAttribute('id', 'commentlist');                                
-                                commentlist.setAttribute('class', 'fonted');
-                                commentlist.setAttribute('style', 'margin-right: 5px;');
-
-                                theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("more than");
-                                theOption.appendChild(theText);
-                                theOption.setAttribute("value","true");
-                                commentlist.appendChild(theOption);
-
-                                theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("less than");
-                                theOption.appendChild(theText);
-                                theOption.setAttribute("value","false");
-                                commentlist.appendChild(theOption);
-
-
-                                commentstx = document.createElement('input');  
-                                commentstx.setAttribute('type', 'text');
-                                commentstx.setAttribute('id', 'commenttext');
-                                commentstx.setAttribute('size', '3'); 
-                                commentstx.setAttribute('maxlength', '3');
-                                commentstx.setAttribute('style', 'margin-right: 5px;');
-                                commentstx.setAttribute('class', 'fonted');
-                                
-                                
-                                commentsl2 = document.createElement('label');
-                                commentsl2.setAttribute('for', 'commentlist');
-                                commentsl2.innerHTML='comments.';
-
-
-                                comments.appendChild(commentsl);
-                                comments.appendChild(commentlist);
-                                comments.appendChild(commentstx);
-                                comments.appendChild(commentsl2);
-                                fconditions.appendChild(comments); */
-
-
-                                ///
-                                dates = document.createElement('div');    
-                                dates.setAttribute('class', 'conditionsfixed');
-                                
-                                datesl = document.createElement('label');
-                                datesl.setAttribute('for', 'likelist');
-                                datesl.setAttribute('style', 'margin-right: 5px;');
-                                datesl.innerHTML='If it has been posted';
-
-
-                                datelist = document.createElement('select');
-                                datelist.setAttribute('id', 'datelist');                                
-                                datelist.setAttribute('class', 'fonted');
-                                datelist.setAttribute('style', 'margin-right: 5px;');
-
-                                theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("before");
-                                theOption.appendChild(theText);
-                                theOption.setAttribute("value","true");
-                                datelist.appendChild(theOption);
-
-                                theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("after");
-                                theOption.appendChild(theText);
-                                theOption.setAttribute("value","false");
-                                datelist.appendChild(theOption);
-
-
-                                datestx = document.createElement('input');
-                                datestx.setAttribute('type', 'text');
-                                datestx.setAttribute('id', 'datetext');
-                                datestx.setAttribute('size', '10'); 
-                                datestx.setAttribute('maxlength', '10');
-                                datestx.setAttribute('style', 'margin-right: 5px;');
-                                datestx.setAttribute('class', 'fonted');
-                                $(datestx).simpleDatepicker({ startdate: 2007 , y: -200});
-                                
-                                timelist = document.createElement('select');
-                                timelist.setAttribute('id', 'timelist');                                
-                                timelist.setAttribute('class', 'fonted');
-                                timelist.setAttribute('style', 'margin-right: 5px;');
-
-                                theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("");
-                                theOption.appendChild(theText);
-                                theOption.setAttribute("value",25);
+                                theOption.setAttribute("value",d);
                                 timelist.appendChild(theOption);
-
-                                for (var d=0;d<=23;d++){
-                                    theOption = document.createElement("OPTION");
-                                    theText = document.createTextNode(d+":00");
-                                    theOption.appendChild(theText);
-                                    theOption.setAttribute("value",d);
-                                    timelist.appendChild(theOption);
-                                }
-                                
-                                datesl2 = document.createElement('label');
-                                datesl2.setAttribute('for', 'likelist');
-                                datesl2.innerHTML='(date and time).';
-
-                                dates.appendChild(datesl);
-                                dates.appendChild(datelist);
-                                dates.appendChild(datestx);
-                                dates.appendChild(timelist);
-                                dates.appendChild(datesl2);
-                                fconditions.appendChild(dates);
-
-                                
-                                attachs = document.createElement('div');    
-                                attachs.setAttribute('class', 'conditionsfixed');
-
-                                attachsin = document.createElement('input');
-                                attachsin.setAttribute('id', 'hasattachments');
-                                attachsin.setAttribute('type', 'checkbox');
-                                attachs.appendChild(attachsin);
-                                
-                                attachsl = document.createElement('label');
-                                attachsl.setAttribute('for', 'hasattachments');
-                                attachsl.innerHTML='If it has attachments';
-                                attachs.appendChild(attachsl);
-
-                                fconditions.appendChild(attachs);
-                                
                             }
-                            function create_condition(){
-                                var newcond = document.createElement('div');
-                                var conditions = document.getElementById('conditions');
+                            
+                            datesl2 = document.createElement('label');
+                            datesl2.setAttribute('for', 'likelist');
+                            datesl2.innerHTML='(date and time).';
 
-                                var button, condlist, textbox;
+                            dates.appendChild(datesl);
+                            dates.appendChild(datelist);
+                            dates.appendChild(datestx);
+                            dates.appendChild(timelist);
+                            dates.appendChild(datesl2);
+                            fconditions.appendChild(dates);
 
-                                // add rule button
-                                button = document.createElement('a');                                            
-                                button.setAttribute('class', 'buttoninline'); 
-                                button.setAttribute('href', '#');
-                                button.innerHTML='more';
-                                button.onclick = function () {
-                                        if (this.innerHTML=='more'){
-                                            set_style(this.parentNode.getElementsByTagName("select")[0],{display: 'inline'});
-                                            set_style(this.parentNode.getElementsByTagName("input")[0],{display: 'inline'});
-                                            this.innerHTML='delete';
-                                            create_condition();
-                                        } else {
-                                            //this.innerHTML='Add rule';
-                                            this.parentNode.parentNode.removeChild(this.parentNode);
-                                        }
-                                        }
-                                        
-                                //condlis                                
-                                condlist = document.createElement('select');
-                                condlist.setAttribute('class', 'fonted');
-                                condlist.setAttribute('style', 'display: none; margin-left: 5px; margin-right: 5px;');
+                            
+                            attachs = document.createElement('div');    
+                            attachs.setAttribute('class', 'conditionsfixed');
 
-                                theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("Who posted the messge");
-                                theOption.appendChild(theText);
-                                theOption.setAttribute("value",1);
-                                condlist.appendChild(theOption);
+                            attachsin = document.createElement('input');
+                            attachsin.setAttribute('id', 'hasattachments');
+                            attachsin.setAttribute('type', 'checkbox');
+                            attachs.appendChild(attachsin);
+                            
+                            attachsl = document.createElement('label');
+                            attachsl.setAttribute('for', 'hasattachments');
+                            attachsl.innerHTML='If it has attachments';
+                            attachs.appendChild(attachsl);
 
-                                theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("Who is mentioned");
-                                theOption.appendChild(theText);
-                                theOption.setAttribute("value",2);
-                                condlist.appendChild(theOption);
+                            fconditions.appendChild(attachs);    
+                        }
+                        
+                        function create_condition(){
+                            var newcond = document.createElement('div');
+                            var conditions = document.getElementById('conditions');
 
-                                theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("What is in the text");
-                                theOption.appendChild(theText);
-                                theOption.setAttribute("value",31);
-                                condlist.appendChild(theOption);
+                            var button, condlist, textbox;
 
-                                theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("What is not in the text");
-                                theOption.appendChild(theText);
-                                theOption.setAttribute("value",32);
-                                condlist.appendChild(theOption);
+                            // add rule button
+                            button = document.createElement('a');                                            
+                            button.setAttribute('class', 'buttoninline'); 
+                            button.setAttribute('href', '#');
+                            button.innerHTML='more';
+                            button.onclick = function () {
+                                    if (this.innerHTML=='more'){
+                                        set_style(this.parentNode.getElementsByTagName("select")[0],{display: 'inline'});
+                                        set_style(this.parentNode.getElementsByTagName("input")[0],{display: 'inline'});
+                                        this.innerHTML='delete';
+                                        create_condition();
+                                    } else {
+                                        //this.innerHTML='Add rule';
+                                        this.parentNode.parentNode.removeChild(this.parentNode);
+                                    }
+                                    }
+                                    
+                            //condlis                                
+                            condlist = document.createElement('select');
+                            condlist.setAttribute('class', 'fonted');
+                            condlist.setAttribute('style', 'display: none; margin-left: 5px; margin-right: 5px;');
 
-                                /*theOption = document.createElement("OPTION");
-                                theText = document.createTextNode("What links are in the message");
-                                theOption.appendChild(theText);
-                                theOption.setAttribute("value","9");
-                                condlist.appendChild(theOption); */
+                            theOption = document.createElement("OPTION");
+                            theText = document.createTextNode("Who posted the messge");
+                            theOption.appendChild(theText);
+                            theOption.setAttribute("value",1);
+                            condlist.appendChild(theOption);
 
+                            theOption = document.createElement("OPTION");
+                            theText = document.createTextNode("Who is mentioned");
+                            theOption.appendChild(theText);
+                            theOption.setAttribute("value",2);
+                            condlist.appendChild(theOption);
 
-                                // textbox
-                                textbox = document.createElement('input');  
-                                textbox.setAttribute('type', 'text');
-                                textbox.setAttribute('size', '25'); 
-                                textbox.setAttribute('maxlength', '40');
-                                textbox.setAttribute('class', 'datetextbox');
-                                                                
-                                
-                                //appending the elements
-                                newcond.setAttribute("style", "margin-bottom: 5px;");
-                                conditions.appendChild(newcond);
-                                newcond.appendChild(button);
-                                newcond.appendChild(condlist);
-                                newcond.appendChild(textbox);
-                                };
+                            theOption = document.createElement("OPTION");
+                            theText = document.createTextNode("What is in the text");
+                            theOption.appendChild(theText);
+                            theOption.setAttribute("value",31);
+                            condlist.appendChild(theOption);
+
+                            theOption = document.createElement("OPTION");
+                            theText = document.createTextNode("What is not in the text");
+                            theOption.appendChild(theText);
+                            theOption.setAttribute("value",32);
+                            condlist.appendChild(theOption);
+
+                            // textbox
+                            textbox = document.createElement('input');  
+                            textbox.setAttribute('type', 'text');
+                            textbox.setAttribute('size', '25'); 
+                            textbox.setAttribute('maxlength', '40');
+                            textbox.setAttribute('class', 'datetextbox');
+                                                            
+                            
+                            //appending the elements
+                            newcond.setAttribute("style", "margin-bottom: 5px;");
+                            conditions.appendChild(newcond);
+                            newcond.appendChild(button);
+                            newcond.appendChild(condlist);
+                            newcond.appendChild(textbox);
+                        };
                                 
                         //jQuery: DB connection and the Menu
                         
@@ -1440,7 +1333,6 @@ Version: 0.1; Sept 19th 2011
                                         add_class(label_list, 'label_item');
                                         for (var i in list){
                                             if (list[i].parent in window.labels){
-                                                //window.labels[list[i].parent].add_child(list[i].name, list[i].id, function(){alert('click')});
                                                 window.labels[list[i].parent].add_child(list[i].name, i, function(){alert('click')});
                                                 }
                                             else{
@@ -1449,144 +1341,89 @@ Version: 0.1; Sept 19th 2011
                                                 label_list.appendChild(l)
                                                 }
                                             }
-                                        //document.getElementById('lable_container').appendChild(label_list); my_general_labels
                                         document.getElementById('my_general_labels').appendChild(label_list);
 
-
-
-                                        // if(window.admin && window.global){
-                                            var menu_add_label = create_label('Add label','creat_label', function(){
-                                                set_style(document.getElementById('dialog-box'), {display : 'block'});
-                                                set_style(document.getElementById('posts_container'), {display : 'none'});
-                                                set_style(document.getElementById('post_comment_container'), {display : 'none'});
-                                                var s = '<div><h2> New Label </h2><p>Please enter a name for the new label: </p>';
-                                                s += '<input type="text" name="name_label" size="26" maxlength="25" value="" id="name_label" title="Name of the label" class="conditionsfixed"/>';
-                                                s += '<p>Please enter a description: </p><textarea id="description_label" rows="2" cols="50" class="conditionsfixed"></textarea>';
-                                                s += '<p id="options_row">Nest label under: <select name="list_labels" id="list_labels" class="conditionsfixed"><option value="0">Root</option>';
-                                                for (var i in window.labels){
-                                                    s += '<option value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
-                                                    }
-                                                s += '</select>';
-                                                s += '</p><div class="form-container"><form action="#" method="post"><div class="controlset">';
-                                                s += '<label for="color1"><strong>Choose Label'+"'"+'s color</strong></label> <input id="color1" type="text" name="color1" value="#333399" />';
-                                                s += '</div></form></div><p>&nbsp;</p>';
-                                                s += '<div id="conditions_container">';
-                                                s += '<div id="conditions_if"></div>'
-                                                s += '<div id="conditions_fixed" style="display: none;"></div>'
-                                                s += '<div id="conditions" style="display: none;"></div>'
-                                                s += '</div></div>';
-                                                document.getElementById('dialog-message').innerHTML = s;
-                                                $('#color1').colorPicker();
-												
-												if (XXX_ADMIN_XXX) {
-													p = document.getElementById('options_row');
-													l1 = document.createElement('label');
-													l1.setAttribute('style', 'margin-left: 15px;');
-													theText = document.createTextNode("This label is ");
-													l1.appendChild(theText);
-													//l1.innerHTML = 'This label is';
-													
-													s1 = document.createElement('select');
-													s1.setAttribute('class', 'fonted');
-													s1.setAttribute('id', 'personal_select');
-													// condlist.setAttribute('style', 'display: none; margin-left: 5px; margin-right: 5px;');
-
-													theOption = document.createElement("OPTION");
-													theText = document.createTextNode("for the "+"XXX_KIND_XXX");
-													theOption.appendChild(theText);
-													theOption.setAttribute("value",1);
-													s1.appendChild(theOption);
-
-													theOption = document.createElement("OPTION");
-													theText = document.createTextNode("personal");
-													theOption.appendChild(theText);
-													theOption.setAttribute("value",2);
-													s1.appendChild(theOption);
-
-													s1.onchange = function () {
-														if (this.value == 1) {
-															set_style(document.getElementById('shared_label'),{display: 'none'});
-														} else {
-															set_style(document.getElementById('shared_label'),{display: 'inline'});
-														}
-													}
-													
-													l1.appendChild(s1);
-													p.appendChild(l1);
-												}
-												
-												p = document.getElementById('options_row');
-												l2 = document.createElement('label');
-												l2.setAttribute('style', 'margin-left: 15px;');
-												l2.setAttribute('id', 'shared_label');
-												theText = document.createTextNode("Share this label ");
-												l2.appendChild(theText);
-												c1 = document.createElement('input');
-												c1.setAttribute('type', 'checkbox');
-												c1.setAttribute('id', 'shared_checkbox');
-												l2.appendChild(c1);
-												p.appendChild(l2);
-												if (XXX_ADMIN_XXX) {
-													set_style(l2,{display: 'none'});
-												}
-                                                create_condition_if();
-                                                create_condition_fix();
-                                                create_condition();
-                                                });
-											menu_add_label_container = document.createElement('ul');
-											add_class(menu_add_label_container, 'label_item');
-											menu_add_label_container.appendChild(menu_add_label)
-											document.getElementById('menu_container_down').appendChild(menu_add_label_container);
-                                            }
-                                        /* if(window.owner){
-                                            var menu_add_label = create_label('Add label','creat_label', function(){
-                                                set_style(document.getElementById('dialog-box'), {display : 'block'});
-                                                set_style(document.getElementById('posts_container'), {display : 'none'});
-                                                set_style(document.getElementById('post_comment_container'), {display : 'none'});
-                                                
-                                                var s = '<div><h2> New Label </h2><p>Please enter a new label name: </p><input type="text" name="name_label" size="19" maxlength="40" value="" id="name_label" title="Name of the label" /><p>Please enter a nickname for the label: </p><input type="text" name="nick_label" size="19" maxlength="18" value="" id="nick_label" title="Nickname of the label" /><p>Please enter a description for this label: </p><textarea id="description_label" rows="4" cols="33"></textarea><p>Nest label under: <select name="list_labels" id="list_labels"><option value="0">Root</option>';
-                                                window.labels = {}
-                                                for (var i in window.labels){
-                                                    if (list[i].parent == '0'){
-                                                        s += '<option value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
-                                                        }
-                                                    }
-                                                s += '</select></p>';
-                                                s += '<p><a href="#" id="Btn_addrule" class="buttoninline" style = "display:inline; width:70px; background-color: #AD2525;">Add rule:</a>';
-                                                s += '<select name="conditions" id="conditions" style = "display:none;">';
-                                                s += '<option value="1">Who posted the messge</option>';
-                                                s += '<option value="2">Who is mentioned</option>';
-                                                s += '<option value="3">What is in the text</option>';
-                                                s += '<option value="4">What is not the text</option>';
-                                                s += '<option value="5">How many likes it has</option>';
-                                                s += '<option value="6">How many comments it has</option>';
-                                                s += '<option value="7">What links are in the message</option>';
-                                                s += '<option value="8">Date of the post</option>';
-                                                s += '<option value="9">Post has attachments</option>';
-                                                s += '</select><select name="condition_kindof_likesandcomments" id="rules_kindof_likesandcomments" style = "display:none;"><option>more than</option><option>less than</option></select>';
-                                                s += '<select name="condition_kindof_date" id="rules_kindof_date" style = "display:none;"><option>after</option><option>before</option></select>';
-                                                s += '<input type="text" name="condition_textbox" size="19" maxlength="40" value="" id="condition_textbox" title="Text" style = "display:none;"/></p>';
-                                                s += '</div>';
-                                                //popup(s);
-                                                document.getElementById('dialog-message').innerHTML = s;
-                                                
-                                                $('#Btn_addrule').click(function () {
-                                                    alert('clicked')
-                                                    //$("#conditions").show();
-                                                    set_style(document.getElementById('conditions'),{display: 'inline'});
-                                                    set_style(document.getElementById('condition_textbox'),{display: 'inline'});
-                                                    return false;
-                                                    });
-                                    
-
-                                                });
-                                            menu_add_label_container = document.createElement('ul');
-                                            add_class(menu_add_label_container, 'label_item');
-                                            menu_add_label_container.appendChild(menu_add_label);
-                                            document.getElementById('menu_container_down').appendChild(menu_add_label_container);
+                                        var menu_add_label = create_label('Add label','creat_label', function(){
+                                            set_style(document.getElementById('dialog-box'), {display : 'block'});
+                                            set_style(document.getElementById('posts_container'), {display : 'none'});
+                                            set_style(document.getElementById('post_comment_container'), {display : 'none'});
+                                            var s = '<div><h2> New Label </h2><p>Please enter a name for the new label: </p>';
+                                            s += '<input type="text" name="name_label" size="26" maxlength="25" value="" id="name_label" title="Name of the label" class="conditionsfixed"/>';
+                                            s += '<p>Please enter a description: </p><textarea id="description_label" rows="2" cols="50" class="conditionsfixed"></textarea>';
+                                            s += '<p id="options_row">Nest label under: <select name="list_labels" id="list_labels" class="conditionsfixed"><option value="0">Root</option>';
+                                            for (var i in window.labels){
+                                                s += '<option value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
+                                                }
+                                            s += '</select>';
+                                            s += '</p><div class="form-container"><form action="#" method="post"><div class="controlset">';
+                                            s += '<label for="color1"><strong>Choose Label'+"'"+'s color</strong></label> <input id="color1" type="text" name="color1" value="#333399" />';
+                                            s += '</div></form></div><p>&nbsp;</p>';
+                                            s += '<div id="conditions_container">';
+                                            s += '<div id="conditions_if"></div>'
+                                            s += '<div id="conditions_fixed" style="display: none;"></div>'
+                                            s += '<div id="conditions" style="display: none;"></div>'
+                                            s += '</div></div>';
+                                            document.getElementById('dialog-message').innerHTML = s;
+                                            $('#color1').colorPicker();
                                             
-                                            } */
-                                        //} 
+                                            if (XXX_ADMIN_XXX) {
+                                                p = document.getElementById('options_row');
+                                                l1 = document.createElement('label');
+                                                l1.setAttribute('style', 'margin-left: 15px;');
+                                                theText = document.createTextNode("This label is ");
+                                                l1.appendChild(theText);
+                                                
+                                                s1 = document.createElement('select');
+                                                s1.setAttribute('class', 'fonted');
+                                                s1.setAttribute('id', 'personal_select');
+
+                                                theOption = document.createElement("OPTION");
+                                                theText = document.createTextNode("for the "+"XXX_KIND_XXX");
+                                                theOption.appendChild(theText);
+                                                theOption.setAttribute("value",1);
+                                                s1.appendChild(theOption);
+
+                                                theOption = document.createElement("OPTION");
+                                                theText = document.createTextNode("personal");
+                                                theOption.appendChild(theText);
+                                                theOption.setAttribute("value",2);
+                                                s1.appendChild(theOption);
+
+                                                s1.onchange = function () {
+                                                    if (this.value == 1) {
+                                                        set_style(document.getElementById('shared_label'),{display: 'none'});
+                                                    } else {
+                                                        set_style(document.getElementById('shared_label'),{display: 'inline'});
+                                                    }
+                                                }
+                                                
+                                                l1.appendChild(s1);
+                                                p.appendChild(l1);
+                                            }
+                                            
+                                            p = document.getElementById('options_row');
+                                            l2 = document.createElement('label');
+                                            l2.setAttribute('style', 'margin-left: 15px;');
+                                            l2.setAttribute('id', 'shared_label');
+                                            theText = document.createTextNode("Share this label ");
+                                            l2.appendChild(theText);
+                                            c1 = document.createElement('input');
+                                            c1.setAttribute('type', 'checkbox');
+                                            c1.setAttribute('id', 'shared_checkbox');
+                                            l2.appendChild(c1);
+                                            p.appendChild(l2);
+                                            if (XXX_ADMIN_XXX) {
+                                                set_style(l2,{display: 'none'});
+                                            }
+                                            create_condition_if();
+                                            create_condition_fix();
+                                            create_condition();
+                                            });
+                                        menu_add_label_container = document.createElement('ul');
+                                        add_class(menu_add_label_container, 'label_item');
+                                        menu_add_label_container.appendChild(menu_add_label)
+                                        document.getElementById('menu_container_down').appendChild(menu_add_label_container);
+                                        }
                                     });
                                 
                                 
@@ -1594,188 +1431,148 @@ Version: 0.1; Sept 19th 2011
                                     $("a").removeClass("clickeditem");
                                     $(this).addClass("clickeditem");
                                     });
-                                
-                                // if user clicked on button, the overlay layer or the dialogbox, close the dialog
-                                
+                                                                
                                 <!-- $('a.btn-ok, #dialog-overlay, #dialog-box').click(function () { -->
-                                    $('#Btn_labeldialog_close').click(function () {
-                                        $('#dialog-overlay, #dialog-box').hide();
-                                        if (window.forum){
-                                            window.forum.destroy(); window.forum.stop_timer();
-                                            }
-                                        set_style(document.getElementById('posts_container'),{display: 'block'})
-                                        
-                                        return false;
-                                        });
+                                $('#Btn_labeldialog_close').click(function () {
+                                    $('#dialog-overlay, #dialog-box').hide();
+                                    if (window.forum){
+                                        window.forum.destroy(); window.forum.stop_timer();
+                                        }
+                                    set_style(document.getElementById('posts_container'),{display: 'block'})
+                                    
+                                    return false;
+                                    });
 
-                                    $('#Btn_labeldialog_addlabel').click(function () {
-                                        var parent_id = '0';
-                                        var name_label = $("#name_label").val();
-                                        if (window.forum){
-                                            window.forum.destroy(); window.forum.stop_timer();
-                                            }
-                                        if (name_label==''){
-                                            //window.name_label_new = prompt("Please enter a name for the label","");
-                                            alert('Please enter a label name.');
-                                            return false;
+                                $('#Btn_labeldialog_addlabel').click(function () {
+                                    var parent_id = '0';
+                                    var name_label = $("#name_label").val();
+                                    if (window.forum){
+                                        window.forum.destroy(); window.forum.stop_timer();
                                         }
-                                        //alert("->"+name_labe+"<-");
-                                        //if(window.name_label_new === undefined){return false;}
-                                        //else if (window.name_label_new == ''){return false;}
-                                        //name_label = window.name_label_new;
-                                        set_style(document.getElementById('posts_container'),{display: 'block'})
-                                        var parent = new Object();
-                                        for (var i in window.labels){
-                                            if (window.labels[i].txt == $("#list_labels").val()){
-                                                parent_id = i;
-                                                parent = window.labels[i];
+                                    if (name_label==''){
+                                        //window.name_label_new = prompt("Please enter a name for the label","");
+                                        alert('Please enter a label name.');
+                                        return false;
+                                    }
+                                    //alert("->"+name_labe+"<-");
+                                    //if(window.name_label_new === undefined){return false;}
+                                    //else if (window.name_label_new == ''){return false;}
+                                    //name_label = window.name_label_new;
+                                    set_style(document.getElementById('posts_container'),{display: 'block'});
+                                    var parent = new Object();
+                                    for (var i in window.labels){
+                                        if (window.labels[i].txt == $("#list_labels").val()){
+                                            parent_id = i;
+                                            parent = window.labels[i];
+                                            }
+                                        }
+                                            
+                                    var label2alert = {};
+                                    label2alert.obj_id = source_id;
+                                    label2alert.name = name_label;
+                                    label2alert.nick = $("#description_label").val();
+                                    label2alert.parent = parent_id;
+                                    label2alert.color = document.getElementById('color1').value;
+                                        
+                                    /*
+                                    // categories:
+                                    if (document.labelcategory == 1) {
+                                        label2laert.shared = 'shared';
+                                        label2alert.owner = 'owner';
+                                    } 
+                                    // else if (){}
+                                    */
+                                    
+                                    var rule=[];
+                                    opt = document.getElementById('taglist').value;
+                                    if(document.getElementById('optionsbutton').innerHTML == "more options..."){
+                                        // no options
+                                        rule=[];
+                                    } else {
+                                        // options maybe active
+                                        
+                                        // date field
+                                        if (!isNaN(parseInt(document.getElementById('datetext').value)) || (document.getElementById('timelist').value != 25)){
+                                            bool = document.getElementById('datetext').value == 'ture';
+                                            date = new Date;
+                                            if (!isNaN(parseInt(document.getElementById('datetext').value))) {
+                                                date = Date(document.getElementById('datetext').value);
                                                 }
+                                            if (document.getElementById('timelist').value != 25){
+                                                date.setHours(document.getElementById('timelist').value);
+                                            }
+                                            intgr = date.getTime()/1000;
+                                            cond = {};
+                                            cond.id = 5;
+                                            cond.opt = opt;
+                                            cond.params = [];
+                                            cond.params[0] = intgr;
+                                            cond.params[1] = bool;
+                                            rule.push(cond);
+                                            }
+                    
+                                        // comments field
+                                        if (document.getElementById('hasattachments').checked){
+                                            // bool = true;
+                                            cond = {};
+                                            cond.id = 4;
+                                            cond.opt = opt;
+                                            cond.params = [];
+                                            // cond.params[0] = bool;
+                                            rule.push(cond);
                                             }
                                             
-                                        var label2alert = {};
-                                        label2alert.obj_id = source_id;
-                                        label2alert.name = name_label;
-                                        label2alert.nick = $("#description_label").val();
-                                        label2alert.parent = parent_id;
-                                        label2alert.color = document.getElementById('color1').value;
-                                        
-                                        /*
-                                        // categories:
-                                        if (document.labelcategory == 1) {
-                                            label2laert.shared = 'shared';
-                                            label2alert.owner = 'owner';
-                                        } 
-                                        // else if (){}
-                                        */
-                                        
-                                        var rule=[];
-                                        opt = document.getElementById('taglist').value;
-                                        if(document.getElementById('optionsbutton').innerHTML == "more options..."){
-                                            // no options
-                                            rule=[];
-                                        } else {
-                                            // options maybe active
-                                            /*
-                                            // likes field
-                                            if (!isNaN(parseInt(document.getElementById('liketext').value))){
-                                                bool = document.getElementById('likelist').value == 'ture';
-                                                intgr = parseInt(document.getElementById('liketext').value);
-                                                cond = {};
-                                                cond.id = 1;
-                                                cond.opt = opt;
-                                                cond.params = [];
-                                                cond.params[0] = bool;
-                                                cond.params[1] = intgr;
-                                                rule.push(cond);
-                                                }
-                                            // comments field
-                                            if (!isNaN(parseInt(document.getElementById('commenttext').value))){
-                                                bool = document.getElementById('commenttext').value == 'ture';
-                                                intgr = parseInt(document.getElementById('commenttext').value);
-                                                cond = {};
-                                                cond.id = 2;
-                                                cond.opt = opt;
-                                                cond.params = [];
-                                                cond.params[0] = bool;
-                                                cond.params[1] = intgr;
-                                                rule.push(cond);
-                                                }
-                                            */
-                                            
-                                            // date field
-                                            if (!isNaN(parseInt(document.getElementById('datetext').value)) || (document.getElementById('timelist').value != 25)){
-                                                bool = document.getElementById('datetext').value == 'ture';
-                                                date = new Date;
-                                                if (!isNaN(parseInt(document.getElementById('datetext').value))) {
-                                                    date = Date(document.getElementById('datetext').value);
-                                                    }
-                                                if (document.getElementById('timelist').value != 25){
-                                                    date.setHours(document.getElementById('timelist').value);
-                                                }
-                                                intgr = date.getTime()/1000;
-                                                cond = {};
-                                                cond.id = 5;
-                                                cond.opt = opt;
-                                                cond.params = [];
-                                                cond.params[0] = intgr;
-                                                cond.params[1] = bool;
-                                                rule.push(cond);
-                                                }
-                        
-                                            // comments field
-                                            if (document.getElementById('hasattachments').checked){
-                                                // bool = true;
-                                                cond = {};
-                                                cond.id = 4;
-                                                cond.opt = opt;
-                                                cond.params = [];
-                                                // cond.params[0] = bool;
-                                                rule.push(cond);
-                                                }
-                                                
-                                             conddiv = document.getElementById('conditions');
-                                             conditionsdiv=conddiv.getElementsByTagName('div');
-                                             for (i=1;i<=conditionsdiv.length-1;i++){
-                                                 if (conditionsdiv[i-1].getElementsByTagName('input')[0].value != ''){
-                                                     cond = {};
-                                                     cond.id = conditionsdiv[i-1].getElementsByTagName('select')[0].value;
-                                                     cond.opt = opt;
-                                                     cond.params = [];
-                                                     cond.params[0] = conditionsdiv[i-1].getElementsByTagName('input')[0].value;
-                                                     if (cond.id == 31) {
+                                         conddiv = document.getElementById('conditions');
+                                         conditionsdiv=conddiv.getElementsByTagName('div');
+                                         for (i=1;i<=conditionsdiv.length-1;i++){
+                                             if (conditionsdiv[i-1].getElementsByTagName('input')[0].value != ''){
+                                                 cond = {};
+                                                 cond.id = conditionsdiv[i-1].getElementsByTagName('select')[0].value;
+                                                 cond.opt = opt;
+                                                 cond.params = [];
+                                                 cond.params[0] = conditionsdiv[i-1].getElementsByTagName('input')[0].value;
+                                                 if (cond.id == 31) {
+                                                    cond.id = 3;
+                                                    cond.params[1] = true;
+                                                    } else if (cond.id == 32) {
                                                         cond.id = 3;
-                                                        cond.params[1] = true;
-                                                        } else if (cond.id == 32) {
-                                                            cond.id = 3;
-                                                            cond.params[1] = false;
-                                                            } else {
-                                                                cond.params[0] = parseInt(cond.params[0]);
-                                                                cond.id = parseInt(cond.id);
-                                                                }
-                                                     rule.push(cond);
-                                                 }
+                                                        cond.params[1] = false;
+                                                        } else {
+                                                            cond.params[0] = parseInt(cond.params[0]);
+                                                            cond.id = parseInt(cond.id);
+                                                            }
+                                                 rule.push(cond);
                                              }
-                        
-                                        }
+                                         }
+                    
+                                    }
                                         
                                         // -> at the end, change the first opt to 0
                                         
-                                        label2alert.rule = JSON.stringify(rule);
-                                        //var jsonText = JSON.stringify(label2alert);    
-                                        //alert (jsonText);
+                                    label2alert.rule = JSON.stringify(rule);
                                         
-                                        $.post("/create_label",label2alert,
-                                        function(result) {
-                                            
-                                            if (result["type"]=="ok"){
-                                                if (parent_id == '0'){
-                                                    window.labels[result["data"]] = create_label_iconed(name_label, result["data"], 'personal', function(){alert('click')});
-                                                    document.getElementById('lable_container_ul').appendChild(window.labels[result["data"]]);
-                                                    
-                                                    } else {
-                                                    window.labels[parent_id].add_child(name_label, result["data"], function(){alert('click')});
-                                                    }
-                                                //$("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
+                                    $.post("/create_label",label2alert,
+                                    function(result) {
+                                        
+                                        if (result["type"]=="ok"){
+                                            if (parent_id == '0'){
+                                                window.labels[result["data"]] = create_label_iconed(name_label, result["data"], 'personal', function(){alert('click')});
+                                                document.getElementById('lable_container_ul').appendChild(window.labels[result["data"]]);
+                                                
                                                 } else {
-                                                alert("An error occured, no lable culd be made, please try again!")
-                                               }
-                                            });
-                                        $('#dialog-overlay, #dialog-box').hide();
-                                        return false;
+                                                window.labels[parent_id].add_child(name_label, result["data"], function(){alert('click')});
+                                                }
+                                            //$("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
+                                            } else {
+                                            alert("An error occured, no lable culd be made, please try again!")
+                                           }
                                         });
-                                    
-                                    // if user resize the window, call the same function again
-                                    // to make sure the overlay fills the screen and dialogbox aligned to center
-                                    $(window).resize(function () {
-                                        
-                                        //only do it if the dialog box is not hidden
-                                        });
-                                    //}
+                                    $('#dialog-overlay, #dialog-box').hide();
+                                    return false;
                                 });
-                            }
-                        //$("post").load(function(){
-                            //    $("ul:last").append('<li><a href="#">' + window.source_id + '</a></li>');
-                            //});
+                                    
+                            });
+                        } // End of DB connection and the Menu
                         
                     </script>
                     <a id="fb_connect_button" class="fb_button fb_button_medium" style="display:none"><span class="fb_button_text">Connect with Facebook</span></a>
