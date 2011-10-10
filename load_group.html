@@ -354,6 +354,7 @@ Version: 0.1; Sept 19th 2011
         <script src="http://code.jquery.com/jquery-latest.js"></script>
         <script src="http://www.tayfeh.com/resources/colorpicker/jquery.colorPicker.js" type="text/javascript"><!--mce:1--></script>
         <script src="http://teddevito.com/demos/cal.js" type="text/javascript"><!--mce:1--></script>
+		<script src="http://jquery-json.googlecode.com/files/jquery.json-2.3.min.js" type="text/javascript"></script>
         <body>
             <div id="fb-root"></div>
             
@@ -1324,8 +1325,11 @@ Version: 0.1; Sept 19th 2011
                                             create_tag_linked('info_global','Global View',"#");
                                             }
                                         create_tag('my_general_labels','My General Labels','http://tayfeh.com/resources/img/My.png');
-                                        create_tag('my_dedicated_labels','My Labels for This Group','http://tayfeh.com/resources/img/My_ThisGroup.png');
-                                        create_tag('here_labels','Group\'s Labels','http://tayfeh.com/resources/img/Group.png');
+										if ("XXX_KIND_XXX" == "group" || "XXX_KIND_XXX" == "page") {
+											create_tag('my_dedicated_labels','My Labels for This '+'XXX_KIND_XXX','http://tayfeh.com/resources/img/My_ThisGroup.png');
+											create_tag('here_labels','XXX_KIND_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png');
+										}
+                                        
                                         list = data.data;
                                         window.labels = {}
                                         var label_list = document.createElement('ul');
@@ -1426,7 +1430,7 @@ Version: 0.1; Sept 19th 2011
                                         }
                                     });
                                 
-                                
+                                // this doesn't work!
                                 $("a").click(function() {
                                     $("a").removeClass("clickeditem");
                                     $(this).addClass("clickeditem");
@@ -1549,7 +1553,8 @@ Version: 0.1; Sept 19th 2011
                                         
                                         // -> at the end, change the first opt to 0
                                         
-                                    label2alert.rule = JSON.stringify(rule);
+                                    //label2alert.rule = JSON.stringify(rule);
+									label2alert.rule = $.toJSON(rule);
                                         
                                     $.post("/create_label",label2alert,
                                     function(result) {
