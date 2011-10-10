@@ -1454,9 +1454,8 @@ Version: 0.1; Sept 19th 2011
 
 
 
-                                        if(window.admin && window.global){
+                                        // if(window.admin && window.global){
                                             var menu_add_label = create_label('Add label','creat_label', function(){
-                                                // document.rule = false;
                                                 set_style(document.getElementById('dialog-box'), {display : 'block'});
                                                 set_style(document.getElementById('posts_container'), {display : 'none'});
                                                 set_style(document.getElementById('post_comment_container'), {display : 'none'});
@@ -1468,11 +1467,6 @@ Version: 0.1; Sept 19th 2011
                                                     s += '<option value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
                                                     }
                                                 s += '</select>';
-                                                // if (XXX_ADMIN_XXX) {
-                                                //    s += '<label style="margin-left: 15px;"><input type="checkbox" id="sharecheckbox" /> This is a personal label.</label>';
-                                                //} else {
-												//    s += '<label style="margin-left: 15px;"><input type="checkbox" id="sharecheckbox" /> Share this label.</label>';
-                                                //}
                                                 s += '</p><div class="form-container"><form action="#" method="post"><div class="controlset">';
                                                 s += '<label for="color1"><strong>Choose Label'+"'"+'s color</strong></label> <input id="color1" type="text" name="color1" value="#333399" />';
                                                 s += '</div></form></div><p>&nbsp;</p>';
@@ -1532,21 +1526,19 @@ Version: 0.1; Sept 19th 2011
 												c1.setAttribute('id', 'shared_checkbox');
 												l2.appendChild(c1);
 												p.appendChild(l2);
-												
 												if (XXX_ADMIN_XXX) {
 													set_style(l2,{display: 'none'});
 												}
-												
                                                 create_condition_if();
                                                 create_condition_fix();
                                                 create_condition();
                                                 });
-                                            menu_add_label_container = document.createElement('ul');
-                                            add_class(menu_add_label_container, 'label_item');
-                                            menu_add_label_container.appendChild(menu_add_label)
-                                            document.getElementById('menu_container_down').appendChild(menu_add_label_container);
+											menu_add_label_container = document.createElement('ul');
+											add_class(menu_add_label_container, 'label_item');
+											menu_add_label_container.appendChild(menu_add_label)
+											document.getElementById('menu_container_down').appendChild(menu_add_label_container);
                                             }
-                                        if(window.owner){
+                                        /* if(window.owner){
                                             var menu_add_label = create_label('Add label','creat_label', function(){
                                                 set_style(document.getElementById('dialog-box'), {display : 'block'});
                                                 set_style(document.getElementById('posts_container'), {display : 'none'});
@@ -1593,8 +1585,8 @@ Version: 0.1; Sept 19th 2011
                                             menu_add_label_container.appendChild(menu_add_label);
                                             document.getElementById('menu_container_down').appendChild(menu_add_label_container);
                                             
-                                            }
-                                        }
+                                            } */
+                                        //} 
                                     });
                                 
                                 
