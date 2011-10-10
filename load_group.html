@@ -19,7 +19,7 @@ Version: 0.1; Sept 19th 2011
                 font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
                 line-height: 1.28;            
                 font-size: 11px;
-                color: 	#333333;
+                color:     #333333;
                 background: #ffffff;
                 border-top: 7px solid #3b5998;
                 /* padding: 0 0 40px; */
@@ -1418,6 +1418,8 @@ Version: 0.1; Sept 19th 2011
                         window.obj_load = function(source_id){
                             
                             $(document).ready(function(){
+                                XXX_ADMIN_XXX = true;
+                                XXX_KIND_XXX = "group";
                                 window.admin = true;
                                 window.global = true;
                                 window.owner = false;
@@ -1463,12 +1465,17 @@ Version: 0.1; Sept 19th 2011
                                                 var s = '<div><h2> New Label </h2><p>Please enter a name for the new label: </p>';
                                                 s += '<input type="text" name="name_label" size="26" maxlength="25" value="" id="name_label" title="Name of the label" class="conditionsfixed"/>';
                                                 s += '<p>Please enter a description: </p><textarea id="description_label" rows="2" cols="50" class="conditionsfixed"></textarea>';
-                                                s += '<p>Nest label under: <select name="list_labels" id="list_labels" class="conditionsfixed"><option value="0">Root</option>';
+                                                s += '<p id="options_row">Nest label under: <select name="list_labels" id="list_labels" class="conditionsfixed"><option value="0">Root</option>';
                                                 for (var i in window.labels){
                                                     s += '<option value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
                                                     }
-                                                s += '</select><label style="margin-left: 15px;"><input type="checkbox" id="sharecheckbox" /> Share This Label</label></p>';
-                                                s += '<div class="form-container"><form action="#" method="post"><div class="controlset">';
+                                                s += '</select>';
+                                                // if (XXX_ADMIN_XXX) {
+                                                //    s += '<label style="margin-left: 15px;"><input type="checkbox" id="sharecheckbox" /> This is a personal label.</label>';
+                                                //} else {
+												//    s += '<label style="margin-left: 15px;"><input type="checkbox" id="sharecheckbox" /> Share this label.</label>';
+                                                //}
+                                                s += '</p><div class="form-container"><form action="#" method="post"><div class="controlset">';
                                                 s += '<label for="color1"><strong>Choose Label'+"'"+'s color</strong></label> <input id="color1" type="text" name="color1" value="#333399" />';
                                                 s += '</div></form></div><p>&nbsp;</p>';
                                                 s += '<div id="conditions_container">';
@@ -1478,6 +1485,42 @@ Version: 0.1; Sept 19th 2011
                                                 s += '</div></div>';
                                                 document.getElementById('dialog-message').innerHTML = s;
                                                 $('#color1').colorPicker();
+												
+												if (XXX_ADMIN_XXX) {
+													var p = document.getElementById('options_row');
+													var l1 = document.createElement('label');
+													l1.setAttribute('style', 'margin-left: 15px;');
+													theText = document.createTextNode("This label is");
+													l1.appendChild(theText);
+													//l1.innerHTML = 'This label is';
+													
+													s1 = document.createElement('select');
+													s1.setAttribute('class', 'fonted');
+													// condlist.setAttribute('style', 'display: none; margin-left: 5px; margin-right: 5px;');
+
+													theOption = document.createElement("OPTION");
+													theText = document.createTextNode("for the "+XXX_KIND_XXX);
+													theOption.appendChild(theText);
+													theOption.setAttribute("value",1);
+													s1.appendChild(theOption);
+
+													theOption = document.createElement("OPTION");
+													theText = document.createTextNode("personal");
+													theOption.appendChild(theText);
+													theOption.setAttribute("value",2);
+													s1.appendChild(theOption);
+
+													s1.onChange = function () {alert('changed');}
+													
+													l1.appendChild(s1);
+													p.appendChild(l1);
+													// var c1 = document.createElement('input');
+													// check1.setAttribute('type', 'checkbox');
+													// textbox.setAttribute('size', '25'); 
+													// textbox.setAttribute('maxlength', '40');
+													// textbox.setAttribute('class', 'datetextbox');
+												}
+												
                                                 create_condition_if();
                                                 create_condition_fix();
                                                 create_condition();
@@ -1589,14 +1632,14 @@ Version: 0.1; Sept 19th 2011
                                         label2alert.color = document.getElementById('color1').value;
                                         
                                         /*
-										// categories:
+                                        // categories:
                                         if (document.labelcategory == 1) {
                                             label2laert.shared = 'shared';
                                             label2alert.owner = 'owner';
                                         } 
                                         // else if (){}
                                         */
-										
+                                        
                                         var rule=[];
                                         opt = document.getElementById('taglist').value;
                                         if(document.getElementById('optionsbutton').innerHTML == "more options..."){
@@ -1604,7 +1647,7 @@ Version: 0.1; Sept 19th 2011
                                             rule=[];
                                         } else {
                                             // options maybe active
-											/*
+                                            /*
                                             // likes field
                                             if (!isNaN(parseInt(document.getElementById('liketext').value))){
                                                 bool = document.getElementById('likelist').value == 'ture';
@@ -1630,14 +1673,14 @@ Version: 0.1; Sept 19th 2011
                                                 rule.push(cond);
                                                 }
                                             */
-											
+                                            
                                             // date field
                                             if (!isNaN(parseInt(document.getElementById('datetext').value)) || (document.getElementById('timelist').value != 25)){
                                                 bool = document.getElementById('datetext').value == 'ture';
-												date = new Date;
-												if (!isNaN(parseInt(document.getElementById('datetext').value))) {
-													date = Date(document.getElementById('datetext').value);
-													}
+                                                date = new Date;
+                                                if (!isNaN(parseInt(document.getElementById('datetext').value))) {
+                                                    date = Date(document.getElementById('datetext').value);
+                                                    }
                                                 if (document.getElementById('timelist').value != 25){
                                                     date.setHours(document.getElementById('timelist').value);
                                                 }
@@ -1671,16 +1714,16 @@ Version: 0.1; Sept 19th 2011
                                                      cond.opt = opt;
                                                      cond.params = [];
                                                      cond.params[0] = conditionsdiv[i-1].getElementsByTagName('input')[0].value;
-													 if (cond.id == 31) {
-														cond.id = 3;
-														cond.params[1] = true;
-														} else if (cond.id == 32) {
-															cond.id = 3;
-															cond.params[1] = false;
-															} else {
-																cond.params[0] = parseInt(cond.params[0]);
-																cond.id = parseInt(cond.id);
-																}
+                                                     if (cond.id == 31) {
+                                                        cond.id = 3;
+                                                        cond.params[1] = true;
+                                                        } else if (cond.id == 32) {
+                                                            cond.id = 3;
+                                                            cond.params[1] = false;
+                                                            } else {
+                                                                cond.params[0] = parseInt(cond.params[0]);
+                                                                cond.id = parseInt(cond.id);
+                                                                }
                                                      rule.push(cond);
                                                  }
                                              }
@@ -1723,7 +1766,7 @@ Version: 0.1; Sept 19th 2011
                                 });
                             }
                         //$("post").load(function(){
-                            //	$("ul:last").append('<li><a href="#">' + window.source_id + '</a></li>');
+                            //    $("ul:last").append('<li><a href="#">' + window.source_id + '</a></li>');
                             //});
                         
                     </script>
@@ -1749,7 +1792,7 @@ Version: 0.1; Sept 19th 2011
                         </div>
                         <div id="post_comment_container" style="display:none">
                             <a onclick="window.forum.destroy(); window.forum.stop_timer(); set_style(this.parentNode, {display:'none'}); set_style(document.getElementById('posts_container'),{display: 'block'})" href="javascript:void(0)" style="float: right; padding-right: 5px;" class="button gray"><table style="border:none 0px;"><tbody><tr><td style="border:none 0px;background-color:transparent;color: rgb(0, 0, 0);">Back to posts</td></tr></tbody></table></a>
-                            <div id="post_comment">		
+                            <div id="post_comment">        
                             </div>
                         </div>
                     </div>
