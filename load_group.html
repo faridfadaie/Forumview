@@ -1522,8 +1522,6 @@ Version: 0.1; Sept 19th 2011
 												}
 												
 												p = document.getElementById('options_row');
-												//d2 = document.createElement('div');
-												//d2.setAttribute('style', 'display: inline;');
 												l2 = document.createElement('label');
 												l2.setAttribute('style', 'margin-left: 15px;');
 												l2.setAttribute('id', 'shared_label');
@@ -1535,9 +1533,9 @@ Version: 0.1; Sept 19th 2011
 												l2.appendChild(c1);
 												p.appendChild(l2);
 												
-												//if (XXX_ADMIN_XXX) {
-												//	set_style(l2,{display: 'none'});
-												//}
+												if (XXX_ADMIN_XXX) {
+													set_style(l2,{display: 'none'});
+												}
 												
                                                 create_condition_if();
                                                 create_condition_fix();
