@@ -694,7 +694,7 @@ Version: 0.1; Sept 19th 2011
                             div1 = document.createElement('div');
                             set_style(div1,{float: 'left'});
                             //set_style(div1,{width: '15px'});
-                            set_style(div1,{background: "#" + color});
+                            set_style(div1,{background: color});
                             a1 = document.createElement('a');
                             a1.href = 'javascript:void(0)';
                             a1.title = "Edit this lable"
@@ -741,7 +741,7 @@ Version: 0.1; Sept 19th 2011
                                 }
                             addEvent(a1, 'click', function(){
                                         thislabel = window.labelslist[this.parentNode.parentNode.uid];
-										set_style(document.getElementById('dialog-box'), {display : 'block'});
+                                        set_style(document.getElementById('dialog-box'), {display : 'block'});
                                         set_style(document.getElementById('posts_container'), {display : 'none'});
                                         set_style(document.getElementById('post_comment_container'), {display : 'none'});
                                         var s = '<div><h2> Edit Label </h2><p>Name of the label: </p>';
@@ -749,14 +749,14 @@ Version: 0.1; Sept 19th 2011
                                         s += '<p>Description: </p><textarea id="description_label" rows="2" cols="50" class="conditionsfixed"></textarea>';
                                         s += '<p id="options_row">Nest label under: <select name="list_labels" id="list_labels" class="conditionsfixed"><option value="0">Root</option>';
                                         if (thislabel.shared == "global") {
-											for (var i in window.labels.cat1){
-												s += '<option value="'+window.labels.cat1[i].txt+'">'+window.labels.cat1[i].txt+'</option>';
-												}
-											} else {
-											for (var i in window.labels.cat2){
-												s += '<option value="'+window.labels.cat2[i].txt+'">'+window.labels.cat2[i].txt+'</option>';
-												}											
-											}
+                                            for (var i in window.labels.cat1){
+                                                s += '<option value="'+window.labels.cat1[i].txt+'">'+window.labels.cat1[i].txt+'</option>';
+                                                }
+                                            } else {
+                                            for (var i in window.labels.cat2){
+                                                s += '<option value="'+window.labels.cat2[i].txt+'">'+window.labels.cat2[i].txt+'</option>';
+                                                }                                            
+                                            }
                                         s += '</select>';
                                         s += '</p><div class="form-container"><form action="#" method="post"><div class="controlset">';
                                         s += '<label for="color1"><strong>Choose Label'+"'"+'s color</strong></label> <input id="color1" type="text" name="color1" value="#333399" />';
@@ -1513,15 +1513,15 @@ Version: 0.1; Sept 19th 2011
                                             s += '<input type="text" name="name_label" size="26" maxlength="25" value="" id="name_label" title="Name of the label" class="conditionsfixed"/>';
                                             s += '<p>Please enter a description: </p><textarea id="description_label" rows="2" cols="50" class="conditionsfixed"></textarea>';
                                             s += '<p id="options_row">Nest label under: <select name="list_labels" id="list_labels" class="conditionsfixed"><option value="0">Root</option>';
-											//if (thislabel.shared == "global") {
-												for (var i in window.labels.cat1){
-													s += '<option value="'+window.labels.cat1[i].txt+'">'+window.labels.cat1[i].txt+'</option>';
-													}
-												//} else {
-												for (var i in window.labels.cat2){
-													s += '<option value="'+window.labels.cat2[i].txt+'">'+window.labels.cat2[i].txt+'</option>';
-													}											
-												//}
+                                            //if (thislabel.shared == "global") {
+                                                for (var i in window.labels.cat1){
+                                                    s += '<option value="'+window.labels.cat1[i].txt+'">'+window.labels.cat1[i].txt+'</option>';
+                                                    }
+                                                //} else {
+                                                for (var i in window.labels.cat2){
+                                                    s += '<option value="'+window.labels.cat2[i].txt+'">'+window.labels.cat2[i].txt+'</option>';
+                                                    }                                            
+                                                //}
                                             s += '</select>';
                                             s += '</p><div class="form-container"><form action="#" method="post"><div class="controlset">';
                                             s += '<label for="color1"><strong>Choose Label'+"'"+'s color</strong></label> <input id="color1" type="text" name="color1" value="#333399" />';
@@ -1726,7 +1726,8 @@ Version: 0.1; Sept 19th 2011
                                             if (result["type"]=="ok"){
                                                 if (parent_id == '0'){
                                                     window.labels[result["data"]] = create_label_iconed(name_label, result["data"], 'personal', color_label, function(){alert('click')});
-                                                    document.getElementById('lable_container_ul').appendChild(window.labels[result["data"]]);
+                                                    // where to add?
+                                                    document.getElementById('lable_cat2_container_ul').appendChild(window.labels[result["data"]]);
                                                     
                                                     } else {
                                                     window.labels[parent_id].add_child(name_label, result["data"], color_label, function(){alert('click')});
