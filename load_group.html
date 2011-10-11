@@ -349,6 +349,11 @@ Version: 0.1; Sept 19th 2011
                 font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
                 line-height: 1.28;            
             }
+			.label_div_right {
+				float: right;
+				padding-left: 10px;
+				padding-right: 15px;
+			}
         </style>
         
         <script src="http://code.jquery.com/jquery-latest.js"></script>
@@ -719,7 +724,14 @@ Version: 0.1; Sept 19th 2011
                             div2.appendChild(a2);
                             li.appendChild(div2);
 							
-                            
+                            s = document.createElement('span');
+							s.innerHTML = 'Ed';
+							add_class(container, 'label_div_right');
+							//s.class = label_div_right
+							li.appendChild(s);
+							
+							//<span class="label_div_right">hello</span>
+							
                             li.add_child = function(t_txt, t_uid, t_color, t_onclick){
                                 if (!li.cn){var c = document.createElement('ul'); li.appendChild(c); li.cn = c; add_class(c, 'label_item');}
                                 var child = create_label_iconed(t_txt, t_uid, 'personal', t_color, t_onclick);
