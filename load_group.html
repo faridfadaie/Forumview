@@ -1542,13 +1542,16 @@ Version: 0.1; Sept 19th 2011
                                                 if ('XXX_KIND_XXX' == 'group' || 'XXX_KIND_XXX' == 'page') {
                                                     create_tag('labels_cat3','XXX_KIND_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png');
                                                 }
-                                            } else {
-                                                create_tag('labels_cat2','My Labels for This '+'XXX_KIND_XXX','http://tayfeh.com/resources/img/My_ThisGroup.png');
+                                            } else if ('XXX_KIND_XXX' == 'group' || 'XXX_KIND_XXX' == 'page') {
+													create_tag('labels_cat2','My Labels for This '+'XXX_KIND_XXX','http://tayfeh.com/resources/img/My_ThisGroup.png');
+                                                    create_tag('labels_cat3','XXX_KIND_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png');
+                                                }
+                                                /* create_tag('labels_cat2','My Labels for This '+'XXX_KIND_XXX','http://tayfeh.com/resources/img/My_ThisGroup.png');
                                                 if ('XXX_KIND_XXX' == 'group' || 'XXX_KIND_XXX' == 'page') {
                                                     create_tag('labels_cat3','XXX_KIND_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png');
                                                 } else {
                                                     create_tag('labels_cat3','XXX_VIEW_ID_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png'); //?? instead of VIED_ID we should put VIUE_ID->name
-                                                }
+                                                }*/
                                             }
                                             
                                         }
