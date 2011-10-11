@@ -1464,6 +1464,10 @@ Version: 0.1; Sept 19th 2011
                                         
                                         // cat 1
                                         list = data.data;
+										for (var i in list){
+											list[i].name=decodeURIComponent(list[i].name);
+											list[i].nick=decodeURIComponent(list[i].nick);
+										}
                                         window.labelslist = list;
                                         window.labels = [];
                                         window.labels.cat1 = {};
@@ -1638,8 +1642,8 @@ Version: 0.1; Sept 19th 2011
                                             
                                     var label2alert = {};
                                     label2alert.obj_id = source_id;
-                                    label2alert.name = name_label;
-                                    label2alert.nick = $("#description_label").val();
+                                    label2alert.name = encodeURIComponent(name_label);
+                                    label2alert.nick = encodeURIComponent($("#description_label").val());
                                     label2alert.parent = parent_id;
                                     label2alert.color = document.getElementById('color1').value;
                                     if (XXX_ADMIN_XXX) {
