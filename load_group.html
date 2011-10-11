@@ -692,14 +692,14 @@ Version: 0.1; Sept 19th 2011
                                 });
                             }
                         
-                        function create_label_iconed(txt, uid, shared, color, onclick){
+                        function create_label_iconed(txt, uid, shared, color, ificon, onclick){
                             var li = document.createElement('li');
                             li.uid = uid;
                             li.txt = txt;
                             
                             div3 = document.createElement('div');
                             set_style(div3,{float: 'left'});
-                            //set_style(div1,{background: color});
+                            if (!ificon) { set_style(div3,{display: 'none'}); }
                             a3 = document.createElement('a');
                             a3.href = 'javascript:void(0)';
                             a3.title = 'Share/Unshare this label';
@@ -759,9 +759,9 @@ Version: 0.1; Sept 19th 2011
                             
                             //<span class="label_div_right">hello</span>
                             
-                            li.add_child = function(t_txt, t_uid, t_color, t_onclick){
+                            li.add_child = function(t_txt, t_uid, t_shared, t_color, t_ificon, t_onclick){
                                 if (!li.cn){var c = document.createElement('ul'); li.appendChild(c); li.cn = c; add_class(c, 'label_item');}
-                                var child = create_label_iconed(t_txt, t_uid, 'personal', t_color, t_onclick);
+                                var child = create_label_iconed(t_txt, t_uid, t_shared, t_color, t_ificon, t_onclick);
                                 li.cn.appendChild(child);
                                 }
                             addEvent(a1, 'click', function(){
@@ -921,15 +921,10 @@ Version: 0.1; Sept 19th 2011
                             }
                         function create_label(txt, uid, onclick){
                             var li = document.createElement('li');
-                            li.uid = uid;
+                            li.id = uid;
                             li.txt = txt;
                             li.innerHTML = '<a href="javascript:void(0)">' + txt + '</a>';
                             add_class(li.getElementsByTagName('a')[0], 'labels');
-                            li.add_child = function(t_txt, t_uid, t_onclick){
-                                if (!li.cn){var c = document.createElement('ul'); li.appendChild(c); li.cn = c; add_class(c, 'label_item');}
-                                var child = create_label(t_txt, t_uid, t_onclick);
-                                li.cn.appendChild(child);
-                                }
                             addEvent(li.getElementsByTagName('a')[0], 'click', onclick);
                             return li
                             }                            
@@ -1573,14 +1568,14 @@ Version: 0.1; Sept 19th 2011
                                         add_class(label_list, 'label_item');
                                         for (var i in list){
                                             if (list[i].parent == "0" && list[i].obj_id.indexOf(':') == -1 ){ // && list[i].owner != FB._session.uid
-                                                var l = create_label_iconed(list[i].name, i, list[i].shared, list[i].color, function(){alert('click')})
+                                                var l = create_label_iconed(list[i].name, i, list[i].shared, list[i].color, true, function(){alert('click')})
                                                 window.labels.cat1[i] = l;
                                                 label_list.appendChild(l)
                                                 }
                                             }
                                         for (var i in list){
                                             if (list[i].parent in window.labels.cat1 && list[i].obj_id.indexOf(':') == -1 ){ // && list[i].owner != FB._session.uid
-                                                window.labels.cat1[list[i].parent].add_child(list[i].name, i, list[i].color, function(){alert('click')});
+                                                window.labels.cat1[list[i].parent].add_child(list[i].name, i, list[i].shared, list[i].color, true, function(){alert('click')});
                                                 }
                                             }
                                         document.getElementById('labels_cat1').appendChild(label_list);
@@ -1594,14 +1589,14 @@ Version: 0.1; Sept 19th 2011
                                         add_class(label_list, 'label_item');
                                         for (var i in list){
                                             if ((list[i].parent == "0") &&  (list[i].obj_id.indexOf(':') != -1 ) && (list[i].owner = FB._session.uid)){ // && list[i].owner != FB._session.uid
-                                                var l = create_label_iconed(list[i].name, i, list[i].shared, list[i].color, function(){alert('click')})
+                                                var l = create_label_iconed(list[i].name, i, list[i].shared, list[i].color, true, function(){alert('click')})
                                                 window.labels.cat2[i] = l;
                                                 label_list.appendChild(l)
                                                 }
                                             }
                                         for (var i in list){
                                             if ((list[i].parent in window.labels.cat2) &&  (list[i].obj_id.indexOf(':') != -1) && (list[i].owner = FB._session.uid)){ // && list[i].owner != FB._session.uid .. list[i].shared != "global"
-                                                window.labels.cat2[list[i].parent].add_child(list[i].name, i, list[i].color, function(){alert('click')});
+                                                window.labels.cat2[list[i].parent].add_child(list[i].name, i, list[i].shared, list[i].color, true, function(){alert('click')});
                                                 }
                                             }
                                         document.getElementById('labels_cat2').appendChild(label_list);
@@ -1615,14 +1610,14 @@ Version: 0.1; Sept 19th 2011
                                         add_class(label_list, 'label_item');
                                         for (var i in list){
                                             if ((list[i].parent == "0") &&  (list[i].obj_id.indexOf(':') != -1) && ((list[i].owner = 'admin') || (list[i].owner = 'owner'))){ // && list[i].owner != FB._session.uid
-                                                var l = create_label_iconed(list[i].name, i, list[i].shared, list[i].color, function(){alert('click')})
+                                                var l = create_label_iconed(list[i].name, i, list[i].shared, list[i].color, false, function(){alert('click')})
                                                 window.labels.cat3[i] = l;
                                                 label_list.appendChild(l)
                                                 }
                                             }
                                         for (var i in list){
                                             if ((list[i].parent in window.labels.cat3) &&  (list[i].obj_id.indexOf(':') != -1) && ((list[i].owner = 'admin') || (list[i].owner = 'owner'))){ // && list[i].owner != FB._session.uid .. list[i].shared != "global"
-                                                window.labels.cat3[list[i].parent].add_child(list[i].name, i, list[i].color, function(){alert('click')});
+                                                window.labels.cat3[list[i].parent].add_child(list[i].name, i, list[i].shared, list[i].color, false, function(){alert('click')});
                                                 }
                                             }
                                         document.getElementById('labels_cat3').appendChild(label_list);
@@ -1884,12 +1879,12 @@ Version: 0.1; Sept 19th 2011
                                         $.post("/create_label",label2alert,function(result) {
                                             if (result["type"]=="ok"){
                                                 if (parent_id == '0'){
-                                                    window.labels.cat1[result["data"]] = create_label_iconed(name_label, result["data"], 'personal', color_label, function(){alert('click')});
+                                                    window.labels.cat1[result["data"]] = create_label_iconed(name_label, result["data"], 'personal', color_label, true, function(){alert('click')});
                                                     // where to add?
                                                     document.getElementById('lable_cat1_container_ul').appendChild(window.labels[result["data"]]);
                                                     
                                                     } else {
-                                                    window.labels.cat1[parent_id].add_child(name_label, result["data"], color_label, function(){alert('click')});
+                                                    window.labels.cat1[parent_id].add_child(name_label, result["data"], 'personal', color_label, true, function(){alert('click')});
                                                     }
                                                 //$("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
                                             } else {
