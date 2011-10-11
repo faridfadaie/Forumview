@@ -1267,13 +1267,62 @@ Version: 0.1; Sept 19th 2011
                             tagtx.appendChild(taglist);
                             tag.appendChild(tagtx);
                             fconditions.appendChild(tag);
+							
+							///
+							likes = document.createElement('div');    
+							likes.setAttribute('class', 'conditionsfixed');
+							
+							likesl = document.createElement('label');
+							likesl.setAttribute('for', 'likelist');
+							likesl.setAttribute('style', 'margin-right: 5px;');
+							likesl.innerHTML='If it has';
 
+
+							likelist = document.createElement('select');
+							likelist.setAttribute('id', 'likelist');                                
+							likelist.setAttribute('class', 'fonted');
+							likelist.setAttribute('style', 'margin-right: 5px;');
+
+							theOption = document.createElement("OPTION");
+							theText = document.createTextNode("more than");
+							theOption.appendChild(theText);
+							theOption.setAttribute("value","ture");
+							likelist.appendChild(theOption);
+
+							theOption = document.createElement("OPTION");
+							theText = document.createTextNode("less than");
+							theOption.appendChild(theText);
+							theOption.setAttribute("value","false");
+							likelist.appendChild(theOption);
+
+
+							likestx = document.createElement('input');  
+							likestx.setAttribute('type', 'text');
+							likestx.setAttribute('id', 'liketext');
+							likestx.setAttribute('size', '3'); 
+							likestx.setAttribute('maxlength', '3');
+							likestx.setAttribute('style', 'margin-right: 5px;');
+							likestx.setAttribute('class', 'fonted');
+							
+							
+							likesl2 = document.createElement('label');
+							likesl2.setAttribute('for', 'likelist');
+							likesl2.innerHTML='likes.';
+
+
+							likes.appendChild(likesl);
+							likes.appendChild(likelist);
+							likes.appendChild(likestx);
+							likes.appendChild(likesl2);
+							fconditions.appendChild(likes);
+                                
+							
                             ///
                             dates = document.createElement('div');    
                             dates.setAttribute('class', 'conditionsfixed');
                             
                             datesl = document.createElement('label');
-                            datesl.setAttribute('for', 'likelist');
+                            datesl.setAttribute('for', 'datelist');
                             datesl.setAttribute('style', 'margin-right: 5px;');
                             datesl.innerHTML='If it has been posted';
 
@@ -1325,7 +1374,7 @@ Version: 0.1; Sept 19th 2011
                             }
                             
                             datesl2 = document.createElement('label');
-                            datesl2.setAttribute('for', 'likelist');
+                            datesl2.setAttribute('for', 'datelist');
                             datesl2.innerHTML='(date and time).';
 
                             dates.appendChild(datesl);
@@ -1683,6 +1732,19 @@ Version: 0.1; Sept 19th 2011
                                     } else {
                                         // options maybe active
                                         
+										// likes field
+										if (!isNaN(parseInt(document.getElementById('liketext').value))){
+											bool = document.getElementById('likelist').value == 'ture';
+											intgr = parseInt(document.getElementById('liketext').value);
+											cond = {};
+											cond.id = 6;
+											cond.opt = opt;
+											cond.params = [];
+											cond.params[0] = intgr;
+											cond.params[1] = bool;
+											rule.push(cond);
+											}
+
                                         // date field
                                         if (!isNaN(parseInt(document.getElementById('datetext').value)) || (document.getElementById('timelist').value != 25)){
                                             bool = document.getElementById('datetext').value == 'ture';
