@@ -1793,32 +1793,28 @@ Version: 0.1; Sept 19th 2011
                                     label2alert.color = document.getElementById('color1').value;
                                     if (XXX_ADMIN_XXX) {
                                         if (document.getElementById('personal_select').value == "1") {
-                                            label2alert.shared = 'global';
+											label2alert.obj_id = XXX_OBJ_ID_XXX;
+											label2alert.personal = 0;
                                         } else {
+											label2alert.obj_id = FB._session.uid;
+											label2alert.personal = 0;										
                                             if (document.getElementById('shared_checkbox').checked) {
-                                                label2alert.shared = 'shared';
+                                                label2alert.shared = 1;
                                             } else {
-                                                label2alert.shared = 'personal';
+                                                label2alert.shared = 0;
                                             }
                                         }
                                     } else {
+											label2alert.obj_id = XXX_OBJ_ID_XXX;
+											label2alert.personal = 1;
                                             if (document.getElementById('shared_checkbox').checked) {
-                                                label2alert.shared = 'shared';
+                                                label2alert.shared = 1;
                                             } else {
-                                                label2alert.shared = 'personal';
+                                                label2alert.shared = 0;
                                             }                                    
                                     }
                                     
                                     var color_label = label2alert.color;
-                                        
-                                    /*
-                                    // categories:
-                                    if (document.labelcategory == 1) {
-                                        label2laert.shared = 'shared';
-                                        label2alert.owner = 'owner';
-                                    } 
-                                    // else if (){}
-                                    */
                                     
                                     var rule=[];
                                     opt = document.getElementById('taglist').value;
