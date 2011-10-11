@@ -768,6 +768,7 @@ Version: 0.1; Sept 19th 2011
                                 li.cn.appendChild(child);
                                 }
                             addEvent(a1, 'click', function(){
+										alert(window.labelslist[this.parentNode.parentNode.uid].color + ' | ' + window.labelslist[this.parentNode.parentNode.uid].shared);
 										set_style(document.getElementById('dialog-box'), {display : 'block'});
                                         set_style(document.getElementById('posts_container'), {display : 'none'});
                                         set_style(document.getElementById('post_comment_container'), {display : 'none'});
@@ -775,7 +776,7 @@ Version: 0.1; Sept 19th 2011
                                         s += '<input type="text" name="name_label" size="26" maxlength="25" value="" id="name_label" title="Name of the label" class="conditionsfixed"/>';
                                         s += '<p>Description: </p><textarea id="description_label" rows="2" cols="50" class="conditionsfixed"></textarea>';
                                         s += '<p id="options_row">Nest label under: <select name="list_labels" id="list_labels" class="conditionsfixed"><option value="0">Root</option>';
-                                        if (window.labelslist[this.parentNode.parentNode.uid].shared == "global") {
+										if (window.labelslist[this.parentNode.parentNode.uid].shared == "global") {
                                             for (var i in window.labels.cat1){
                                                 if ( window.labelslist[this.parentNode.parentNode.uid].parent == window.labels.cat1[i].uid) {
                                                     s += '<option selected value="'+window.labels.cat1[i].txt+'">'+window.labels.cat1[i].txt+'</option>';
