@@ -712,9 +712,9 @@ Version: 0.1; Sept 19th 2011
                             add_class(a2, 'labels');
                             li.appendChild(a2);
 
-                            li.add_child = function(t_txt, t_uid, t_onclick){
+                            li.add_child = function(t_txt, t_uid, t_color, t_onclick){
                                 if (!li.cn){var c = document.createElement('ul'); li.appendChild(c); li.cn = c; add_class(c, 'label_item');}
-                                var child = create_label_iconed(t_txt, t_uid, 'personal', t_onclick);
+                                var child = create_label_iconed(t_txt, t_uid, 'personal', t_color, t_onclick);
                                 li.cn.appendChild(child);
                                 }
                             addEvent(a1, 'click', function(){
@@ -1366,7 +1366,7 @@ Version: 0.1; Sept 19th 2011
                                             }
 										for (var i in list){
                                             if (list[i].parent in window.labels.cat1 && list[i].shared == "global"){ // && list[i].owner != FB._session.uid
-                                                window.labels.cat1[list[i].parent].add_child(list[i].name, i, function(){alert('click')});
+                                                window.labels.cat1[list[i].parent].add_child(list[i].name, i, list[i].color, function(){alert('click')});
                                                 }
                                             }
                                         document.getElementById('labels_cat1').appendChild(label_list);
