@@ -740,88 +740,88 @@ Version: 0.1; Sept 19th 2011
                                 li.cn.appendChild(child);
                                 }
                             addEvent(a1, 'click', function(){
-										set_style(document.getElementById('dialog-box'), {display : 'block'});
-										set_style(document.getElementById('posts_container'), {display : 'none'});
-										set_style(document.getElementById('post_comment_container'), {display : 'none'});
-										var s = '<div><h2> New Label </h2><p>Please enter a name for the new label: </p>';
-										s += '<input type="text" name="name_label" size="26" maxlength="25" value="" id="name_label" title="Name of the label" class="conditionsfixed"/>';
-										s += '<p>Please enter a description: </p><textarea id="description_label" rows="2" cols="50" class="conditionsfixed"></textarea>';
-										s += '<p id="options_row">Nest label under: <select name="list_labels" id="list_labels" class="conditionsfixed"><option value="0">Root</option>';
-										for (var i in window.labels){
-											s += '<option value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
-											}
-										s += '</select>';
-										s += '</p><div class="form-container"><form action="#" method="post"><div class="controlset">';
-										s += '<label for="color1"><strong>Choose Label'+"'"+'s color</strong></label> <input id="color1" type="text" name="color1" value="#333399" />';
-										s += '</div></form></div><p>&nbsp;</p>';
-										s += '<div id="conditions_container">';
-										s += '<div id="conditions_if"></div>'
-										s += '<div id="conditions_fixed" style="display: none;"></div>'
-										s += '<div id="conditions" style="display: none;"></div>'
-										s += '</div></div>';
-										document.getElementById('dialog-message').innerHTML = s;
-										document.getElementById('Btn_labeldialog_addlabel').innerHTML = 'Update';
-										$('#color1').colorPicker();
-										
-										// adding the label's data for the first part:
-										$("#color1").val(window.labelslist[this.parentNode.parentNode.uid].color);   
-										$("#color1").change();
-										document.getElementById('name_label').value = window.labelslist[this.parentNode.parentNode.uid].name;
-										document.getElementById('description_label').value = window.labelslist[this.parentNode.parentNode.uid].nick;
-										
-										if (XXX_ADMIN_XXX) {
-											p = document.getElementById('options_row');
-											l1 = document.createElement('label');
-											l1.setAttribute('style', 'margin-left: 15px;');
-											theText = document.createTextNode("This label is ");
-											l1.appendChild(theText);
-											
-											s1 = document.createElement('select');
-											s1.setAttribute('class', 'fonted');
-											s1.setAttribute('id', 'personal_select');
+                                        set_style(document.getElementById('dialog-box'), {display : 'block'});
+                                        set_style(document.getElementById('posts_container'), {display : 'none'});
+                                        set_style(document.getElementById('post_comment_container'), {display : 'none'});
+                                        var s = '<div><h2> New Label </h2><p>Please enter a name for the new label: </p>';
+                                        s += '<input type="text" name="name_label" size="26" maxlength="25" value="" id="name_label" title="Name of the label" class="conditionsfixed"/>';
+                                        s += '<p>Please enter a description: </p><textarea id="description_label" rows="2" cols="50" class="conditionsfixed"></textarea>';
+                                        s += '<p id="options_row">Nest label under: <select name="list_labels" id="list_labels" class="conditionsfixed"><option value="0">Root</option>';
+                                        for (var i in window.labels){
+                                            s += '<option value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
+                                            }
+                                        s += '</select>';
+                                        s += '</p><div class="form-container"><form action="#" method="post"><div class="controlset">';
+                                        s += '<label for="color1"><strong>Choose Label'+"'"+'s color</strong></label> <input id="color1" type="text" name="color1" value="#333399" />';
+                                        s += '</div></form></div><p>&nbsp;</p>';
+                                        s += '<div id="conditions_container">';
+                                        s += '<div id="conditions_if"></div>'
+                                        s += '<div id="conditions_fixed" style="display: none;"></div>'
+                                        s += '<div id="conditions" style="display: none;"></div>'
+                                        s += '</div></div>';
+                                        document.getElementById('dialog-message').innerHTML = s;
+                                        document.getElementById('Btn_labeldialog_addlabel').innerHTML = 'Update';
+                                        $('#color1').colorPicker();
+                                        
+                                        // adding the label's data for the first part:
+                                        $("#color1").val(window.labelslist[this.parentNode.parentNode.uid].color);   
+                                        $("#color1").change();
+                                        document.getElementById('name_label').value = window.labelslist[this.parentNode.parentNode.uid].name;
+                                        document.getElementById('description_label').value = window.labelslist[this.parentNode.parentNode.uid].nick;
+                                        
+                                        if (XXX_ADMIN_XXX) {
+                                            p = document.getElementById('options_row');
+                                            l1 = document.createElement('label');
+                                            l1.setAttribute('style', 'margin-left: 15px;');
+                                            theText = document.createTextNode("This label is ");
+                                            l1.appendChild(theText);
+                                            
+                                            s1 = document.createElement('select');
+                                            s1.setAttribute('class', 'fonted');
+                                            s1.setAttribute('id', 'personal_select');
 
-											theOption = document.createElement("OPTION");
-											theText = document.createTextNode("for the "+"XXX_KIND_XXX");
-											theOption.appendChild(theText);
-											theOption.setAttribute("value",1);
-											s1.appendChild(theOption);
+                                            theOption = document.createElement("OPTION");
+                                            theText = document.createTextNode("for the "+"XXX_KIND_XXX");
+                                            theOption.appendChild(theText);
+                                            theOption.setAttribute("value",1);
+                                            s1.appendChild(theOption);
 
-											theOption = document.createElement("OPTION");
-											theText = document.createTextNode("personal");
-											theOption.appendChild(theText);
-											theOption.setAttribute("value",2);
-											s1.appendChild(theOption);
+                                            theOption = document.createElement("OPTION");
+                                            theText = document.createTextNode("personal");
+                                            theOption.appendChild(theText);
+                                            theOption.setAttribute("value",2);
+                                            s1.appendChild(theOption);
 
-											s1.onchange = function () {
-												if (this.value == 1) {
-													set_style(document.getElementById('shared_label'),{display: 'none'});
-												} else {
-													set_style(document.getElementById('shared_label'),{display: 'inline'});
-												}
-											}
-											
-											l1.appendChild(s1);
-											p.appendChild(l1);
-										}
-										
-										p = document.getElementById('options_row');
-										l2 = document.createElement('label');
-										l2.setAttribute('style', 'margin-left: 15px;');
-										l2.setAttribute('id', 'shared_label');
-										theText = document.createTextNode("Share this label ");
-										l2.appendChild(theText);
-										c1 = document.createElement('input');
-										c1.setAttribute('type', 'checkbox');
-										c1.setAttribute('id', 'shared_checkbox');
-										l2.appendChild(c1);
-										p.appendChild(l2);
-										if (XXX_ADMIN_XXX) {
-											set_style(l2,{display: 'none'});
-										}
-										create_condition_if();
-										create_condition_fix();
-										create_condition();
-									});
+                                            s1.onchange = function () {
+                                                if (this.value == 1) {
+                                                    set_style(document.getElementById('shared_label'),{display: 'none'});
+                                                } else {
+                                                    set_style(document.getElementById('shared_label'),{display: 'inline'});
+                                                }
+                                            }
+                                            
+                                            l1.appendChild(s1);
+                                            p.appendChild(l1);
+                                        }
+                                        
+                                        p = document.getElementById('options_row');
+                                        l2 = document.createElement('label');
+                                        l2.setAttribute('style', 'margin-left: 15px;');
+                                        l2.setAttribute('id', 'shared_label');
+                                        theText = document.createTextNode("Share this label ");
+                                        l2.appendChild(theText);
+                                        c1 = document.createElement('input');
+                                        c1.setAttribute('type', 'checkbox');
+                                        c1.setAttribute('id', 'shared_checkbox');
+                                        l2.appendChild(c1);
+                                        p.appendChild(l2);
+                                        if (XXX_ADMIN_XXX) {
+                                            set_style(l2,{display: 'none'});
+                                        }
+                                        create_condition_if();
+                                        create_condition_fix();
+                                        create_condition();
+                                    });
                             addEvent(a3, 'click', function(){
                                 var okay = false;
                                 if (this.getElementsByTagName('img')[0].src == 'http://tayfeh.com/resources/img/Shareit_disabled.png'){
@@ -1519,7 +1519,7 @@ Version: 0.1; Sept 19th 2011
                                             s += '<div id="conditions" style="display: none;"></div>'
                                             s += '</div></div>';
                                             document.getElementById('dialog-message').innerHTML = s;
-											//document.getElementById('Btn_labeldialog_addlabel').innerHTML = 'Update';
+                                            //document.getElementById('Btn_labeldialog_addlabel').innerHTML = 'Update';
                                             $('#color1').colorPicker();
                                             
                                             if (XXX_ADMIN_XXX) {
@@ -1709,21 +1709,21 @@ Version: 0.1; Sept 19th 2011
                                     label2alert.rule = $.toJSON(rule);
                                         
                                     if (document.getElementById('Btn_labeldialog_addlabel').innerHTML == 'Add') {
-										$.post("/create_label",label2alert,function(result) {
-											if (result["type"]=="ok"){
-												if (parent_id == '0'){
-													window.labels[result["data"]] = create_label_iconed(name_label, result["data"], 'personal', color_label, function(){alert('click')});
-													document.getElementById('lable_container_ul').appendChild(window.labels[result["data"]]);
-													
-													} else {
-													window.labels[parent_id].add_child(name_label, result["data"], color_label, function(){alert('click')});
-													}
-												//$("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
-											} else {
-												alert("An error occured, no lable culd be made, please try again!")
-											}
-										});
-									}
+                                        $.post("/create_label",label2alert,function(result) {
+                                            if (result["type"]=="ok"){
+                                                if (parent_id == '0'){
+                                                    window.labels[result["data"]] = create_label_iconed(name_label, result["data"], 'personal', color_label, function(){alert('click')});
+                                                    document.getElementById('lable_container_ul').appendChild(window.labels[result["data"]]);
+                                                    
+                                                    } else {
+                                                    window.labels[parent_id].add_child(name_label, result["data"], color_label, function(){alert('click')});
+                                                    }
+                                                //$("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
+                                            } else {
+                                                alert("An error occured, no lable culd be made, please try again!")
+                                            }
+                                        });
+                                    }
                                     $('#dialog-overlay, #dialog-box').hide();
                                     return false;
                                 });
