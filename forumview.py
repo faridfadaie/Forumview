@@ -199,7 +199,12 @@ def create_label(env, start_response, args):
         if admin is None:
             return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_PERMISSION, 'access to the object is denied or the object is not supported.')
         if admin:
-            shared = 'global'
+            if _detect_obj_type(obj_id, user) == 'profile':
+                shared = 'personal'
+                if ('shared' in args) and (str(args['shared']) == '1'):
+                    shared = 'shared'
+            else:
+                shared = 'global'
         elif ('personal' not in args) or (str(args['personal']) != '1'):
             return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'the personal view should be selected.')
         if ('personal' in args) and (str(args['personal']) == '1'):
