@@ -750,11 +750,11 @@ Version: 0.1; Sept 19th 2011
                                         s += '<p id="options_row">Nest label under: <select name="list_labels" id="list_labels" class="conditionsfixed"><option value="0">Root</option>';
                                         if (thislabel.shared == "global") {
 											for (var i in window.labels.cat1){
-												s += '<option value="'+window.labels.cat1[i].txt+'">'+window.labels[i].txt+'</option>';
+												s += '<option value="'+window.labels.cat1[i].txt+'">'+window.labels.cat1[i].txt+'</option>';
 												}
 											} else {
 											for (var i in window.labels.cat2){
-												s += '<option value="'+window.labels.cat2[i].txt+'">'+window.labels[i].txt+'</option>';
+												s += '<option value="'+window.labels.cat2[i].txt+'">'+window.labels.cat2[i].txt+'</option>';
 												}											
 											}
                                         s += '</select>';
