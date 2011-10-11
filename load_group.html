@@ -766,6 +766,7 @@ Version: 0.1; Sept 19th 2011
                                 }
                             addEvent(a1, 'click', function(){
                                         thislabel = window.labelslist[this.parentNode.parentNode.uid];
+										alert(thislabel.parent);
                                         set_style(document.getElementById('dialog-box'), {display : 'block'});
                                         set_style(document.getElementById('posts_container'), {display : 'none'});
                                         set_style(document.getElementById('post_comment_container'), {display : 'none'});
