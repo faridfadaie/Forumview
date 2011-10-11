@@ -1513,9 +1513,15 @@ Version: 0.1; Sept 19th 2011
                                             s += '<input type="text" name="name_label" size="26" maxlength="25" value="" id="name_label" title="Name of the label" class="conditionsfixed"/>';
                                             s += '<p>Please enter a description: </p><textarea id="description_label" rows="2" cols="50" class="conditionsfixed"></textarea>';
                                             s += '<p id="options_row">Nest label under: <select name="list_labels" id="list_labels" class="conditionsfixed"><option value="0">Root</option>';
-                                            for (var i in window.labels){
-                                                s += '<option value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
-                                                }
+											//if (thislabel.shared == "global") {
+												for (var i in window.labels.cat1){
+													s += '<option value="'+window.labels.cat1[i].txt+'">'+window.labels.cat1[i].txt+'</option>';
+													}
+												//} else {
+												for (var i in window.labels.cat2){
+													s += '<option value="'+window.labels.cat2[i].txt+'">'+window.labels.cat2[i].txt+'</option>';
+													}											
+												//}
                                             s += '</select>';
                                             s += '</p><div class="form-container"><form action="#" method="post"><div class="controlset">';
                                             s += '<label for="color1"><strong>Choose Label'+"'"+'s color</strong></label> <input id="color1" type="text" name="color1" value="#333399" />';
