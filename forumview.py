@@ -207,7 +207,7 @@ def create_label(env, start_response, args):
                 shared = 'global'
         elif ('personal' not in args) or (str(args['personal']) != '1'):
             return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'the personal view should be selected.')
-        if ('personal' in args) and (str(args['personal']) == '1'):
+        if ('personal' in args) and (str(args['personal']) == '1') and (not admin):
             obj_id = str(obj_id) + ':' + str(user['uid'])
             shared = 'personal'
             if ('shared' in args) and (str(args['shared']) == '1'):
