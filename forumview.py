@@ -315,9 +315,9 @@ def update_label(env, start_response, args):
         return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_SESSION)
     if 'label_id' not in args:
         return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'label_id not passed.')
-    sdb = Retry(SimpleDB, RETRY_LIMIT, ['select', 'put_attributes', 'get_attributes'], AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
+    sdb = Retry(SimpleDB, RETRY_LIMIT, ['delete_attributes', 'select', 'put_attributes', 'get_attributes'], AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
     try:
-        label = sdb.select(AWS_SDB_LABELS_DOMAIN, 'select `%s` from %s' %(args['label_id'], AWS_SDB_LABELS_DOMAIN))
+        label = sdb.select(AWS_SDB_LABELS_DOMAIN, 'select `%s` from %s where `%s` in ("A:shared", "A:global", "A:personal")' %(args['label_id'], AWS_SDB_LABELS_DOMAIN, args['label_id']))
         if len(label) == 0:
             return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'label_id does not exist.')
         for i in label:
@@ -357,6 +357,11 @@ def update_label(env, start_response, args):
             shared = 'personal'
             if ('shared' in args) and (str(args['shared']) == '1'):
                 shared = 'shared'
+        sdb.delete_attributes(AWS_SDB_LABELS_DOMAIN, con_obj_id, [args['label_id']])
+        if shared == 'global':
+            con_obj_id = con_obj_id.split(':')[0]
+        else:
+            con_obj_id = con_obj_id.split(':')[0] + ':' + str(user['uid'])
         sdb.put_attributes(AWS_SDB_LABELS_DOMAIN, con_obj_id, [(args['label_id'], SHARE_DEL + shared, True),
                                                         (args['label_id'], NAME_DEL + name, True),
                                                         (args['label_id'], NICK_DEL + nick, True),
