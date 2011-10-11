@@ -1600,7 +1600,7 @@ Version: 0.1; Sept 19th 2011
                                         label_list.id = 'lable_cat2_container_ul'
                                         add_class(label_list, 'label_item');
                                         for (var i in list){
-                                            if ((list[i].parent == "0") &&  (list[i].obj_id.indexOf(':') != -1 ) && (list[i].owner = FB._session.uid)){ // && list[i].owner != FB._session.uid
+                                            if ((list[i].parent == "0") &&  (list[i].obj_id.indexOf(':') != -1 ) && (list[i].owner == FB._session.uid)){ // && list[i].owner != FB._session.uid
                                                 var l = create_label_iconed(list[i].name, i, list[i].shared, list[i].color, true, function(){
 													$('.clickeditem').removeClass('clickeditem');
 													add_class(this.parentNode,'clickeditem'); 
@@ -1610,7 +1610,7 @@ Version: 0.1; Sept 19th 2011
                                                 }
                                             }
                                         for (var i in list){
-                                            if ((list[i].parent in window.labels.cat2) &&  (list[i].obj_id.indexOf(':') != -1) && (list[i].owner = FB._session.uid)){ // && list[i].owner != FB._session.uid .. list[i].shared != "global"
+                                            if ((list[i].parent in window.labels.cat2) &&  (list[i].obj_id.indexOf(':') != -1) && (list[i].owner == FB._session.uid)){ // && list[i].owner != FB._session.uid .. list[i].shared != "global"
                                                 window.labels.cat2[list[i].parent].add_child(list[i].name, i, list[i].shared, list[i].color, true, function(){
 													$('.clickeditem').removeClass('clickeditem');
 													add_class(this.parentNode,'clickeditem'); 
@@ -1627,7 +1627,7 @@ Version: 0.1; Sept 19th 2011
                                         label_list.id = 'lable_cat3_container_ul'
                                         add_class(label_list, 'label_item');
                                         for (var i in list){
-                                            if ((list[i].parent == "0") &&  (list[i].obj_id.indexOf(':') != -1) && ((list[i].owner = 'admin') || (list[i].owner = 'owner'))){ // && list[i].owner != FB._session.uid
+                                            if ((list[i].parent == "0") &&  (list[i].obj_id.indexOf(':') != -1) && ((list[i].owner == 'admin') || (list[i].owner == 'owner'))){ // && list[i].owner != FB._session.uid
                                                 var l = create_label_iconed(list[i].name, i, list[i].shared, list[i].color, false, function(){
 													$('.clickeditem').removeClass('clickeditem');
 													add_class(this.parentNode,'clickeditem'); 
@@ -1637,7 +1637,7 @@ Version: 0.1; Sept 19th 2011
                                                 }
                                             }
                                         for (var i in list){
-                                            if ((list[i].parent in window.labels.cat3) &&  (list[i].obj_id.indexOf(':') != -1) && ((list[i].owner = 'admin') || (list[i].owner = 'owner'))){ // && list[i].owner != FB._session.uid .. list[i].shared != "global"
+                                            if ((list[i].parent in window.labels.cat3) &&  (list[i].obj_id.indexOf(':') != -1) && ((list[i].owner == 'admin') || (list[i].owner == 'owner'))){ // && list[i].owner != FB._session.uid .. list[i].shared != "global"
                                                 window.labels.cat3[list[i].parent].add_child(list[i].name, i, list[i].shared, list[i].color, false, function(){
 													$('.clickeditem').removeClass('clickeditem');
 													add_class(this.parentNode,'clickeditem'); 
