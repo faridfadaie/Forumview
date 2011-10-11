@@ -349,12 +349,12 @@ Version: 0.1; Sept 19th 2011
                 font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
                 line-height: 1.28;            
             }
-			.label_div_right {
-				float: right;
-				 padding-right: 5px;
-				position: relative;
-				top: -18px;
-				}
+            .label_div_right {
+                float: right;
+                 padding-right: 5px;
+                position: relative;
+                top: -18px;
+                }
         </style>
         
         <script src="http://code.jquery.com/jquery-latest.js"></script>
@@ -724,41 +724,41 @@ Version: 0.1; Sept 19th 2011
                             add_class(a2, 'labels');
                             div2.appendChild(a2);
                             li.appendChild(div2);
-							
+                            
                             /*div1 = document.createElement('div');
-							set_style(div1,{background: color});
-							add_class(div1, 'label_div_right');
-							a1 = document.createElement('a');
-							a1.href = 'javascript:void(0)';
-							a1.title = "Edit this lable"
-							img1 = document.createElement('img');
-							img1.width = 20;
-							img1.height = 20;
-							img1.src = "http://tayfeh.com/resources/img/box20by20.png";
-							a1.appendChild(img1);
-							div1.appendChild(a1);
-							li.appendChild(div1);*/
-							
-							s = document.createElement('span');
-							//s.innerHTML = 'Ed';
-							add_class(s, 'label_div_right');
-							
-							a1 = document.createElement('a');
-							set_style(a1,{background: color});
-							set_style(a1,{border: '1px solid #999999;'});
-							a1.href = 'javascript:void(0)';
-							a1.title = "Edit this lable"
-							img1 = document.createElement('img');
-							img1.width = 12;
-							img1.height = 12;
-							img1.src = "http://tayfeh.com/resources/img/box_nothing.png";
-							a1.appendChild(img1);
-							s.appendChild(a1);
+                            set_style(div1,{background: color});
+                            add_class(div1, 'label_div_right');
+                            a1 = document.createElement('a');
+                            a1.href = 'javascript:void(0)';
+                            a1.title = "Edit this lable"
+                            img1 = document.createElement('img');
+                            img1.width = 20;
+                            img1.height = 20;
+                            img1.src = "http://tayfeh.com/resources/img/box20by20.png";
+                            a1.appendChild(img1);
+                            div1.appendChild(a1);
+                            li.appendChild(div1);*/
+                            
+                            s = document.createElement('span');
+                            //s.innerHTML = 'Ed';
+                            add_class(s, 'label_div_right');
+                            
+                            a1 = document.createElement('a');
+                            set_style(a1,{background: color});
+                            set_style(a1,{border: '1px solid #999999;'});
+                            a1.href = 'javascript:void(0)';
+                            a1.title = "Edit this lable"
+                            img1 = document.createElement('img');
+                            img1.width = 12;
+                            img1.height = 12;
+                            img1.src = "http://tayfeh.com/resources/img/box_nothing.png";
+                            a1.appendChild(img1);
+                            s.appendChild(a1);
 
-							li.appendChild(s);
-							
-							//<span class="label_div_right">hello</span>
-							
+                            li.appendChild(s);
+                            
+                            //<span class="label_div_right">hello</span>
+                            
                             li.add_child = function(t_txt, t_uid, t_color, t_onclick){
                                 if (!li.cn){var c = document.createElement('ul'); li.appendChild(c); li.cn = c; add_class(c, 'label_item');}
                                 var child = create_label_iconed(t_txt, t_uid, 'personal', t_color, t_onclick);
@@ -775,13 +775,21 @@ Version: 0.1; Sept 19th 2011
                                         s += '<p id="options_row">Nest label under: <select name="list_labels" id="list_labels" class="conditionsfixed"><option value="0">Root</option>';
                                         if (thislabel.shared == "global") {
                                             for (var i in window.labels.cat1){
-                                                s += '<option value="'+window.labels.cat1[i].txt+'">'+window.labels.cat1[i].txt+'</option>';
+                                                if ( thislabel.parent == window.labels.cat1[i].parent) {
+                                                    s += '<option selected value="'+window.labels.cat1[i].txt+'">'+window.labels.cat1[i].txt+'</option>';
+                                                } else {
+                                                    s += '<option value="'+window.labels.cat1[i].txt+'">'+window.labels.cat1[i].txt+'</option>';
                                                 }
-                                            } else {
-                                            for (var i in window.labels.cat2){
-                                                s += '<option value="'+window.labels.cat2[i].txt+'">'+window.labels.cat2[i].txt+'</option>';
-                                                }                                            
                                             }
+                                        } else {
+                                            for (var i in window.labels.cat2){
+                                                if ( thislabel.parent == window.labels.cat2[i].parent) {
+                                                    s += '<option selected value="'+window.labels.cat2[i].txt+'">'+window.labels.cat2[i].txt+'</option>';
+                                                } else {
+                                                    s += '<option value="'+window.labels.cat2[i].txt+'">'+window.labels.cat2[i].txt+'</option>';
+                                                }
+                                            }                                            
+                                        }
                                         s += '</select>';
                                         s += '</p><div class="form-container"><form action="#" method="post"><div class="controlset">';
                                         s += '<label for="color1"><strong>Choose Label'+"'"+'s color</strong></label> <input id="color1" type="text" name="color1" value="#333399" />';
@@ -801,6 +809,21 @@ Version: 0.1; Sept 19th 2011
                                         document.getElementById('name_label').value = window.labelslist[this.parentNode.parentNode.uid].name;
                                         document.getElementById('description_label').value = window.labelslist[this.parentNode.parentNode.uid].nick;
                                         
+                                        for (var i in window.labels.cat1){
+                                            if (window.labels.cat1[i].txt == $("#list_labels").val()){
+                                                parent_id = i;
+                                                parent = window.labels.cat1[i];
+                                                }
+                                        }
+                                        for (var i in window.labels.cat2){
+                                            if (window.labels.cat2[i].txt == $("#list_labels").val()){
+                                                parent_id = i;
+                                                parent = window.labels.cat2[i];
+                                                }
+                                        }
+
+                                        
+                                        //
                                         if (XXX_ADMIN_XXX) {
                                             p = document.getElementById('options_row');
                                             l1 = document.createElement('label');
@@ -1292,56 +1315,56 @@ Version: 0.1; Sept 19th 2011
                             tagtx.appendChild(taglist);
                             tag.appendChild(tagtx);
                             fconditions.appendChild(tag);
-							
-							///
-							likes = document.createElement('div');    
-							likes.setAttribute('class', 'conditionsfixed');
-							
-							likesl = document.createElement('label');
-							likesl.setAttribute('for', 'likelist');
-							likesl.setAttribute('style', 'margin-right: 5px;');
-							likesl.innerHTML='If it has';
+                            
+                            ///
+                            likes = document.createElement('div');    
+                            likes.setAttribute('class', 'conditionsfixed');
+                            
+                            likesl = document.createElement('label');
+                            likesl.setAttribute('for', 'likelist');
+                            likesl.setAttribute('style', 'margin-right: 5px;');
+                            likesl.innerHTML='If it has';
 
 
-							likelist = document.createElement('select');
-							likelist.setAttribute('id', 'likelist');                                
-							likelist.setAttribute('class', 'fonted');
-							likelist.setAttribute('style', 'margin-right: 5px;');
+                            likelist = document.createElement('select');
+                            likelist.setAttribute('id', 'likelist');                                
+                            likelist.setAttribute('class', 'fonted');
+                            likelist.setAttribute('style', 'margin-right: 5px;');
 
-							theOption = document.createElement("OPTION");
-							theText = document.createTextNode("more than");
-							theOption.appendChild(theText);
-							theOption.setAttribute("value","ture");
-							likelist.appendChild(theOption);
+                            theOption = document.createElement("OPTION");
+                            theText = document.createTextNode("more than");
+                            theOption.appendChild(theText);
+                            theOption.setAttribute("value","ture");
+                            likelist.appendChild(theOption);
 
-							theOption = document.createElement("OPTION");
-							theText = document.createTextNode("less than");
-							theOption.appendChild(theText);
-							theOption.setAttribute("value","false");
-							likelist.appendChild(theOption);
-
-
-							likestx = document.createElement('input');  
-							likestx.setAttribute('type', 'text');
-							likestx.setAttribute('id', 'liketext');
-							likestx.setAttribute('size', '3'); 
-							likestx.setAttribute('maxlength', '3');
-							likestx.setAttribute('style', 'margin-right: 5px;');
-							likestx.setAttribute('class', 'fonted');
-							
-							
-							likesl2 = document.createElement('label');
-							likesl2.setAttribute('for', 'likelist');
-							likesl2.innerHTML='likes.';
+                            theOption = document.createElement("OPTION");
+                            theText = document.createTextNode("less than");
+                            theOption.appendChild(theText);
+                            theOption.setAttribute("value","false");
+                            likelist.appendChild(theOption);
 
 
-							likes.appendChild(likesl);
-							likes.appendChild(likelist);
-							likes.appendChild(likestx);
-							likes.appendChild(likesl2);
-							fconditions.appendChild(likes);
+                            likestx = document.createElement('input');  
+                            likestx.setAttribute('type', 'text');
+                            likestx.setAttribute('id', 'liketext');
+                            likestx.setAttribute('size', '3'); 
+                            likestx.setAttribute('maxlength', '3');
+                            likestx.setAttribute('style', 'margin-right: 5px;');
+                            likestx.setAttribute('class', 'fonted');
+                            
+                            
+                            likesl2 = document.createElement('label');
+                            likesl2.setAttribute('for', 'likelist');
+                            likesl2.innerHTML='likes.';
+
+
+                            likes.appendChild(likesl);
+                            likes.appendChild(likelist);
+                            likes.appendChild(likestx);
+                            likes.appendChild(likesl2);
+                            fconditions.appendChild(likes);
                                 
-							
+                            
                             ///
                             dates = document.createElement('div');    
                             dates.setAttribute('class', 'conditionsfixed');
@@ -1538,10 +1561,10 @@ Version: 0.1; Sept 19th 2011
                                         
                                         // cat 1
                                         list = data.data;
-										for (var i in list){
-											list[i].name=decodeURIComponent(list[i].name);
-											list[i].nick=decodeURIComponent(list[i].nick);
-										}
+                                        for (var i in list){
+                                            list[i].name=decodeURIComponent(list[i].name);
+                                            list[i].nick=decodeURIComponent(list[i].nick);
+                                        }
                                         window.labelslist = list;
                                         window.labels = [];
                                         window.labels.cat1 = {};
@@ -1763,18 +1786,18 @@ Version: 0.1; Sept 19th 2011
                                     } else {
                                         // options maybe active
                                         
-										// likes field
-										if (!isNaN(parseInt(document.getElementById('liketext').value))){
-											bool = document.getElementById('likelist').value == 'ture';
-											intgr = parseInt(document.getElementById('liketext').value);
-											cond = {};
-											cond.id = 6;
-											cond.opt = opt;
-											cond.params = [];
-											cond.params[0] = intgr;
-											cond.params[1] = bool;
-											rule.push(cond);
-											}
+                                        // likes field
+                                        if (!isNaN(parseInt(document.getElementById('liketext').value))){
+                                            bool = document.getElementById('likelist').value == 'ture';
+                                            intgr = parseInt(document.getElementById('liketext').value);
+                                            cond = {};
+                                            cond.id = 6;
+                                            cond.opt = opt;
+                                            cond.params = [];
+                                            cond.params[0] = intgr;
+                                            cond.params[1] = bool;
+                                            rule.push(cond);
+                                            }
 
                                         // date field
                                         if (!isNaN(parseInt(document.getElementById('datetext').value)) || (document.getElementById('timelist').value != 25)){
