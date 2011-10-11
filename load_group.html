@@ -708,12 +708,15 @@ Version: 0.1; Sept 19th 2011
                             div1.appendChild(a1);
                             li.appendChild(div1);
 							
+                            div2 = document.createElement('div');
+                            //set_style(div2,{float: 'left'});
                             a2 = document.createElement('a');
                             a2.href = "javascript:void(0)";
                             a2.innerHTML = txt;
 							a2.title = "Share/Unshare this label";
                             add_class(a2, 'labels');
-                            li.appendChild(a2);
+							div2.appendChild(a2);
+                            li.appendChild(div2);
 							
                             div3 = document.createElement('div');
                             set_style(div3,{float: 'right'});
@@ -722,7 +725,7 @@ Version: 0.1; Sept 19th 2011
                             a3.href = 'javascript:void(0)';
 							a3.innerHTML = " Ed ";
 							a3.title = "Edit this label";
-							set_style(a3,{background: color});
+							set_style(div3,{background: color});
                             /*img1 = document.createElement('img');
                             img1.width = 15;
                             img1.height = 16;
@@ -733,8 +736,8 @@ Version: 0.1; Sept 19th 2011
                             }
                             a1.appendChild(img1); */
                             div3.appendChild(a3);
-                            //li.appendChild(div3);
-							a2.appendChild(div3);
+                            li.appendChild(div3);
+							//a2.appendChild(div3);
 
                             li.add_child = function(t_txt, t_uid, t_color, t_onclick){
                                 if (!li.cn){var c = document.createElement('ul'); li.appendChild(c); li.cn = c; add_class(c, 'label_item');}
