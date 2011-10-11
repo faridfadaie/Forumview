@@ -740,8 +740,19 @@ Version: 0.1; Sept 19th 2011
 							li.appendChild(div1);*/
 							
 							s = document.createElement('span');
-							s.innerHTML = 'Ed';
+							//s.innerHTML = 'Ed';
 							add_class(s, 'label_div_right');
+							
+							a1 = document.createElement('a');
+							a1.href = 'javascript:void(0)';
+							a1.title = "Edit this lable"
+							img1 = document.createElement('img');
+							img1.width = 20;
+							img1.height = 20;
+							img1.src = "http://tayfeh.com/resources/img/box20by20.png";
+							a1.appendChild(img1);
+							s.appendChild(a1);
+
 							li.appendChild(s);
 							
 							//<span class="label_div_right">hello</span>
