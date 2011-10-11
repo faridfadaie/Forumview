@@ -1387,7 +1387,7 @@ Version: 0.1; Sept 19th 2011
                                             }
 										for (var i in list){
                                             if (list[i].parent in window.labels.cat2 && list[i].shared != "global"){ // && list[i].owner != FB._session.uid
-                                                window.labels.cat2[list[i].parent].add_child(list[i].name, i, function(){alert('click')});
+                                                window.labels.cat2[list[i].parent].add_child(list[i].name, i, list[i].color, function(){alert('click')});
                                                 }
                                             }
                                         document.getElementById('labels_cat2').appendChild(label_list);
