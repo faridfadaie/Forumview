@@ -199,10 +199,15 @@ def create_label(env, start_response, args):
         if admin is None:
             return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_PERMISSION, 'access to the object is denied or the object is not supported.')
         if admin:
-            shared = 'global'
+            if _detect_obj_type(obj_id, user) == 'profile':
+                shared = 'personal'
+                if ('shared' in args) and (str(args['shared']) == '1'):
+                    shared = 'shared'
+            else:
+                shared = 'global'
         elif ('personal' not in args) or (str(args['personal']) != '1'):
             return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'the personal view should be selected.')
-        if ('personal' in args) and (str(args['personal']) == '1'):
+        if ('personal' in args) and (str(args['personal']) == '1') and (not admin):
             obj_id = str(obj_id) + ':' + str(user['uid'])
             shared = 'personal'
             if ('shared' in args) and (str(args['shared']) == '1'):
@@ -321,30 +326,29 @@ def update_label(env, start_response, args):
         if len(label) == 0:
             return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'label_id does not exist.')
         for i in label:
-            if i.has_key('owned'):
-                owned = i['owned']
+            owned = i['owned']
+            con_obj_id = i.name
+            obj_id = i.name.split(':')[0]
+            if i.name.count(':') == 0:
+                owner = 'admin'
             else:
-                con_obj_id = i.name
-                obj_id = i.name.split(':')[0]
-                if i.name.count(':') == 0:
-                    owner = 'admin'
-                else:
-                    owner = i.name.split(':')[1]
-                shared_status, name, nick, parent, rule, color = _decode_label(i[args['label_id']])
-                admin = _is_admin(obj_id, user)
-                if admin is None:
-                    return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_PERMISSION, 'access to the object is denied or the object is not supported.')
-                if (not admin) and (owner != str(user['uid'])):
-                    return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'the label does not belong to the user.')
+                owner = i.name.split(':')[1]
+            original_label_value = dict([[args['label_id'],i[args['label_id']]]])
+            shared_status, name, nick, parent, rule, color = _decode_label(i[args['label_id']])
+            admin = _is_admin(obj_id, user)
+            if admin is None:
+                return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_PERMISSION, 'access to the object is denied or the object is not supported.')
+            if (not admin) and (owner != str(user['uid'])):
+                return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'the label does not belong to the user.')
         if 'parent' in args:
-             if str(args['parent']) == '0':
-                 parent = '0'
-             elif str(args['parent']) == args['label_id']:
-                 return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER,'parent_id is not valid.')
-             else:
-                 parent = sdb.get_attributes(AWS_SDB_LABELS_DOMAIN, con_obj_id, [args['parent']])
-                 if not parent.has_key(args['parent']) or parent[args['parent']] is None:
-                     return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER,'parent_id is not valid.')
+            if str(args['parent']) == '0':
+                parent = '0'
+            elif str(args['parent']) == args['label_id']:
+                return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER,'parent_id is not valid.')
+            else:
+                parent = sdb.get_attributes(AWS_SDB_LABELS_DOMAIN, con_obj_id, [args['parent']])
+                if not parent.has_key(args['parent']) or parent[args['parent']] is None:
+                    return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER,'parent_id is not valid.')
         if 'name' in args:
              name = args['name']
         if 'nick' in args:
@@ -360,7 +364,7 @@ def update_label(env, start_response, args):
             shared = 'personal'
             if ('shared' in args) and (str(args['shared']) == '1'):
                 shared = 'shared'
-        sdb.delete_attributes(AWS_SDB_LABELS_DOMAIN, con_obj_id, [args['label_id']])
+        sdb.delete_attributes(AWS_SDB_LABELS_DOMAIN, con_obj_id, original_label_value)
         if shared == 'global':
             con_obj_id = con_obj_id.split(':')[0]
         else:
