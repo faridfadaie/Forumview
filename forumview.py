@@ -411,13 +411,13 @@ def get_labels(env, start_response, args):
         uid = str(user['uid'])
     try:
         sdb = Retry(SimpleDB, RETRY_LIMIT, ['select', 'put_attributes', 'get_attributes'], AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
-        labels = sdb.select(AWS_SDB_LABELS_DOMAIN, "select * from %s where obj_id='%s' and owned in ('%s', '%s', 'admin', 'owner')" %(AWS_SDB_LABELS_DOMAIN, obj_id.split(':')[0], user['uid'], uid))
+        labels = sdb.select(AWS_SDB_LABELS_DOMAIN, "select * from %s where obj_id in ('%s', '%s') and owned in ('%s', '%s', 'admin', 'owner')" %(AWS_SDB_LABELS_DOMAIN, obj_id.split(':')[0], user['uid'], user['uid'], uid))
         easy_labels = {}
         for i in labels:
             for j in i:
                 if j not in ['obj_id', 'owned']:
                     shared_status, name, nick, parent, rule, color = _decode_label(i[j])
-                    if (i['owned']=='admin') or (i['owned'] == user['uid']) or (shared_status == 'shared') or ((i['owned'] == 'owner') and admin):
+                    if (i['owned']=='admin') or (i['owned'] == user['uid']) or (shared_status == 'shared') or ((i['owned'] == 'owner') and admin) or (i['obj_id'] == user['uid']):
                         easy_labels[j] = {'parent' : parent, 'name' : name, 'owner' : i['owned'], 'obj_id' : i.name,
                                       'nick': nick, 'shared' : shared_status, 'rule' : rule, 'color' : color}
                         
