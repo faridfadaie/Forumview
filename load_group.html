@@ -768,6 +768,7 @@ Version: 0.1; Sept 19th 2011
                                 li.cn.appendChild(child);
                                 }
                             addEvent(a1, 'click', function(){
+										thislabel = [];
                                         thislabel = window.labelslist[this.parentNode.parentNode.uid];
 										set_style(document.getElementById('dialog-box'), {display : 'block'});
                                         set_style(document.getElementById('posts_container'), {display : 'none'});
@@ -922,9 +923,9 @@ Version: 0.1; Sept 19th 2011
                             addEvent(a2, 'click', onclick);
                             return li
                             }
-                        function create_label(txt, uid, onclick){
+                        function create_label(txt, id, onclick){
                             var li = document.createElement('li');
-                            li.id = uid;
+                            li.id = id;
                             li.txt = txt;
                             li.innerHTML = '<a href="javascript:void(0)" style="margin-right: 5px;">' + txt + '</a>';
                             add_class(li.getElementsByTagName('a')[0], 'labels');
