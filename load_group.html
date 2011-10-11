@@ -691,21 +691,6 @@ Version: 0.1; Sept 19th 2011
                             li.uid = uid;
                             li.txt = txt;
                             
-                            div1 = document.createElement('div');
-                            set_style(div1,{float: 'left'});
-                            //set_style(div1,{width: '15px'});
-                            set_style(div1,{background: color});
-                            a1 = document.createElement('a');
-                            a1.href = 'javascript:void(0)';
-                            a1.title = "Edit this lable"
-                            img1 = document.createElement('img');
-                            img1.width = 12;
-                            img1.height = 16;
-                            img1.src = "http://tayfeh.com/resources/img/Edit_Label.png";
-                            a1.appendChild(img1);
-                            div1.appendChild(a1);
-                            li.appendChild(div1);
-                            
                             div3 = document.createElement('div');
                             set_style(div3,{float: 'left'});
                             //set_style(div1,{background: color});
@@ -724,15 +709,16 @@ Version: 0.1; Sept 19th 2011
                             div3.appendChild(a3);
                             li.appendChild(div3);
                             
-                            //div2 = document.createElement('div');
-                            //set_style(div2,{'margin-right': '30px'});
+                            div2 = document.createElement('div');
+                            set_style(div2,{'margin-right': '30px'});
                             a2 = document.createElement('a');
                             a2.href = "javascript:void(0)";
                             a2.innerHTML = txt;
                             a2.title = "Share/Unshare this label";
                             add_class(a2, 'labels');
-                            //div2.appendChild(a2);
-                            li.appendChild(a2);
+                            div2.appendChild(a2);
+                            li.appendChild(div2);
+							
                             
                             li.add_child = function(t_txt, t_uid, t_color, t_onclick){
                                 if (!li.cn){var c = document.createElement('ul'); li.appendChild(c); li.cn = c; add_class(c, 'label_item');}
