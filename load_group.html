@@ -926,7 +926,7 @@ Version: 0.1; Sept 19th 2011
                             var li = document.createElement('li');
                             li.id = uid;
                             li.txt = txt;
-                            li.innerHTML = '<a href="javascript:void(0)">' + txt + '</a>';
+                            li.innerHTML = '<a href="javascript:void(0)" style="margin-right: 5px;">' + txt + '</a>';
                             add_class(li.getElementsByTagName('a')[0], 'labels');
                             addEvent(li.getElementsByTagName('a')[0], 'click', onclick);
                             return li
