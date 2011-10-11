@@ -740,7 +740,7 @@ Version: 0.1; Sept 19th 2011
                                 li.cn.appendChild(child);
                                 }
 							addEvent(a1, 'click', function(){
-								alert('Update Label #' + this.parentNode.parentNode.uid);
+								alert('Color of this label is: ' + window.labelslist[this.parentNode.parentNode.uid].color);
 							});
                             addEvent(a3, 'click', function(){
                                 var okay = false;
@@ -1377,6 +1377,7 @@ Version: 0.1; Sept 19th 2011
                                         
 										// cat 1
                                         list = data.data;
+										window.labelslist = list;
 										window.labels = [];
                                         window.labels.cat1 = {};
                                         var label_list = document.createElement('ul');
