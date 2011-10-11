@@ -693,7 +693,7 @@ Version: 0.1; Sept 19th 2011
 							
                             div1 = document.createElement('div');
                             set_style(div1,{float: 'left'});
-							//set_style(div1,{background: color});
+							set_style(div1,{background: color});
                             a1 = document.createElement('a');
                             a1.href = 'javascript:void(0)';
                             img1 = document.createElement('img');
@@ -764,7 +764,7 @@ Version: 0.1; Sept 19th 2011
                                 var child = create_label_iconed(t_txt, t_uid, 'personal', t_color, t_onclick);
                                 li.cn.appendChild(child);
                                 }
-                            addEvent(a1, 'click', function(){
+                            addEvent(a3, 'click', function(){
                                 var okay = false;
                                 if (this.getElementsByTagName('img')[0].src == 'http://tayfeh.com/resources/img/Shareit_disabled.png'){
                                     var label2update = {};
