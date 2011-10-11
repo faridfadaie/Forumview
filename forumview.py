@@ -408,7 +408,7 @@ def get_labels(env, start_response, args):
                 if j not in ['obj_id', 'owned']:
                     shared_status, name, nick, parent, rule, color = _decode_label(i[j])
                     if (i['owned']=='admin') or (i['owned'] == user['uid']) or (shared_status == 'shared') or ((i['owned'] == 'owner') and admin):
-                        easy_labels[j] = {'parent' : parent, 'name' : name, 'owner' : i['owned'],
+                        easy_labels[j] = {'parent' : parent, 'name' : name, 'owner' : i['owned'], 'obj_id' : i['obj_id'],
                                       'nick': nick, 'shared' : shared_status, 'rule' : rule, 'color' : color}
                         
         return json_ok(env, start_response, easy_labels)
