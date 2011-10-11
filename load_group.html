@@ -694,7 +694,7 @@ Version: 0.1; Sept 19th 2011
                             div1 = document.createElement('div');
                             set_style(div1,{float: 'left'});
                             //set_style(div1,{width: '15px'});
-                            set_style(div1,{background: color});
+                            set_style(div1,{background: "#" + color});
                             a1 = document.createElement('a');
                             a1.href = 'javascript:void(0)';
                             a1.title = "Edit this lable"
@@ -740,15 +740,17 @@ Version: 0.1; Sept 19th 2011
                                 li.cn.appendChild(child);
                                 }
                             addEvent(a1, 'click', function(){
-                                        set_style(document.getElementById('dialog-box'), {display : 'block'});
+                                        thislabel = window.labelslist[this.parentNode.parentNode.uid];
+										set_style(document.getElementById('dialog-box'), {display : 'block'});
                                         set_style(document.getElementById('posts_container'), {display : 'none'});
                                         set_style(document.getElementById('post_comment_container'), {display : 'none'});
-                                        var s = '<div><h2> New Label </h2><p>Please enter a name for the new label: </p>';
+                                        var s = '<div><h2> Edit Label </h2><p>Name of the label: </p>';
                                         s += '<input type="text" name="name_label" size="26" maxlength="25" value="" id="name_label" title="Name of the label" class="conditionsfixed"/>';
-                                        s += '<p>Please enter a description: </p><textarea id="description_label" rows="2" cols="50" class="conditionsfixed"></textarea>';
+                                        s += '<p>Description: </p><textarea id="description_label" rows="2" cols="50" class="conditionsfixed"></textarea>';
                                         s += '<p id="options_row">Nest label under: <select name="list_labels" id="list_labels" class="conditionsfixed"><option value="0">Root</option>';
-                                        for (var i in window.labels){
-                                            s += '<option value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
+                                        //if (thislabel.shared == ) 
+										for (var i in window.labels){
+                                            s += '<option value="'+window.labels.cat1[i].txt+'">'+window.labels[i].txt+'</option>';
                                             }
                                         s += '</select>';
                                         s += '</p><div class="form-container"><form action="#" method="post"><div class="controlset">';
@@ -764,7 +766,7 @@ Version: 0.1; Sept 19th 2011
                                         $('#color1').colorPicker();
                                         
                                         // adding the label's data for the first part:
-                                        $("#color1").val(window.labelslist[this.parentNode.parentNode.uid].color);   
+                                        $("#color1").val(thislabel.color);   
                                         $("#color1").change();
                                         document.getElementById('name_label').value = window.labelslist[this.parentNode.parentNode.uid].name;
                                         document.getElementById('description_label').value = window.labelslist[this.parentNode.parentNode.uid].nick;
