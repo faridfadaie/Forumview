@@ -351,9 +351,10 @@ Version: 0.1; Sept 19th 2011
             }
 			.label_div_right {
 				float: right;
-				padding-left: 10px;
-				padding-right: 15px;
-			}
+				 padding-right: 5px;
+				position: relative;
+				top: -15px;
+				}
         </style>
         
         <script src="http://code.jquery.com/jquery-latest.js"></script>
@@ -724,11 +725,24 @@ Version: 0.1; Sept 19th 2011
                             div2.appendChild(a2);
                             li.appendChild(div2);
 							
-                            s = document.createElement('span');
-							s.innerHTML = 'Ed';
-							add_class(s, 'label_div_right');
-							//s.class = label_div_right
-							li.appendChild(s);
+                            div1 = document.createElement('div');
+							set_style(div1,{background: color});
+							add_class(div1, 'label_div_right');
+							a1 = document.createElement('a');
+							a1.href = 'javascript:void(0)';
+							a1.title = "Edit this lable"
+							img1 = document.createElement('img');
+							img1.width = 12;
+							img1.height = 16;
+							img1.src = "http://tayfeh.com/resources/img/Edit_Label.png";
+							a1.appendChild(img1);
+							div1.appendChild(a1);
+							li.appendChild(div1);
+							
+							//s = document.createElement('span');
+							//s.innerHTML = 'Ed';
+							//add_class(s, 'label_div_right');
+							//li.appendChild(s);
 							
 							//<span class="label_div_right">hello</span>
 							
