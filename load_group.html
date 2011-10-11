@@ -354,7 +354,7 @@ Version: 0.1; Sept 19th 2011
         <script src="http://code.jquery.com/jquery-latest.js"></script>
         <script src="http://www.tayfeh.com/resources/colorpicker/jquery.colorPicker.js" type="text/javascript"><!--mce:1--></script>
         <script src="http://teddevito.com/demos/cal.js" type="text/javascript"><!--mce:1--></script>
-		<script src="http://jquery-json.googlecode.com/files/jquery.json-2.3.min.js" type="text/javascript"></script>
+        <script src="http://jquery-json.googlecode.com/files/jquery.json-2.3.min.js" type="text/javascript"></script>
         <body>
             <div id="fb-root"></div>
             
@@ -690,28 +690,28 @@ Version: 0.1; Sept 19th 2011
                             var li = document.createElement('li');
                             li.uid = uid;
                             li.txt = txt;
-							
+                            
                             div1 = document.createElement('div');
                             set_style(div1,{float: 'left'});
-							//set_style(div1,{width: '15px'});
-							set_style(div1,{background: color});
+                            //set_style(div1,{width: '15px'});
+                            set_style(div1,{background: color});
                             a1 = document.createElement('a');
                             a1.href = 'javascript:void(0)';
-							a1.title = "Edit this lable"
+                            a1.title = "Edit this lable"
                             img1 = document.createElement('img');
                             img1.width = 12;
                             img1.height = 16;
-							img1.src = "http://tayfeh.com/resources/img/Edit_Label.png";
+                            img1.src = "http://tayfeh.com/resources/img/Edit_Label.png";
                             a1.appendChild(img1);
                             div1.appendChild(a1);
                             li.appendChild(div1);
-							
+                            
                             div3 = document.createElement('div');
                             set_style(div3,{float: 'left'});
-							//set_style(div1,{background: color});
+                            //set_style(div1,{background: color});
                             a3 = document.createElement('a');
                             a3.href = 'javascript:void(0)';
-							a3.title = 'Share/Unshare this label';
+                            a3.title = 'Share/Unshare this label';
                             img3 = document.createElement('img');
                             img3.width = 15;
                             img3.height = 16;
@@ -723,25 +723,25 @@ Version: 0.1; Sept 19th 2011
                             a3.appendChild(img3);
                             div3.appendChild(a3);
                             li.appendChild(div3);
-							
+                            
                             //div2 = document.createElement('div');
                             //set_style(div2,{'margin-right': '30px'});
                             a2 = document.createElement('a');
                             a2.href = "javascript:void(0)";
                             a2.innerHTML = txt;
-							a2.title = "Share/Unshare this label";
+                            a2.title = "Share/Unshare this label";
                             add_class(a2, 'labels');
-							//div2.appendChild(a2);
+                            //div2.appendChild(a2);
                             li.appendChild(a2);
-							
+                            
                             li.add_child = function(t_txt, t_uid, t_color, t_onclick){
                                 if (!li.cn){var c = document.createElement('ul'); li.appendChild(c); li.cn = c; add_class(c, 'label_item');}
                                 var child = create_label_iconed(t_txt, t_uid, 'personal', t_color, t_onclick);
                                 li.cn.appendChild(child);
                                 }
-							addEvent(a1, 'click', function(){
-								alert('Color of this label is: ' + window.labelslist[this.parentNode.parentNode.uid].color);
-							});
+                            addEvent(a1, 'click', function(){
+                                alert('Color of this label is: ' + window.labelslist[this.parentNode.parentNode.uid].color);
+                            });
                             addEvent(a3, 'click', function(){
                                 var okay = false;
                                 if (this.getElementsByTagName('img')[0].src == 'http://tayfeh.com/resources/img/Shareit_disabled.png'){
@@ -1351,34 +1351,34 @@ Version: 0.1; Sept 19th 2011
                                             create_tag_linked('info_global','Global View',"#");
                                             }
                                         create_tag('labels_cat1','My General Labels','http://tayfeh.com/resources/img/My.png');
-										
-										if (FB._session.uid == 'XXX_VIEW_ID_XXX') {
-											if (XXX_ADMIN_XXX) {
-												if ('XXX_OBJ_ID_XXX' != 'XXX_VIEW_ID_XXX') {
-													create_tag('labels_cat2','Personal lables for here','http://tayfeh.com/resources/img/My_ThisGroup.png');
-												}
-												if ('XXX_KIND_XXX' == 'group' || 'XXX_KIND_XXX' == 'page') {
-													create_tag('labels_cat3','XXX_KIND_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png');
-												}
-											} else {
-												create_tag('labels_cat2','My Labels for This '+'XXX_KIND_XXX','http://tayfeh.com/resources/img/My_ThisGroup.png');
-												if ('XXX_KIND_XXX' == 'group' || 'XXX_KIND_XXX' == 'page') {
-													create_tag('labels_cat3','XXX_KIND_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png');
-												} else {
-													create_tag('labels_cat3','XXX_VIEW_ID_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png'); //?? instead of VIED_ID we should put VIUE_ID->name
-												}
-											}
-											
-										}
-										//if ("XXX_KIND_XXX" == "group" || "XXX_KIND_XXX" == "page") {
-										//	create_tag('my_dedicated_labels','My Labels for This '+'XXX_KIND_XXX','http://tayfeh.com/resources/img/My_ThisGroup.png');
-										//	create_tag('here_labels','XXX_KIND_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png');
-										//}
                                         
-										// cat 1
+                                        if (FB._session.uid == 'XXX_VIEW_ID_XXX') {
+                                            if (XXX_ADMIN_XXX) {
+                                                if ('XXX_OBJ_ID_XXX' != 'XXX_VIEW_ID_XXX') {
+                                                    create_tag('labels_cat2','Personal lables for here','http://tayfeh.com/resources/img/My_ThisGroup.png');
+                                                }
+                                                if ('XXX_KIND_XXX' == 'group' || 'XXX_KIND_XXX' == 'page') {
+                                                    create_tag('labels_cat3','XXX_KIND_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png');
+                                                }
+                                            } else {
+                                                create_tag('labels_cat2','My Labels for This '+'XXX_KIND_XXX','http://tayfeh.com/resources/img/My_ThisGroup.png');
+                                                if ('XXX_KIND_XXX' == 'group' || 'XXX_KIND_XXX' == 'page') {
+                                                    create_tag('labels_cat3','XXX_KIND_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png');
+                                                } else {
+                                                    create_tag('labels_cat3','XXX_VIEW_ID_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png'); //?? instead of VIED_ID we should put VIUE_ID->name
+                                                }
+                                            }
+                                            
+                                        }
+                                        //if ("XXX_KIND_XXX" == "group" || "XXX_KIND_XXX" == "page") {
+                                        //    create_tag('my_dedicated_labels','My Labels for This '+'XXX_KIND_XXX','http://tayfeh.com/resources/img/My_ThisGroup.png');
+                                        //    create_tag('here_labels','XXX_KIND_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png');
+                                        //}
+                                        
+                                        // cat 1
                                         list = data.data;
-										window.labelslist = list;
-										window.labels = [];
+                                        window.labelslist = list;
+                                        window.labels = [];
                                         window.labels.cat1 = {};
                                         var label_list = document.createElement('ul');
                                         label_list.id = 'lable_cat1_container_ul'
@@ -1390,16 +1390,16 @@ Version: 0.1; Sept 19th 2011
                                                 label_list.appendChild(l)
                                                 }
                                             }
-										for (var i in list){
+                                        for (var i in list){
                                             if (list[i].parent in window.labels.cat1 && list[i].shared == "global"){ // && list[i].owner != FB._session.uid
                                                 window.labels.cat1[list[i].parent].add_child(list[i].name, i, list[i].color, function(){alert('click')});
                                                 }
                                             }
                                         document.getElementById('labels_cat1').appendChild(label_list);
 
-										// cat 2
+                                        // cat 2
                                        // list = data.data;
-										//window.labels = [];
+                                        //window.labels = [];
                                         window.labels.cat2 = {};
                                         label_list = document.createElement('ul');
                                         label_list.id = 'lable_cat2_container_ul'
@@ -1411,7 +1411,7 @@ Version: 0.1; Sept 19th 2011
                                                 label_list.appendChild(l)
                                                 }
                                             }
-										for (var i in list){
+                                        for (var i in list){
                                             if (list[i].parent in window.labels.cat2 && list[i].shared != "global"){ // && list[i].owner != FB._session.uid
                                                 window.labels.cat2[list[i].parent].add_child(list[i].name, i, list[i].color, function(){alert('click')});
                                                 }
@@ -1548,7 +1548,7 @@ Version: 0.1; Sept 19th 2011
                                     label2alert.nick = $("#description_label").val();
                                     label2alert.parent = parent_id;
                                     label2alert.color = document.getElementById('color1').value;
-									var color_label = label2alert.color;
+                                    var color_label = label2alert.color;
                                         
                                     /*
                                     // categories:
@@ -1625,7 +1625,7 @@ Version: 0.1; Sept 19th 2011
                                         
                                         // -> at the end, change the first opt to 0
                                         
-									label2alert.rule = $.toJSON(rule);
+                                    label2alert.rule = $.toJSON(rule);
                                         
                                     $.post("/create_label",label2alert,
                                     function(result) {
