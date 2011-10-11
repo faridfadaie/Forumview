@@ -766,8 +766,7 @@ Version: 0.1; Sept 19th 2011
                                 }
                             addEvent(a1, 'click', function(){
                                         thislabel = window.labelslist[this.parentNode.parentNode.uid];
-										alert(thislabel.parent);
-                                        set_style(document.getElementById('dialog-box'), {display : 'block'});
+										set_style(document.getElementById('dialog-box'), {display : 'block'});
                                         set_style(document.getElementById('posts_container'), {display : 'none'});
                                         set_style(document.getElementById('post_comment_container'), {display : 'none'});
                                         var s = '<div><h2> Edit Label </h2><p>Name of the label: </p>';
@@ -776,7 +775,7 @@ Version: 0.1; Sept 19th 2011
                                         s += '<p id="options_row">Nest label under: <select name="list_labels" id="list_labels" class="conditionsfixed"><option value="0">Root</option>';
                                         if (thislabel.shared == "global") {
                                             for (var i in window.labels.cat1){
-                                                if ( thislabel.parent == window.labels.cat1[i].parent) {
+                                                if ( thislabel.parent == window.labels.cat1[i].uid) {
                                                     s += '<option selected value="'+window.labels.cat1[i].txt+'">'+window.labels.cat1[i].txt+'</option>';
                                                 } else {
                                                     s += '<option value="'+window.labels.cat1[i].txt+'">'+window.labels.cat1[i].txt+'</option>';
@@ -784,7 +783,7 @@ Version: 0.1; Sept 19th 2011
                                             }
                                         } else {
                                             for (var i in window.labels.cat2){
-                                                if ( thislabel.parent == window.labels.cat2[i].parent) {
+                                                if ( thislabel.parent == window.labels.cat2[i].uid) {
                                                     s += '<option selected value="'+window.labels.cat2[i].txt+'">'+window.labels.cat2[i].txt+'</option>';
                                                 } else {
                                                     s += '<option value="'+window.labels.cat2[i].txt+'">'+window.labels.cat2[i].txt+'</option>';
