@@ -1325,10 +1325,28 @@ Version: 0.1; Sept 19th 2011
                                             create_tag_linked('info_global','Global View',"#");
                                             }
                                         create_tag('my_general_labels','My General Labels','http://tayfeh.com/resources/img/My.png');
-										if ("XXX_KIND_XXX" == "group" || "XXX_KIND_XXX" == "page") {
-											create_tag('my_dedicated_labels','My Labels for This '+'XXX_KIND_XXX','http://tayfeh.com/resources/img/My_ThisGroup.png');
-											create_tag('here_labels','XXX_KIND_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png');
+										if (FB._session.uid == 'XXX_VIEW_ID_XXX') {
+											if ('XXX_ADMIN_XXX') {
+												if ('XXX_OBJ_ID_XXX' != 'XXX_VIEW_ID_XXX') {
+													create_tag('my_dedicated_labels','My Labels for This '+'XXX_KIND_XXX','http://tayfeh.com/resources/img/My_ThisGroup.png');
+												}
+												if ('XXX_KIND_XXX' == 'group' || 'XXX_KIND_XXX' == 'page') {
+													create_tag('here_labels','XXX_KIND_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png');
+												}
+											} else {
+												create_tag('my_dedicated_labels','My Labels for This '+'XXX_KIND_XXX','http://tayfeh.com/resources/img/My_ThisGroup.png');
+												if ('XXX_KIND_XXX' == 'group' || 'XXX_KIND_XXX' == 'page') {
+													create_tag('here_labels','XXX_KIND_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png');
+												} else {
+													create_tag('here_labels','XXX_VIEW_ID_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png'); //?? instead of VIED_ID we should put VIUE_ID->name
+												}
+											}
+											
 										}
+										//if ("XXX_KIND_XXX" == "group" || "XXX_KIND_XXX" == "page") {
+										//	create_tag('my_dedicated_labels','My Labels for This '+'XXX_KIND_XXX','http://tayfeh.com/resources/img/My_ThisGroup.png');
+										//	create_tag('here_labels','XXX_KIND_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png');
+										//}
                                         
                                         list = data.data;
                                         window.labels = {}
@@ -1553,7 +1571,6 @@ Version: 0.1; Sept 19th 2011
                                         
                                         // -> at the end, change the first opt to 0
                                         
-                                    //label2alert.rule = JSON.stringify(rule);
 									label2alert.rule = $.toJSON(rule);
                                         
                                     $.post("/create_label",label2alert,
