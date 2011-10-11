@@ -690,9 +690,10 @@ Version: 0.1; Sept 19th 2011
                             var li = document.createElement('li');
                             li.uid = uid;
                             li.txt = txt;
+							
                             div1 = document.createElement('div');
                             set_style(div1,{float: 'left'});
-							set_style(div1,{background: color});
+							//set_style(div1,{background: color});
                             a1 = document.createElement('a');
                             a1.href = 'javascript:void(0)';
                             img1 = document.createElement('img');
@@ -706,11 +707,34 @@ Version: 0.1; Sept 19th 2011
                             a1.appendChild(img1);
                             div1.appendChild(a1);
                             li.appendChild(div1);
+							
                             a2 = document.createElement('a');
                             a2.href = "javascript:void(0)";
                             a2.innerHTML = txt;
+							a2.title = "Share/Unshare this label";
                             add_class(a2, 'labels');
                             li.appendChild(a2);
+							
+                            div3 = document.createElement('div');
+                            set_style(div3,{float: 'right'});
+							//set_style(div1,{background: color});
+                            a3 = document.createElement('a');
+                            a3.href = 'javascript:void(0)';
+							a3.innerHTML = " E ";
+							a3.title = "Edit this label";
+							set_style(a3,{background: color});
+                            /*img1 = document.createElement('img');
+                            img1.width = 15;
+                            img1.height = 16;
+                            if (shared == 'shared') {
+                                img1.src = "http://tayfeh.com/resources/img/Shareit_abled.png";
+                            } else {
+                                img1.src = "http://tayfeh.com/resources/img/Shareit_disabled.png";
+                            }
+                            a1.appendChild(img1); */
+                            div3.appendChild(a3);
+                            li.appendChild(div3);
+							
 
                             li.add_child = function(t_txt, t_uid, t_color, t_onclick){
                                 if (!li.cn){var c = document.createElement('ul'); li.appendChild(c); li.cn = c; add_class(c, 'label_item');}
