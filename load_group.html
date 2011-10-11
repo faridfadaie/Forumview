@@ -763,10 +763,11 @@ Version: 0.1; Sept 19th 2011
 										document.getElementById('Btn_labeldialog_addlabel').innerHTML = 'Update';
 										$('#color1').colorPicker();
 										
-										// adding the label's data:
+										// adding the label's data for the first part:
 										$("#color1").val(window.labelslist[this.parentNode.parentNode.uid].color);   
 										$("#color1").change();
 										document.getElementById('name_label').value = window.labelslist[this.parentNode.parentNode.uid].name;
+										document.getElementById('description_label').value = window.labelslist[this.parentNode.parentNode.uid].nick;
 										
 										if (XXX_ADMIN_XXX) {
 											p = document.getElementById('options_row');
