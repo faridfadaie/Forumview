@@ -317,22 +317,25 @@ def update_label(env, start_response, args):
         return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'label_id not passed.')
     sdb = Retry(SimpleDB, RETRY_LIMIT, ['delete_attributes', 'select', 'put_attributes', 'get_attributes'], AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
     try:
-        label = sdb.select(AWS_SDB_LABELS_DOMAIN, 'select `%s` from %s where `%s` in ("A:shared", "A:global", "A:personal")' %(args['label_id'], AWS_SDB_LABELS_DOMAIN, args['label_id']))
+        label = sdb.select(AWS_SDB_LABELS_DOMAIN, 'select owned, `%s` from %s where `%s` in ("A:shared", "A:global", "A:personal")' %(args['label_id'], AWS_SDB_LABELS_DOMAIN, args['label_id']))
         if len(label) == 0:
             return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'label_id does not exist.')
         for i in label:
-            con_obj_id = i.name
-            obj_id = i.name.split(':')[0]
-            if i.name.count(':') == 0:
-                owner = 'admin'
+            if i.has_key('owned'):
+                owned = i['owned']
             else:
-                owner = i.name.split(':')[1]
-            shared_status, name, nick, parent, rule, color = _decode_label(i[args['label_id']])
-            admin = _is_admin(obj_id, user)
-            if admin is None:
-                return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_PERMISSION, 'access to the object is denied or the object is not supported.')
-            if (not admin) and (owner != str(user['uid'])):
-                return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'the label does not belong to the user.')
+                con_obj_id = i.name
+                obj_id = i.name.split(':')[0]
+                if i.name.count(':') == 0:
+                    owner = 'admin'
+                else:
+                    owner = i.name.split(':')[1]
+                shared_status, name, nick, parent, rule, color = _decode_label(i[args['label_id']])
+                admin = _is_admin(obj_id, user)
+                if admin is None:
+                    return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_PERMISSION, 'access to the object is denied or the object is not supported.')
+                if (not admin) and (owner != str(user['uid'])):
+                    return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'the label does not belong to the user.')
         if 'parent' in args:
              if str(args['parent']) == '0':
                  parent = '0'
@@ -367,6 +370,8 @@ def update_label(env, start_response, args):
                                                         (args['label_id'], NICK_DEL + nick, True),
                                                         (args['label_id'], PARENT_DEL + parent, True),
                                                         (args['label_id'], RULE_DEL + rule, True),
+                                                        ('owned', owned, True),
+                                                        ('obj_id', con_obj_id.split(':')[0], True),
                                                         (args['label_id'], COL_DEL + color, True)])
         return json_ok(env, start_response, {})
     except:
