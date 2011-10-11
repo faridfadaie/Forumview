@@ -1668,10 +1668,16 @@ Version: 0.1; Sept 19th 2011
                                     //name_label = window.name_label_new;
                                     set_style(document.getElementById('posts_container'),{display: 'block'});
                                     var parent = new Object();
-                                    for (var i in window.labels){
-                                        if (window.labels[i].txt == $("#list_labels").val()){
+                                    for (var i in window.labels.cat1){
+                                        if (window.labels.cat1[i].txt == $("#list_labels").val()){
                                             parent_id = i;
-                                            parent = window.labels[i];
+                                            parent = window.labels.cat1[i];
+                                            }
+                                        }
+                                    for (var i in window.labels.cat2){
+                                        if (window.labels.cat2[i].txt == $("#list_labels").val()){
+                                            parent_id = i;
+                                            parent = window.labels.cat2[i];
                                             }
                                         }
                                             
@@ -1795,12 +1801,12 @@ Version: 0.1; Sept 19th 2011
                                         $.post("/create_label",label2alert,function(result) {
                                             if (result["type"]=="ok"){
                                                 if (parent_id == '0'){
-                                                    window.labels[result["data"]] = create_label_iconed(name_label, result["data"], 'personal', color_label, function(){alert('click')});
+                                                    window.labels.cat1[result["data"]] = create_label_iconed(name_label, result["data"], 'personal', color_label, function(){alert('click')});
                                                     // where to add?
-                                                    document.getElementById('lable_cat2_container_ul').appendChild(window.labels[result["data"]]);
+                                                    document.getElementById('lable_cat1_container_ul').appendChild(window.labels[result["data"]]);
                                                     
                                                     } else {
-                                                    window.labels[parent_id].add_child(name_label, result["data"], color_label, function(){alert('click')});
+                                                    window.labels.cat1[parent_id].add_child(name_label, result["data"], color_label, function(){alert('click')});
                                                     }
                                                 //$("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
                                             } else {
