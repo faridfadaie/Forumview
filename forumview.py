@@ -130,9 +130,16 @@ def _get_post_info(post_id, user):
         updated_time = obj['updated_time']
     return from_id, to_id, created_time, updated_time
 
+def redirect(env, start_response, url):
+    start_response('200 OK', [])
+    return ['<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Redirecting to Facebook</title><meta http-equiv="REFRESH" content="0;url=%s"></HEAD><BODY></BODY></HTML>' %url]
+
 def view_obj(env, start_response, params):
     if params.has_key('code'):
-        file = urllib2.urlopen('https://graph.facebook.com/oauth/access_token?client_id=246575252046549&redirect_uri=http%3A%2F%2F'+env['HTTP_HOST'].split(':')[0]+'%3A'+str(LISTEN_PORT)+'%2F'+'%2F'.join(params['list'])+'&client_secret=bba342dc751c88d7522ce822d4d30ab8&code='+params['code'])
+        try:
+            file = urllib2.urlopen('https://graph.facebook.com/oauth/access_token?client_id=246575252046549&redirect_uri=http%3A%2F%2F'+env['HTTP_HOST'].split(':')[0]+'%3A'+str(LISTEN_PORT)+'%2F'+'%2F'.join(params['list'])+'&client_secret=bba342dc751c88d7522ce822d4d30ab8&code='+params['code'])
+        except:
+            return redirect(env, start_response, 'http://' + env['HTTP_HOST'] + env['PATH_INFO'])
         try: response = file.read()
         finally: file.close()
         response = dict([a.split('=') for a in response.split('&')])
@@ -146,8 +153,7 @@ def view_obj(env, start_response, params):
         if len(params['list']) == 0:
             start_response('200 OK', [])
             return [page_contents['home.html']]
-        start_response('200 OK', [])
-        return ['<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Redirecting to Facebook</title><meta http-equiv="REFRESH" content="0;url=https://graph.facebook.com/oauth/authorize?client_id=246575252046549&redirect_uri=http%3A%2F%2F'+env['HTTP_HOST'].split(':')[0]+'%3A'+str(LISTEN_PORT)+'%2F'+'%2F'.join(params['list'])+'&scope=publish_stream%2Cread_stream%2Cuser_groups"></HEAD><BODY></BODY></HTML>']
+        return redirect(env, start_response, 'https://graph.facebook.com/oauth/authorize?client_id=246575252046549&redirect_uri=http%3A%2F%2F'+env['HTTP_HOST'].split(':')[0]+'%3A'+str(LISTEN_PORT)+'%2F'+'%2F'.join(params['list'])+'&scope=publish_stream%2Cread_stream%2Cuser_groups')
     ret = page_contents['load_group.html']
     if len(params['list']) == 0:
         ret = ret.replace('XXX_ADMIN_XXX', 'true')
@@ -157,8 +163,7 @@ def view_obj(env, start_response, params):
         start_response('200 OK',[])
         return [ret]
     if len(params['list']) == 1:
-        start_response('200 OK', [])
-        return ['<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>Redirecting to Facebook</title><meta http-equiv="REFRESH" content="0;url=http://'+env['HTTP_HOST'].split(':')[0]+':'+str(LISTEN_PORT)+'/'+params['list'][0]+'/'+str(user['uid'])+'"></HEAD><BODY></BODY></HTML>']
+        return redirect(env, start_response, 'http://' + env['HTTP_HOST']+'/'+params['list'][0]+'/'+str(user['uid']))
     view_obj_kind, fb_uid = _detect_obj_type(params['list'][1], user)
     if view_obj_kind != 'profile':
         return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'The view should be a facebook user.')
@@ -310,9 +315,9 @@ def update_label(env, start_response, args):
         return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_SESSION)
     if 'label_id' not in args:
         return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'label_id not passed.')
-    sdb = Retry(SimpleDB, RETRY_LIMIT, ['select', 'put_attributes', 'get_attributes'], AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
+    sdb = Retry(SimpleDB, RETRY_LIMIT, ['delete_attributes', 'select', 'put_attributes', 'get_attributes'], AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
     try:
-        label = sdb.select(AWS_SDB_LABELS_DOMAIN, 'select `%s` from %s' %(args['label_id'], AWS_SDB_LABELS_DOMAIN))
+        label = sdb.select(AWS_SDB_LABELS_DOMAIN, 'select `%s` from %s where `%s` in ("A:shared", "A:global", "A:personal")' %(args['label_id'], AWS_SDB_LABELS_DOMAIN, args['label_id']))
         if len(label) == 0:
             return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'label_id does not exist.')
         for i in label:
@@ -352,6 +357,11 @@ def update_label(env, start_response, args):
             shared = 'personal'
             if ('shared' in args) and (str(args['shared']) == '1'):
                 shared = 'shared'
+        sdb.delete_attributes(AWS_SDB_LABELS_DOMAIN, con_obj_id, [args['label_id']])
+        if shared == 'global':
+            con_obj_id = con_obj_id.split(':')[0]
+        else:
+            con_obj_id = con_obj_id.split(':')[0] + ':' + str(user['uid'])
         sdb.put_attributes(AWS_SDB_LABELS_DOMAIN, con_obj_id, [(args['label_id'], SHARE_DEL + shared, True),
                                                         (args['label_id'], NAME_DEL + name, True),
                                                         (args['label_id'], NICK_DEL + nick, True),
@@ -403,7 +413,7 @@ def get_labels(env, start_response, args):
                 if j not in ['obj_id', 'owned']:
                     shared_status, name, nick, parent, rule, color = _decode_label(i[j])
                     if (i['owned']=='admin') or (i['owned'] == user['uid']) or (shared_status == 'shared') or ((i['owned'] == 'owner') and admin):
-                        easy_labels[j] = {'parent' : parent, 'name' : name, 'owner' : i['owned'],
+                        easy_labels[j] = {'parent' : parent, 'name' : name, 'owner' : i['owned'], 'obj_id' : i.name,
                                       'nick': nick, 'shared' : shared_status, 'rule' : rule, 'color' : color}
                         
         return json_ok(env, start_response, easy_labels)
@@ -497,7 +507,6 @@ def request_handler(env, start_response):
     method = env['REQUEST_METHOD']
     path = env['PATH_INFO']
     if (method in ['GET', 'POST']):
-        print path.split('/')[1]
         params = load_args(env)
         if (path.count('/') > 0) and path.split('/')[1] in allowed_functions:
             if path.count('/') > 1:
