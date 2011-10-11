@@ -1642,6 +1642,27 @@ Version: 0.1; Sept 19th 2011
                                     label2alert.nick = $("#description_label").val();
                                     label2alert.parent = parent_id;
                                     label2alert.color = document.getElementById('color1').value;
+                                    if (XXX_ADMIN_XXX) {
+                                        if (document.getElementById('personal_select').value == "1") {
+                                            label2alert.owner = 'admin';
+                                            label2alert.shared = 'global';
+                                        } else {
+                                            label2alert.owner = FB._session.uid;
+                                            if (document.getElementById('shared_checkbox').checked) {
+                                                label2alert.shared = 'shared';
+                                            } else {
+                                                label2alert.shared = 'personal';
+                                            }
+                                        }
+                                    } else {
+                                            label2alert.owner = FB._session.uid;
+                                            if (document.getElementById('shared_checkbox').checked) {
+                                                label2alert.shared = 'shared';
+                                            } else {
+                                                label2alert.shared = 'personal';
+                                            }                                    
+                                    }
+                                    
                                     var color_label = label2alert.color;
                                         
                                     /*
