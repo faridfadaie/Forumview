@@ -762,8 +762,12 @@ Version: 0.1; Sept 19th 2011
 										document.getElementById('dialog-message').innerHTML = s;
 										document.getElementById('Btn_labeldialog_addlabel').innerHTML = 'Update';
 										$('#color1').colorPicker();
+										
+										// adding the label's data:
 										$("#color1").val(window.labelslist[this.parentNode.parentNode.uid].color);   
 										$("#color1").change();
+										document.getElementById('name_label').value = window.labelslist[this.parentNode.parentNode.uid].name;
+										
 										if (XXX_ADMIN_XXX) {
 											p = document.getElementById('options_row');
 											l1 = document.createElement('label');
