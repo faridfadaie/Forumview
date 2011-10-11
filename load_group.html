@@ -1571,7 +1571,8 @@ Version: 0.1; Sept 19th 2011
                                                 //var l = create_label_iconed(list[i].name, i, list[i].shared, list[i].color, true, function(){alert('click')})
 												var l = create_label_iconed(list[i].name, i, list[i].shared, list[i].color, true, function(){
 													$('div').removeClass('clickeditem');
-													$(this).addClass('clickeditem');
+													alert(this.innerHTML);
+													//$(this).addClass('clickeditem');
 												});
                                                 window.labels.cat1[i] = l;
                                                 label_list.appendChild(l)
