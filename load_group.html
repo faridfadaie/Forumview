@@ -1594,7 +1594,7 @@ Version: 0.1; Sept 19th 2011
 													add_class(this.parentNode,'clickeditem'); 
 													//now show labels here :D ->
 												});
-												window.labels = l;
+												window.labels[i] = l;
 												switch (list[i].cat) {
 													case 1:
 													label_list_cat1.appendChild(l);
@@ -1618,8 +1618,8 @@ Version: 0.1; Sept 19th 2011
 													add_class(this.parentNode,'clickeditem'); 
 													//now show labels here :D ->
 												});
-												window.labels = l;
-												switch (list[i].cat) {
+												window.labels[list[i].parent] = l;
+												switch (list[list[i].parent].cat) {
 													case 1:
 													label_list_cat1.appendChild(l);
 													break;
