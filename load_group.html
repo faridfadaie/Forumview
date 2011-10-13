@@ -1868,13 +1868,19 @@ Version: 0.1; Sept 19th 2011
                                     if (document.getElementById('Btn_labeldialog_addlabel').innerHTML == 'Add') {
                                         $.post("/create_label",label2alert,function(result) {
                                             if (result["type"]=="ok"){
-                                            //window.labelslist[this.parentNode.parentNode.uid]
 												window.labelslist[result["data"]]=label2alert;
-												//obj_id=page/group which is owned by user&personal=0 => global label for the page/group
-												//obj_id=page/group&personal=1&shared=0 => personal label for the group 
-												//obj_id=page/group&personal=1&shared=1 => shared label for the group
-												
-												if (XXX_ADMIN_XXX && label2alert.personal == 0) {
+												if (XXX_KIND_XXX == 'profile') {
+													var sharedtext = '';
+													if (label2alert.shared == 1) { sharedtext = 'shared'; } else { sharedtext = 'personal';}
+                                                    if (parent_id == '0'){
+                                                        window.labels[result["data"]] = create_label_iconed(1,name_label, result["data"], sharedtext, color_label, true, function(){alert('click')});
+                                                        document.getElementById('lable_cat2_container_ul').appendChild(window.labels[result["data"]]);
+                                                        
+                                                    } else {
+                                                        window.labels[parent_id].add_child(1,name_label, result["data"], sharedtext, color_label, true, function(){alert('click')});
+                                                    }                                                												
+												}
+												else if (XXX_ADMIN_XXX && label2alert.personal == 0) {
                                                     if (parent_id == '0'){
                                                         window.labels[result["data"]] = create_label_iconed(3, name_label, result["data"], 'global', color_label, false, function(){alert('click')});
                                                         document.getElementById('lable_cat3_container_ul').appendChild(window.labels[result["data"]]);
