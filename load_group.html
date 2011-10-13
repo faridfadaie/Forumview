@@ -1584,7 +1584,7 @@ Version: 0.1; Sept 19th 2011
 											} else if (list[i].owner == 'admin' || list[i].owner == 'owner') { //cat3
 												list[i].cat = 3;
 											}
-											if (list[i].parent == "0") { // root label
+											if (list[i].parent == "0") { // root labels
 												var l = create_label_iconed(list[i].cat,list[i].name, i, list[i].shared, list[i].color, true, function(){
 													// changing the appearance
 													$('.clickeditem').removeClass('clickeditem');
@@ -1603,36 +1603,16 @@ Version: 0.1; Sept 19th 2011
 													label_list_cat3.appendChild(l);
 													break;
 												}
-											} else if (list[i].parent in window.labels){ //child label with parent present
-												window.labels[list[i].parent].add_child(list[i].cat,list[i].name, i, list[i].shared, list[i].color, true, function(){
-													$('.clickeditem').removeClass('clickeditem');
-													add_class(this.parentNode,'clickeditem'); 
-												});
-											} else { //child label with parent not present
-												var l = create_label_iconed(list[i].cat,list[list[i].parent].name, list[i].parent, list[list[i].parent].shared, list[list[i].parent].color, true, function(){
-													// changing the appearance
-													$('.clickeditem').removeClass('clickeditem');
-													add_class(this.parentNode,'clickeditem'); 
-													//now show labels here :D ->
-												});
-												window.labels[list[i].parent] = l;
-												switch (list[list[i].parent].cat) {
-													case 1:
-													label_list_cat1.appendChild(l);
-													break;
-													case 2:
-													label_list_cat2.appendChild(l);
-													break;
-													case 3:
-													label_list_cat3.appendChild(l);
-													break;
-												}
-												window.labels[list[i].parent].add_child(list[i].cat,list[i].name, i, list[i].shared, list[i].color, true, function(){
-													$('.clickeditem').removeClass('clickeditem');
-													add_class(this.parentNode,'clickeditem'); 
-												});
-											}
+											} 
                                         }
+										for (var i in list){
+											if (list[i].parent in window.labels){ //child labels with parents present
+												window.labels[list[i].parent].add_child(list[i].cat,list[i].name, i, list[i].shared, list[i].color, true, function(){
+													$('.clickeditem').removeClass('clickeditem');
+													add_class(this.parentNode,'clickeditem'); 
+												});
+											} 
+										}
                                         document.getElementById('labels_cat1').appendChild(label_list_cat1);
                                         document.getElementById('labels_cat2').appendChild(label_list_cat2);
                                         document.getElementById('labels_cat3').appendChild(label_list_cat3);
