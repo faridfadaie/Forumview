@@ -1883,7 +1883,7 @@ Version: 0.1; Sept 19th 2011
                                                     }
                                                 } else {
 													var sharedtext = '';
-													if (label2alert.shared = 1) { sharedtext = 'shared'; } else { sharedtext = 'personal'; }
+													if (label2alert.shared == 1) { sharedtext = 'shared'; } else { sharedtext = 'personal'; }
                                                     if (parent_id == '0'){
                                                         window.labels[result["data"]] = create_label_iconed(2,name_label, result["data"], sharedtext, color_label, label2alert.shared == 1, function(){alert('click')});
                                                         document.getElementById('lable_cat2_container_ul').appendChild(window.labels[result["data"]]);
