@@ -1883,14 +1883,13 @@ Version: 0.1; Sept 19th 2011
                                                     }
                                                 } else {
 													var sharedtext = '';
-													var wasshared = true;
-													if (label2alert.shared == 1) { sharedtext = 'shared'; } else { sharedtext = 'personal'; wasshared = false;}
+													if (label2alert.shared == 1) { sharedtext = 'shared'; } else { sharedtext = 'personal';}
                                                     if (parent_id == '0'){
-                                                        window.labels[result["data"]] = create_label_iconed(2,name_label, result["data"], sharedtext, color_label, wasshared, function(){alert('click')});
+                                                        window.labels[result["data"]] = create_label_iconed(2,name_label, result["data"], sharedtext, color_label, true, function(){alert('click')});
                                                         document.getElementById('lable_cat2_container_ul').appendChild(window.labels[result["data"]]);
                                                         
                                                     } else {
-                                                        window.labels[parent_id].add_child(2,name_label, result["data"], sharedtext, color_label, wasshared, function(){alert('click')});
+                                                        window.labels[parent_id].add_child(2,name_label, result["data"], sharedtext, color_label, true, function(){alert('click')});
                                                     }                                                
                                                 }
                                             } else {
