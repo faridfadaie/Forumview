@@ -1869,7 +1869,7 @@ Version: 0.1; Sept 19th 2011
                                         $.post("/create_label",label2alert,function(result) {
                                             if (result["type"]=="ok"){
 												window.labelslist[result["data"]]=label2alert;
-												if (XXX_KIND_XXX == 'profile') {
+												if ('XXX_KIND_XXX' == 'profile') {
 													var sharedtext = '';
 													if (label2alert.shared == 1) { sharedtext = 'shared'; } else { sharedtext = 'personal';}
                                                     if (parent_id == '0'){
