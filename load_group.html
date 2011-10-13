@@ -1864,46 +1864,56 @@ Version: 0.1; Sept 19th 2011
                                         // -> at the end, change the first opt to 0
                                         
                                     label2alert.rule = $.toJSON(rule);
+									
+									if ('XXX_KIND_XXX' == 'profile') {
+										//for now commented, should be revisited for creating labels in someone else's profile:
+										//if (XXX_ADMIN_XXX) {
+											label2alert.obj_id = FB._session.uid;
+										//}
+									}
                                         
                                     if (document.getElementById('Btn_labeldialog_addlabel').innerHTML == 'Add') {
-                                        $.post("/create_label",label2alert,function(result) {
-                                            if (result["type"]=="ok"){
-												window.labelslist[result["data"]]=label2alert;
-												if ('XXX_KIND_XXX' == 'profile') {
-													var sharedtext = '';
-													if (label2alert.shared == 1) { sharedtext = 'shared'; } else { sharedtext = 'personal';}
-                                                    if (parent_id == '0'){
-                                                        window.labels[result["data"]] = create_label_iconed(1,name_label, result["data"], sharedtext, color_label, true, function(){alert('click')});
-                                                        document.getElementById('lable_cat1_container_ul').appendChild(window.labels[result["data"]]);
-                                                        
-                                                    } else {
-                                                        window.labels[parent_id].add_child(1,name_label, result["data"], sharedtext, color_label, true, function(){alert('click')});
-                                                    }                                                												
+										var todo = "/create_label"; 
+									} else {
+										var todo = "/update_label"; 									
+									}
+									$.post(todo,label2alert,function(result) {
+										if (result["type"]=="ok"){
+											window.labelslist[result["data"]]=label2alert;
+											if ('XXX_KIND_XXX' == 'profile') {
+												var sharedtext = '';
+												if (label2alert.shared == 1) { sharedtext = 'shared'; } else { sharedtext = 'personal';}
+												if (parent_id == '0'){
+													window.labels[result["data"]] = create_label_iconed(1,name_label, result["data"], sharedtext, color_label, true, function(){alert('click')});
+													document.getElementById('lable_cat1_container_ul').appendChild(window.labels[result["data"]]);
+													
+												} else {
+													window.labels[parent_id].add_child(1,name_label, result["data"], sharedtext, color_label, true, function(){alert('click')});
+												}                                                												
+											}
+											else if (XXX_ADMIN_XXX && label2alert.personal == 0) {
+												if (parent_id == '0'){
+													window.labels[result["data"]] = create_label_iconed(3, name_label, result["data"], 'global', color_label, false, function(){alert('click')});
+													document.getElementById('lable_cat3_container_ul').appendChild(window.labels[result["data"]]);
+													
+												} else {
+													window.labels[parent_id].add_child(3,name_label, result["data"], 'global', color_label, false, function(){alert('click')});
 												}
-												else if (XXX_ADMIN_XXX && label2alert.personal == 0) {
-                                                    if (parent_id == '0'){
-                                                        window.labels[result["data"]] = create_label_iconed(3, name_label, result["data"], 'global', color_label, false, function(){alert('click')});
-                                                        document.getElementById('lable_cat3_container_ul').appendChild(window.labels[result["data"]]);
-                                                        
-                                                    } else {
-                                                        window.labels[parent_id].add_child(3,name_label, result["data"], 'global', color_label, false, function(){alert('click')});
-                                                    }
-                                                } else {
-													var sharedtext = '';
-													if (label2alert.shared == 1) { sharedtext = 'shared'; } else { sharedtext = 'personal';}
-                                                    if (parent_id == '0'){
-                                                        window.labels[result["data"]] = create_label_iconed(2,name_label, result["data"], sharedtext, color_label, true, function(){alert('click')});
-                                                        document.getElementById('lable_cat2_container_ul').appendChild(window.labels[result["data"]]);
-                                                        
-                                                    } else {
-                                                        window.labels[parent_id].add_child(2,name_label, result["data"], sharedtext, color_label, true, function(){alert('click')});
-                                                    }                                                
-                                                }
-                                            } else {
-                                                alert("An error occured, no lable culd be made, please try again!")
-                                            }
-                                        });
-                                    }
+											} else {
+												var sharedtext = '';
+												if (label2alert.shared == 1) { sharedtext = 'shared'; } else { sharedtext = 'personal';}
+												if (parent_id == '0'){
+													window.labels[result["data"]] = create_label_iconed(2,name_label, result["data"], sharedtext, color_label, true, function(){alert('click')});
+													document.getElementById('lable_cat2_container_ul').appendChild(window.labels[result["data"]]);
+													
+												} else {
+													window.labels[parent_id].add_child(2,name_label, result["data"], sharedtext, color_label, true, function(){alert('click')});
+												}                                                
+											}
+										} else {
+											alert("An error occured, no lable culd be made, please try again!")
+										}
+									});
                                     $('#dialog-overlay, #dialog-box').hide();
                                     return false;
                                 });
