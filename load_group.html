@@ -1518,7 +1518,7 @@ Version: 0.1; Sept 19th 2011
                         window.obj_load = function(source_id){
                             
                             $(document).ready(function(){
-								$('labelize').attr('href', '/'+FB._session.uid);
+								document.getElementById('labelize').href = '/'+FB._session.uid;
                                 window.global = true;
                                 
                                 $.getJSON("/get_labels?obj_id="+source_id, function(data) {
@@ -1711,10 +1711,10 @@ Version: 0.1; Sept 19th 2011
                                     });
                                 
                                 // this doesn't work!
-                                $("a").click(function() {
-                                    $("a").removeClass("clickeditem");
-                                    $(this).addClass("clickeditem");
-                                    });
+                                //$("a").click(function() {
+                                //    $("a").removeClass("clickeditem");
+                                //    $(this).addClass("clickeditem");
+                                //    });
                                                                 
                                 <!-- $('a.btn-ok, #dialog-overlay, #dialog-box').click(function () { -->
                                 $('#Btn_labeldialog_close').click(function () {
