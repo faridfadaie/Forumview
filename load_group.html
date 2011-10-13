@@ -1530,27 +1530,7 @@ Version: 0.1; Sept 19th 2011
                                         else{
                                             create_tag_linked('info_global','Global View',"#");
                                             }
-                                        create_tag('labels_cat1','My General Labels','http://tayfeh.com/resources/img/My.png');
-                                        
-                                        if (FB._session.uid == 'XXX_VIEW_ID_XXX') {
-                                            if (XXX_ADMIN_XXX) {
-                                                if ('XXX_OBJ_ID_XXX' != 'XXX_VIEW_ID_XXX') {
-                                                    create_tag('labels_cat2','Personal labels for here','http://tayfeh.com/resources/img/My_ThisGroup.png');
-                                                }
-                                                if ('XXX_KIND_XXX' == 'group' || 'XXX_KIND_XXX' == 'page') {
-                                                    create_tag('labels_cat3','XXX_KIND_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png');
-                                                }
-                                            } else if ('XXX_KIND_XXX' == 'group' || 'XXX_KIND_XXX' == 'page') {
-                                                    create_tag('labels_cat2','My Labels for This '+'XXX_KIND_XXX','http://tayfeh.com/resources/img/My_ThisGroup.png');
-                                                    create_tag('labels_cat3','XXX_KIND_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png');
-                                                }
-                                                /* create_tag('labels_cat2','My Labels for This '+'XXX_KIND_XXX','http://tayfeh.com/resources/img/My_ThisGroup.png');
-                                                if ('XXX_KIND_XXX' == 'group' || 'XXX_KIND_XXX' == 'page') {
-                                                    create_tag('labels_cat3','XXX_KIND_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png');
-                                                } else {
-                                                    create_tag('labels_cat3','XXX_VIEW_ID_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png'); //?? instead of VIED_ID we should put VIUE_ID->name
-                                                }*/
-                                        }
+
                                             
                                         //if ("XXX_KIND_XXX" == "group" || "XXX_KIND_XXX" == "page") {
                                         //    create_tag('my_dedicated_labels','My Labels for This '+'XXX_KIND_XXX','http://tayfeh.com/resources/img/My_ThisGroup.png');
@@ -1572,7 +1552,6 @@ Version: 0.1; Sept 19th 2011
                                         }
                                         window.labelslist = list;
                                         window.labels = [];
-                                        //window.labels.cat1 = {};
                                         var label_list_cat1 = document.createElement('ul');
                                         label_list_cat1.id = 'lable_cat1_container_ul'
                                         add_class(label_list_cat1, 'label_item');
@@ -1613,9 +1592,29 @@ Version: 0.1; Sept 19th 2011
                                                 });
                                             } 
                                         }
+
+										create_tag('labels_cat1','My General Labels','http://tayfeh.com/resources/img/My.png');
                                         document.getElementById('labels_cat1').appendChild(label_list_cat1);
-                                        document.getElementById('labels_cat2').appendChild(label_list_cat2);
-                                        document.getElementById('labels_cat3').appendChild(label_list_cat3);
+                                        
+                                        if (FB._session.uid == 'XXX_VIEW_ID_XXX') {
+                                            if (XXX_ADMIN_XXX) {
+                                                if ('XXX_OBJ_ID_XXX' != 'XXX_VIEW_ID_XXX') {
+                                                    create_tag('labels_cat2','Personal labels for here','http://tayfeh.com/resources/img/My_ThisGroup.png');
+													document.getElementById('labels_cat2').appendChild(label_list_cat2);
+
+                                                }
+                                                if ('XXX_KIND_XXX' == 'group' || 'XXX_KIND_XXX' == 'page') {
+                                                    create_tag('labels_cat3','XXX_KIND_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png');
+													document.getElementById('labels_cat3').appendChild(label_list_cat3);
+                                                }
+                                            } else if ('XXX_KIND_XXX' == 'group' || 'XXX_KIND_XXX' == 'page') {
+                                                    create_tag('labels_cat2','My Labels for This '+'XXX_KIND_XXX','http://tayfeh.com/resources/img/My_ThisGroup.png');
+                                                    create_tag('labels_cat3','XXX_KIND_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png');
+													document.getElementById('labels_cat2').appendChild(label_list_cat2);
+													document.getElementById('labels_cat3').appendChild(label_list_cat3);
+                                                }
+                                        }
+
 
                                         var menu_add_label = create_label('Add label','creat_label', function(){
                                             set_style(document.getElementById('dialog-box'), {display : 'block'});
