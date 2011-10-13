@@ -1542,12 +1542,12 @@ Version: 0.1; Sept 19th 2011
                                         for (var i in list){
                                             list[i].name=decodeURIComponent(list[i].name);
                                             list[i].nick=decodeURIComponent(list[i].nick);
-                                            if (list[i].obj_id.indexOf(':') == -1 ){ //cat1
-                                                list[i].cat = 1;
+                                            if (list[i].owner == 'admin' || list[i].owner == 'owner'){ //cat3
+                                                list[i].cat = 3;
                                             } else if (list[i].owner == FB._session.uid) { //cat2
                                                 list[i].cat = 2;
-                                            } else if (list[i].owner == 'admin' || list[i].owner == 'owner') { //cat3
-                                                list[i].cat = 3;
+                                            } else if (list[i].obj_id.indexOf(':') == -1 ) { //cat1
+                                                list[i].cat = 1;
                                             }
                                         }
                                         window.labelslist = list;
