@@ -1542,13 +1542,22 @@ Version: 0.1; Sept 19th 2011
                                         for (var i in list){
                                             list[i].name=decodeURIComponent(list[i].name);
                                             list[i].nick=decodeURIComponent(list[i].nick);
-                                            if (list[i].owner == 'admin' || list[i].owner == 'owner'){ //cat3
+											if (list[i].obj_id.indexOf(':') == -1 ) {
+												if (list[i].shared == 'global') {
+													list[i].cat = 3;
+												} else {
+													list[i].cat = 1;
+												}
+											} else {
+												list[i].cat = 2;
+											}
+                                            /*if (list[i].owner == 'admin' || list[i].owner == 'owner'){ //cat3
                                                 list[i].cat = 3;
                                             } else if (list[i].owner == FB._session.uid) { //cat2
                                                 list[i].cat = 2;
                                             } else if (list[i].obj_id.indexOf(':') == -1 ) { //cat1
                                                 list[i].cat = 1;
-                                            }
+                                            }*/
                                         }
                                         window.labelslist = list;
                                         window.labels = [];
@@ -1754,8 +1763,8 @@ Version: 0.1; Sept 19th 2011
                                             label2alert.obj_id = XXX_OBJ_ID_XXX;
                                             label2alert.personal = 0;
                                         } else {
-                                            label2alert.obj_id = FB._session.uid;
-                                            label2alert.personal = 0;                                        
+                                            label2alert.obj_id = XXX_OBJ_ID_XXX;
+                                            label2alert.personal = 1;                                        
                                             if (document.getElementById('shared_checkbox').checked) {
                                                 label2alert.shared = 1;
                                             } else {
@@ -1860,7 +1869,11 @@ Version: 0.1; Sept 19th 2011
                                             if (result["type"]=="ok"){
                                             //window.labelslist[this.parentNode.parentNode.uid]
 												window.labelslist[result["data"]]=label2alert;
-                                                if (XXX_ADMIN_XXX) {
+												//obj_id=page/group which is owned by user&personal=0 => global label for the page/group
+												//obj_id=page/group&personal=1&shared=0 => personal label for the group 
+												//obj_id=page/group&personal=1&shared=1 => shared label for the group
+												
+												if (XXX_ADMIN_XXX && label2alert.personal == 0) {
                                                     if (parent_id == '0'){
                                                         window.labels[result["data"]] = create_label_iconed(3, name_label, result["data"], 'global', color_label, false, function(){alert('click')});
                                                         document.getElementById('lable_cat3_container_ul').appendChild(window.labels[result["data"]]);
@@ -1869,15 +1882,16 @@ Version: 0.1; Sept 19th 2011
                                                         window.labels[parent_id].add_child(3,name_label, result["data"], 'global', color_label, false, function(){alert('click')});
                                                     }
                                                 } else {
+													var sharedtext = '';
+													if (label2alert.shared = 1) { sharedtext = 'shared'; } else { sharedtext = 'personal'; }
                                                     if (parent_id == '0'){
-                                                        window.labels[result["data"]] = create_label_iconed(2,name_label, result["data"], 'personal', color_label, true, function(){alert('click')});
+                                                        window.labels[result["data"]] = create_label_iconed(2,name_label, result["data"], sharedtext, color_label, true, function(){alert('click')});
                                                         document.getElementById('lable_cat2_container_ul').appendChild(window.labels[result["data"]]);
                                                         
                                                     } else {
-                                                        window.labels[parent_id].add_child(2,name_label, result["data"], 'personal', color_label, true, function(){alert('click')});
+                                                        window.labels[parent_id].add_child(2,name_label, result["data"], sharedtext, color_label, true, function(){alert('click')});
                                                     }                                                
                                                 }
-                                                //$("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
                                             } else {
                                                 alert("An error occured, no lable culd be made, please try again!")
                                             }
