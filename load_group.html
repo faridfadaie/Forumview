@@ -698,7 +698,7 @@ Version: 0.1; Sept 19th 2011
                         function create_label_iconed(cat, txt, uid, shared, color, ificon, onclick){
                             var li = document.createElement('li');
                             li.cat = cat;
-							li.uid = uid;
+                            li.uid = uid;
                             li.txt = txt;
                             
                             div3 = document.createElement('div');
@@ -779,23 +779,23 @@ Version: 0.1; Sept 19th 2011
                                         s += '<p id="options_row">Nest label under: <select name="list_labels" id="list_labels" class="conditionsfixed"><option value="0">Root</option>';
                                         if (window.labelslist[this.parentNode.parentNode.uid].shared == "global") {
                                             for (var i in window.labels){
-												if (window.labels[i].cat == 1) {
-													if ( window.labelslist[this.parentNode.parentNode.uid].parent == window.labels[i].uid) {
-														s += '<option selected value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
-													} else {
-														s += '<option value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
-													}
-												}
+                                                if (window.labels[i].cat == 1) {
+                                                    if ( window.labelslist[this.parentNode.parentNode.uid].parent == window.labels[i].uid) {
+                                                        s += '<option selected value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
+                                                    } else {
+                                                        s += '<option value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
+                                                    }
+                                                }
                                             }
                                         } else {
                                             for (var i in window.labels){
-												if (window.labels[i].cat == 2) {
-													if ( window.labelslist[this.parentNode.parentNode.uid].parent == window.labels[i].uid) {
-														s += '<option selected value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
-													} else {
-														s += '<option value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
-													}
-												}
+                                                if (window.labels[i].cat == 2) {
+                                                    if ( window.labelslist[this.parentNode.parentNode.uid].parent == window.labels[i].uid) {
+                                                        s += '<option selected value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
+                                                    } else {
+                                                        s += '<option value="'+window.labels[i].txt+'">'+window.labels[i].txt+'</option>';
+                                                    }
+                                                }
                                             }                                            
                                         }
                                         s += '</select>';
@@ -1562,13 +1562,13 @@ Version: 0.1; Sept 19th 2011
                                         for (var i in list){
                                             list[i].name=decodeURIComponent(list[i].name);
                                             list[i].nick=decodeURIComponent(list[i].nick);
-											if (list[i].obj_id.indexOf(':') == -1 ){ //cat1
-												list[i].cat = 1;
-											} else if (list[i].owner == FB._session.uid) { //cat2
-												list[i].cat = 2;
-											} else if (list[i].owner == 'admin' || list[i].owner == 'owner') { //cat3
-												list[i].cat = 3;
-											}
+                                            if (list[i].obj_id.indexOf(':') == -1 ){ //cat1
+                                                list[i].cat = 1;
+                                            } else if (list[i].owner == FB._session.uid) { //cat2
+                                                list[i].cat = 2;
+                                            } else if (list[i].owner == 'admin' || list[i].owner == 'owner') { //cat3
+                                                list[i].cat = 3;
+                                            }
                                         }
                                         window.labelslist = list;
                                         window.labels = [];
@@ -1584,35 +1584,35 @@ Version: 0.1; Sept 19th 2011
                                         add_class(label_list_cat3, 'label_item');
 
                                         for (var i in list){
-											if (list[i].parent == "0") { // root labels
-												var l = create_label_iconed(list[i].cat,list[i].name, i, list[i].shared, list[i].color, true, function(){
-													// changing the appearance
-													$('.clickeditem').removeClass('clickeditem');
-													add_class(this.parentNode,'clickeditem'); 
-													//now show labels here :D ->
-												});
-												window.labels[i] = l;
-												switch (list[i].cat) {
-													case 1:
-													label_list_cat1.appendChild(l);
-													break;
-													case 2:
-													label_list_cat2.appendChild(l);
-													break;
-													case 3:
-													label_list_cat3.appendChild(l);
-													break;
-												}
-											} 
+                                            if (list[i].parent == "0") { // root labels
+                                                var l = create_label_iconed(list[i].cat,list[i].name, i, list[i].shared, list[i].color, true, function(){
+                                                    // changing the appearance
+                                                    $('.clickeditem').removeClass('clickeditem');
+                                                    add_class(this.parentNode,'clickeditem'); 
+                                                    //now show labels here :D ->
+                                                });
+                                                window.labels[i] = l;
+                                                switch (list[i].cat) {
+                                                    case 1:
+                                                    label_list_cat1.appendChild(l);
+                                                    break;
+                                                    case 2:
+                                                    label_list_cat2.appendChild(l);
+                                                    break;
+                                                    case 3:
+                                                    label_list_cat3.appendChild(l);
+                                                    break;
+                                                }
+                                            } 
                                         }
-										for (var i in list){
-											if (list[i].parent in window.labels){ //child labels with parents present
-												window.labels[list[i].parent].add_child(list[i].cat,list[i].name, i, list[i].shared, list[i].color, true, function(){
-													$('.clickeditem').removeClass('clickeditem');
-													add_class(this.parentNode,'clickeditem'); 
-												});
-											} 
-										}
+                                        for (var i in list){
+                                            if (list[i].parent in window.labels){ //child labels with parents present
+                                                window.labels[list[i].parent].add_child(list[i].cat,list[i].name, i, list[i].shared, list[i].color, true, function(){
+                                                    $('.clickeditem').removeClass('clickeditem');
+                                                    add_class(this.parentNode,'clickeditem'); 
+                                                });
+                                            } 
+                                        }
                                         document.getElementById('labels_cat1').appendChild(label_list_cat1);
                                         document.getElementById('labels_cat2').appendChild(label_list_cat2);
                                         document.getElementById('labels_cat3').appendChild(label_list_cat3);
