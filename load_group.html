@@ -1859,25 +1859,22 @@ Version: 0.1; Sept 19th 2011
                                         $.post("/create_label",label2alert,function(result) {
                                             if (result["type"]=="ok"){
                                             //window.labelslist[this.parentNode.parentNode.uid]
+												window.labelslist[result["data"]]=label2alert;
                                                 if (XXX_ADMIN_XXX) {
                                                     if (parent_id == '0'){
                                                         window.labels[result["data"]] = create_label_iconed(3, name_label, result["data"], 'global', color_label, false, function(){alert('click')});
-                                                        window.labelslist[result["data"]] = window.labels[result["data"]];
                                                         document.getElementById('lable_cat3_container_ul').appendChild(window.labels[result["data"]]);
                                                         
                                                     } else {
                                                         window.labels[parent_id].add_child(3,name_label, result["data"], 'global', color_label, false, function(){alert('click')});
-                                                        window.labelslist[parent_id].add_child(3,name_label, result["data"], 'global', color_label, false, function(){alert('click')});
                                                     }
                                                 } else {
                                                     if (parent_id == '0'){
                                                         window.labels[result["data"]] = create_label_iconed(2,name_label, result["data"], 'personal', color_label, true, function(){alert('click')});
-                                                        window.labelslist[result["data"]] = window.labels[result["data"]];
                                                         document.getElementById('lable_cat2_container_ul').appendChild(window.labels[result["data"]]);
                                                         
                                                     } else {
                                                         window.labels[parent_id].add_child(2,name_label, result["data"], 'personal', color_label, true, function(){alert('click')});
-                                                        window.labelslist[parent_id].add_child(2,name_label, result["data"], 'personal', color_label, true, function(){alert('click')});
                                                     }                                                
                                                 }
                                                 //$("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
