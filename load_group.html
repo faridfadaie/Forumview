@@ -1655,7 +1655,7 @@ Version: 0.1; Sept 19th 2011
                                             document.getElementById('Btn_labeldialog_addlabel').innerHTML = 'Add';
                                             $('#color1').colorPicker();
                                             
-                                            if (XXX_ADMIN_XXX) {
+                                            if (XXX_ADMIN_XXX && 'XXX_KIND_XXX'!='profile') {
                                                 p = document.getElementById('options_row');
                                                 l1 = document.createElement('label');
                                                 l1.setAttribute('style', 'margin-left: 15px;');
@@ -1701,7 +1701,7 @@ Version: 0.1; Sept 19th 2011
                                             c1.setAttribute('id', 'shared_checkbox');
                                             l2.appendChild(c1);
                                             p.appendChild(l2);
-                                            if (XXX_ADMIN_XXX) {
+                                            if (XXX_ADMIN_XXX && 'XXX_KIND_XXX'!='profile') {
                                                 set_style(l2,{display: 'none'});
                                             }
                                             create_condition_if();
