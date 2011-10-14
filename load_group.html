@@ -732,7 +732,7 @@ Version: 0.1; Sept 19th 2011
                                 if ((window.obj_load) && (!window.load_obj_initialized)){window.obj_load(window.source_id); window.load_obj_initialized = true;}
                                 if (posts.value.length > 0){var from_time = posts.value[posts.value.length-1].updated_time; var to_time = posts.value[0].updated_time}else{var updated_time = null; var to_time = null}
                                 //labels = {'dangool': {color: '#ffffcc', text: 'attach', rules : [{opt: 'or', id : 4}]}, dsfdsfd: {color : '#ffccff', text : 'try', rules: [{opt: 'or', id : 3, params: [':)))', true]}]}}
-                                labels = {}
+                                labels = window.labeltags;
                                 posts = labelize(posts.value, labels);
                                 args.onload(posts, users.value, to_time, from_time);
                                 };
@@ -1693,6 +1693,7 @@ Version: 0.1; Sept 19th 2011
                                                 list[i].cat = 1;
                                                 }*/
                                             }
+										window.labeltags = {};
                                         window.labelslist = list;
                                         window.labels = [];
                                         var label_list_cat1 = document.createElement('ul');
@@ -1714,6 +1715,8 @@ Version: 0.1; Sept 19th 2011
                                                     //now show labels here :D ->
                                                     });
                                                 window.labels[i] = l;
+												//labels = {'dangool': {color: '#ffffcc', text: 'attach', rules : [{opt: 'or', id : 4}]}, dsfdsfd: {color : '#ffccff', text : 'try', rules: [{opt: 'or', id : 3, params: [':)))', true]}]}}
+												window.labeltags[list[i].name] = {color: list[i].color, text:list[i].name, rules: list[i].rule};
                                                 switch (list[i].cat) {
                                                     case 1:
                                                     label_list_cat1.appendChild(l);
@@ -1734,6 +1737,7 @@ Version: 0.1; Sept 19th 2011
                                                     add_class(this.parentNode,'clickeditem');
                                                     });
                                                 }
+												window.labeltags[list[i].name] = {color: list[i].color, text:list[i].name, rules: list[i].rule};
                                             }
                                         
                                         create_tag('labels_cat1','My General Labels','http://tayfeh.com/resources/img/My.png');
