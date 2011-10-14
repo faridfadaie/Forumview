@@ -1763,7 +1763,10 @@ Version: 0.1; Sept 19th 2011
                                     label2alert.parent = parent_id;
                                     label2alert.color = document.getElementById('color1').value;
                                     if (XXX_ADMIN_XXX) {
-                                        if (document.getElementById('personal_select').value == "1") {
+										var personalselect = document.getElementById('personal_select');
+										var personalselectvalue = "1";
+										if (personalselect != null) {personalselectvalue = personalselect.value;}
+                                        if (personalselectvalue == "1") {
                                             label2alert.obj_id = XXX_OBJ_ID_XXX;
                                             label2alert.personal = 0;
                                         } else {
