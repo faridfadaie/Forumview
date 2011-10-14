@@ -1649,20 +1649,21 @@ Version: 0.1; Sept 19th 2011
                         
                         //jQuery: DB connection and the Menu
                         
-                        window.obj_load = function(source_id){
+                       // window.obj_load = function(source_id){
                             
                             $(document).ready(function(){
-                                document.getElementById('labelize').href = '/'+FB._session.uid;
+                                document.getElementById('labelize').href = '/'; //+FB._session.uid;
                                 window.global = true;
                                 
-                                $.getJSON("/get_labels?obj_id="+source_id, function(data) {
-                                    if (data.type == 'ok'){
-                                        if (window.global) {
-                                            pv = create_tag_linked('info_personal','Personal View',"#");
-                                            }
-                                        else{
-                                            create_tag_linked('info_global','Global View',"#");
-                                            }
+                                //$.getJSON("/get_labels?obj_id="+source_id, function(data) {
+                                    //if (data.type == 'ok'){
+										//data = XXX_LABELS_XXX;
+                                        //if (window.global) {
+                                        //    pv = create_tag_linked('info_personal','Personal View',"#");
+                                        //    }
+                                        //else{
+                                        //    create_tag_linked('info_global','Global View',"#");
+                                        //    }
                                         
                                         
                                         //if ("XXX_KIND_XXX" == "group" || "XXX_KIND_XXX" == "page") {
@@ -1671,7 +1672,7 @@ Version: 0.1; Sept 19th 2011
                                             //}
                                         
                                         // cat 1
-                                        list = data.data;
+                                        list = XXX_LABELS_XXX;
                                         for (var i in list){
                                             list[i].name=decodeURIComponent(list[i].name);
                                             list[i].nick=decodeURIComponent(list[i].nick);
@@ -1841,9 +1842,9 @@ Version: 0.1; Sept 19th 2011
                                         add_class(menu_add_label_container, 'label_item');
                                         menu_add_label_container.appendChild(menu_add_label)
                                         document.getElementById('menu_container_down').appendChild(menu_add_label_container);
-                                        }
-                                    });
-                                
+                                        //}
+                                    //});
+                                }
                                 // this doesn't work!
                                 //$("a").click(function() {
                                     //    $("a").removeClass("clickeditem");
@@ -2054,7 +2055,7 @@ Version: 0.1; Sept 19th 2011
                                         });
                                     
                                     });
-                                } // End of DB connection and the Menu
+                                //} // End of DB connection and the Menu
                             
                         </script>
                         <a id="fb_connect_button" class="fb_button fb_button_medium" style="display:none"><span class="fb_button_text">Connect with Facebook</span></a>
