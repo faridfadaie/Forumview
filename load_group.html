@@ -294,6 +294,9 @@ Version: 0.1; Sept 19th 2011
                 text-transform: capitalize;
                 color : #000000;
                 }
+            .labels:visited{
+                cursor: pointer;
+                }
             .labels:hover{
                 cursor: pointer;
                 background-color: #eff2f7;
@@ -370,8 +373,10 @@ Version: 0.1; Sept 19th 2011
             <div class="container_12">
                 <div id="container_header" class="grid_12">
                     <h3 style="color:#3B5998">
-                        <span>Labelize</span><br>
-                        <span style="color:#000000">Facebook groups as you wish!</span>
+                        <a id='labelize' title='Home' style='text-decoration: none;'>
+                        <span style="color: #3B5998;">Labelize</span><br>
+                        <span style="color: #000000;">Facebook as you wish!</span>
+                        </a>
                     </h3>
                 </div>
                 <!-- end .grid_12 -->
@@ -1239,7 +1244,7 @@ Version: 0.1; Sept 19th 2011
                             var a = document.createElement('a');
                             a.innerHTML = txt;
                             a.setAttribute('href', link);
-                            a.setAttribute('style', "text-decoration:none;");
+                            a.setAttribute('style', "text-decoration:none; color: #3B5998;");
                             menu_div.appendChild(a);
                             document.getElementById('lable_container').appendChild(menu_div);
                         };
@@ -1518,9 +1523,8 @@ Version: 0.1; Sept 19th 2011
                         window.obj_load = function(source_id){
                             
                             $(document).ready(function(){
-                                window.admin = true;
+                                document.getElementById('labelize').href = '/'+FB._session.uid;
                                 window.global = true;
-                                window.owner = false;
                                 
                                 $.getJSON("/get_labels?obj_id="+source_id, function(data) {
                                     if (data.type == 'ok'){
@@ -1530,27 +1534,7 @@ Version: 0.1; Sept 19th 2011
                                         else{
                                             create_tag_linked('info_global','Global View',"#");
                                             }
-                                        create_tag('labels_cat1','My General Labels','http://tayfeh.com/resources/img/My.png');
-                                        
-                                        if (FB._session.uid == 'XXX_VIEW_ID_XXX') {
-                                            if (XXX_ADMIN_XXX) {
-                                                if ('XXX_OBJ_ID_XXX' != 'XXX_VIEW_ID_XXX') {
-                                                    create_tag('labels_cat2','Personal labels for here','http://tayfeh.com/resources/img/My_ThisGroup.png');
-                                                }
-                                                if ('XXX_KIND_XXX' == 'group' || 'XXX_KIND_XXX' == 'page') {
-                                                    create_tag('labels_cat3','XXX_KIND_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png');
-                                                }
-                                            } else if ('XXX_KIND_XXX' == 'group' || 'XXX_KIND_XXX' == 'page') {
-                                                    create_tag('labels_cat2','My Labels for This '+'XXX_KIND_XXX','http://tayfeh.com/resources/img/My_ThisGroup.png');
-                                                    create_tag('labels_cat3','XXX_KIND_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png');
-                                                }
-                                                /* create_tag('labels_cat2','My Labels for This '+'XXX_KIND_XXX','http://tayfeh.com/resources/img/My_ThisGroup.png');
-                                                if ('XXX_KIND_XXX' == 'group' || 'XXX_KIND_XXX' == 'page') {
-                                                    create_tag('labels_cat3','XXX_KIND_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png');
-                                                } else {
-                                                    create_tag('labels_cat3','XXX_VIEW_ID_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png'); //?? instead of VIED_ID we should put VIUE_ID->name
-                                                }*/
-                                        }
+
                                             
                                         //if ("XXX_KIND_XXX" == "group" || "XXX_KIND_XXX" == "page") {
                                         //    create_tag('my_dedicated_labels','My Labels for This '+'XXX_KIND_XXX','http://tayfeh.com/resources/img/My_ThisGroup.png');
@@ -1562,17 +1546,25 @@ Version: 0.1; Sept 19th 2011
                                         for (var i in list){
                                             list[i].name=decodeURIComponent(list[i].name);
                                             list[i].nick=decodeURIComponent(list[i].nick);
-                                            if (list[i].obj_id.indexOf(':') == -1 ){ //cat1
-                                                list[i].cat = 1;
+                                            if (list[i].obj_id.indexOf(':') == -1 ) {
+                                                if (list[i].shared == 'global') {
+                                                    list[i].cat = 3;
+                                                } else {
+                                                    list[i].cat = 1;
+                                                }
+                                            } else {
+                                                list[i].cat = 2;
+                                            }
+                                            /*if (list[i].owner == 'admin' || list[i].owner == 'owner'){ //cat3
+                                                list[i].cat = 3;
                                             } else if (list[i].owner == FB._session.uid) { //cat2
                                                 list[i].cat = 2;
-                                            } else if (list[i].owner == 'admin' || list[i].owner == 'owner') { //cat3
-                                                list[i].cat = 3;
-                                            }
+                                            } else if (list[i].obj_id.indexOf(':') == -1 ) { //cat1
+                                                list[i].cat = 1;
+                                            }*/
                                         }
                                         window.labelslist = list;
                                         window.labels = [];
-                                        //window.labels.cat1 = {};
                                         var label_list_cat1 = document.createElement('ul');
                                         label_list_cat1.id = 'lable_cat1_container_ul'
                                         add_class(label_list_cat1, 'label_item');
@@ -1585,7 +1577,7 @@ Version: 0.1; Sept 19th 2011
 
                                         for (var i in list){
                                             if (list[i].parent == "0") { // root labels
-                                                var l = create_label_iconed(list[i].cat,list[i].name, i, list[i].shared, list[i].color, true, function(){
+                                                var l = create_label_iconed(list[i].cat,list[i].name, i, list[i].shared, list[i].color, list[i].cat!=3, function(){
                                                     // changing the appearance
                                                     $('.clickeditem').removeClass('clickeditem');
                                                     add_class(this.parentNode,'clickeditem'); 
@@ -1607,15 +1599,35 @@ Version: 0.1; Sept 19th 2011
                                         }
                                         for (var i in list){
                                             if (list[i].parent in window.labels){ //child labels with parents present
-                                                window.labels[list[i].parent].add_child(list[i].cat,list[i].name, i, list[i].shared, list[i].color, true, function(){
+                                                window.labels[list[i].parent].add_child(list[i].cat,list[i].name, i, list[i].shared, list[i].color, list[i].cat!=3, function(){
                                                     $('.clickeditem').removeClass('clickeditem');
                                                     add_class(this.parentNode,'clickeditem'); 
                                                 });
                                             } 
                                         }
+
+                                        create_tag('labels_cat1','My General Labels','http://tayfeh.com/resources/img/My.png');
                                         document.getElementById('labels_cat1').appendChild(label_list_cat1);
-                                        document.getElementById('labels_cat2').appendChild(label_list_cat2);
-                                        document.getElementById('labels_cat3').appendChild(label_list_cat3);
+                                        
+                                        if (FB._session.uid == 'XXX_VIEW_ID_XXX') {
+                                            if (XXX_ADMIN_XXX) {
+                                                if ('XXX_OBJ_ID_XXX' != 'XXX_VIEW_ID_XXX') {
+                                                    create_tag('labels_cat2','Personal labels for here','http://tayfeh.com/resources/img/My_ThisGroup.png');
+                                                    document.getElementById('labels_cat2').appendChild(label_list_cat2);
+
+                                                }
+                                                if ('XXX_KIND_XXX' == 'group' || 'XXX_KIND_XXX' == 'page') {
+                                                    create_tag('labels_cat3','XXX_KIND_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png');
+                                                    document.getElementById('labels_cat3').appendChild(label_list_cat3);
+                                                }
+                                            } else if ('XXX_KIND_XXX' == 'group' || 'XXX_KIND_XXX' == 'page') {
+                                                    create_tag('labels_cat2','My Labels for This '+'XXX_KIND_XXX','http://tayfeh.com/resources/img/My_ThisGroup.png');
+                                                    create_tag('labels_cat3','XXX_KIND_XXX'+'\'s Labels','http://tayfeh.com/resources/img/Group.png');
+                                                    document.getElementById('labels_cat2').appendChild(label_list_cat2);
+                                                    document.getElementById('labels_cat3').appendChild(label_list_cat3);
+                                                }
+                                        }
+
 
                                         var menu_add_label = create_label('Add label','creat_label', function(){
                                             set_style(document.getElementById('dialog-box'), {display : 'block'});
@@ -1704,10 +1716,10 @@ Version: 0.1; Sept 19th 2011
                                     });
                                 
                                 // this doesn't work!
-                                $("a").click(function() {
-                                    $("a").removeClass("clickeditem");
-                                    $(this).addClass("clickeditem");
-                                    });
+                                //$("a").click(function() {
+                                //    $("a").removeClass("clickeditem");
+                                //    $(this).addClass("clickeditem");
+                                //    });
                                                                 
                                 <!-- $('a.btn-ok, #dialog-overlay, #dialog-box').click(function () { -->
                                 $('#Btn_labeldialog_close').click(function () {
@@ -1755,8 +1767,8 @@ Version: 0.1; Sept 19th 2011
                                             label2alert.obj_id = XXX_OBJ_ID_XXX;
                                             label2alert.personal = 0;
                                         } else {
-                                            label2alert.obj_id = FB._session.uid;
-                                            label2alert.personal = 0;                                        
+                                            label2alert.obj_id = XXX_OBJ_ID_XXX;
+                                            label2alert.personal = 1;                                        
                                             if (document.getElementById('shared_checkbox').checked) {
                                                 label2alert.shared = 1;
                                             } else {
@@ -1855,38 +1867,56 @@ Version: 0.1; Sept 19th 2011
                                         // -> at the end, change the first opt to 0
                                         
                                     label2alert.rule = $.toJSON(rule);
+                                    
+                                    if ('XXX_KIND_XXX' == 'profile') {
+                                        //for now commented, should be revisited for creating labels in someone else's profile:
+                                        //if (XXX_ADMIN_XXX) {
+                                            label2alert.obj_id = FB._session.uid;
+                                        //}
+                                    }
                                         
                                     if (document.getElementById('Btn_labeldialog_addlabel').innerHTML == 'Add') {
-                                        $.post("/create_label",label2alert,function(result) {
-                                            if (result["type"]=="ok"){
-                                            //window.labelslist[this.parentNode.parentNode.uid]
-                                                if (XXX_ADMIN_XXX) {
-                                                    if (parent_id == '0'){
-                                                        window.labels[result["data"]] = create_label_iconed(3, name_label, result["data"], 'global', color_label, false, function(){alert('click')});
-                                                        window.labelslist[result["data"]] = window.labels[result["data"]];
-                                                        document.getElementById('lable_cat3_container_ul').appendChild(window.labels[result["data"]]);
-                                                        
-                                                    } else {
-                                                        window.labels[parent_id].add_child(3,name_label, result["data"], 'global', color_label, false, function(){alert('click')});
-                                                        window.labelslist[parent_id].add_child(3,name_label, result["data"], 'global', color_label, false, function(){alert('click')});
-                                                    }
-                                                } else {
-                                                    if (parent_id == '0'){
-                                                        window.labels[result["data"]] = create_label_iconed(2,name_label, result["data"], 'personal', color_label, true, function(){alert('click')});
-                                                        window.labelslist[result["data"]] = window.labels[result["data"]];
-                                                        document.getElementById('lable_cat2_container_ul').appendChild(window.labels[result["data"]]);
-                                                        
-                                                    } else {
-                                                        window.labels[parent_id].add_child(2,name_label, result["data"], 'personal', color_label, true, function(){alert('click')});
-                                                        window.labelslist[parent_id].add_child(2,name_label, result["data"], 'personal', color_label, true, function(){alert('click')});
-                                                    }                                                
-                                                }
-                                                //$("#TEST_UL").append('<li><a href="#" title="' +$("#description_label").val() + '">' + $("#name_label").val() + '</a></li>');
-                                            } else {
-                                                alert("An error occured, no lable culd be made, please try again!")
-                                            }
-                                        });
+                                        var todo = "/create_label"; 
+                                    } else {
+                                        var todo = "/update_label";                                     
                                     }
+                                    $.post(todo,label2alert,function(result) {
+                                        if (result["type"]=="ok"){
+                                            window.labelslist[result["data"]]=label2alert;
+                                            if ('XXX_KIND_XXX' == 'profile') {
+                                                var sharedtext = '';
+                                                if (label2alert.shared == 1) { sharedtext = 'shared'; } else { sharedtext = 'personal';}
+                                                if (parent_id == '0'){
+                                                    window.labels[result["data"]] = create_label_iconed(1,name_label, result["data"], sharedtext, color_label, true, function(){alert('click')});
+                                                    document.getElementById('lable_cat1_container_ul').appendChild(window.labels[result["data"]]);
+                                                    
+                                                } else {
+                                                    window.labels[parent_id].add_child(1,name_label, result["data"], sharedtext, color_label, true, function(){alert('click')});
+                                                }                                                                                                
+                                            }
+                                            else if (XXX_ADMIN_XXX && label2alert.personal == 0) {
+                                                if (parent_id == '0'){
+                                                    window.labels[result["data"]] = create_label_iconed(3, name_label, result["data"], 'global', color_label, false, function(){alert('click')});
+                                                    document.getElementById('lable_cat3_container_ul').appendChild(window.labels[result["data"]]);
+                                                    
+                                                } else {
+                                                    window.labels[parent_id].add_child(3,name_label, result["data"], 'global', color_label, false, function(){alert('click')});
+                                                }
+                                            } else {
+                                                var sharedtext = '';
+                                                if (label2alert.shared == 1) { sharedtext = 'shared'; } else { sharedtext = 'personal';}
+                                                if (parent_id == '0'){
+                                                    window.labels[result["data"]] = create_label_iconed(2,name_label, result["data"], sharedtext, color_label, true, function(){alert('click')});
+                                                    document.getElementById('lable_cat2_container_ul').appendChild(window.labels[result["data"]]);
+                                                    
+                                                } else {
+                                                    window.labels[parent_id].add_child(2,name_label, result["data"], sharedtext, color_label, true, function(){alert('click')});
+                                                }                                                
+                                            }
+                                        } else {
+                                            alert("An error occured, no lable culd be made, please try again!")
+                                        }
+                                    });
                                     $('#dialog-overlay, #dialog-box').hide();
                                     return false;
                                 });
