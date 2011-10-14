@@ -160,6 +160,8 @@ def view_obj(env, start_response, params):
         ret = ret.replace('XXX_KIND_XXX', 'home')
         ret = ret.replace('XXX_OBJ_ID_XXX', user['uid'])
         ret = ret.replace('XXX_VIEW_ID_XXX', user['uid'])
+        labels = _get_labels(user['uid'], user['uid'], True)
+        ret = ret.replace('XXX_LABELS_XXX', json.dumps(labels))
         start_response('200 OK',[])
         return [ret]
     if len(params['list']) == 1:
@@ -179,6 +181,8 @@ def view_obj(env, start_response, params):
     ret = ret.replace('XXX_KIND_XXX', kind)
     ret = ret.replace('XXX_OBJ_ID_XXX', id)
     ret = ret.replace('XXX_VIEW_ID_XXX', fb_uid)
+    labels = _get_labels(id, user['uid'], admin, fb_uid)
+    ret = ret.replace('XXX_LABELS_XXX', json.dumps(labels))
     return [ret]
 
 
@@ -389,6 +393,31 @@ def update_label(env, start_response, args):
         raise
         start_response('503 Service Unavailable',[])
         return ['Temporarily not available']
+
+def _get_labels(obj_id, uid, admin, view_uid=None):
+    if view_uid is None:
+        view_uid = uid
+    elif view_uid == uid:
+        shared = 'personal'
+        obj_id = obj_id + ':' + str(uid)
+    else:
+        shared = 'shared'
+        obj_id = obj_id + ':' + str(uid)
+    try:
+        sdb = Retry(SimpleDB, RETRY_LIMIT, ['select', 'put_attributes', 'get_attributes'], AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
+        labels = sdb.select(AWS_SDB_LABELS_DOMAIN, "select * from %s where obj_id in ('%s', '%s') and owned in ('%s', '%s', 'admin', 'owner')" %(AWS_SDB_LABELS_DOMAIN, obj_id.split(':')[0], uid, uid, view_uid))
+        easy_labels = {}
+        for i in labels:
+            for j in i:
+                if j not in ['obj_id', 'owned']:
+                    shared_status, name, nick, parent, rule, color = _decode_label(i[j])
+                    if (i['owned']=='admin') or (i['owned'] == uid) or (shared_status == 'shared') or ((i['owned'] == 'owner') and admin) or (i['obj_id'] == uid):
+                        easy_labels[j] = {'parent' : parent, 'name' : name, 'owner' : i['owned'], 'obj_id' : i.name,
+                                      'nick': nick, 'shared' : shared_status, 'rule' : rule, 'color' : color}
+    except:
+        raise
+    return easy_labels
+
 
 def get_labels(env, start_response, args):
     method = env['REQUEST_METHOD']
