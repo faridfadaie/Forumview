@@ -334,22 +334,13 @@ def update_label(env, start_response, args):
                 owner = 'admin'
             else:
                 owner = i.name.split(':')[1]
-            original_label_value = dict([[args['label_id'],i[args['label_id']]]])
+            #original_label_value = dict([[args['label_id'],i[args['label_id']]]])
             shared_status, name, nick, parent, rule, color = _decode_label(i[args['label_id']])
             admin = _is_admin(obj_id, user)
             if admin is None:
                 return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_PERMISSION, 'access to the object is denied or the object is not supported.')
             if (not admin) and (owner != str(user['uid'])):
                 return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'the label does not belong to the user.')
-        if 'parent' in args:
-            if str(args['parent']) == '0':
-                parent = '0'
-            elif str(args['parent']) == args['label_id']:
-                return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER,'parent_id is not valid.')
-            else:
-                parent = sdb.get_attributes(AWS_SDB_LABELS_DOMAIN, con_obj_id, [args['parent']])
-                if not parent.has_key(args['parent']) or parent[args['parent']] is None:
-                    return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER,'parent_id is not valid.')
         if 'name' in args:
              name = args['name']
         if 'nick' in args:
@@ -359,17 +350,32 @@ def update_label(env, start_response, args):
         if 'color' in args:
              color = args['color']
         shared = shared_status
-        if ('personal' in args) and (str(args['personal']) == '0') and admin:
-            shared = 'global'
-        if ('personal' in args) and (str(args['personal']) == '1'):
-            shared = 'personal'
+        obj_type, id = _detect_obj_type(con_obj_id.split(':')[0], user)
+        if (obj_type == 'profile') and admin:
             if ('shared' in args) and (str(args['shared']) == '1'):
                 shared = 'shared'
-        sdb.delete_attributes(AWS_SDB_LABELS_DOMAIN, con_obj_id, original_label_value)
-        if shared == 'global':
-            con_obj_id = con_obj_id.split(':')[0]
-        else:
-            con_obj_id = con_obj_id.split(':')[0] + ':' + str(user['uid'])
+            elif ('shared' in args) and (str(args['shared']) == '0'):
+                shared = 'personal'
+                
+        if (obj_type == 'profile') and (not admin):
+            if ('shared' in args) and (str(args['shared']) == '1'):
+                shared = 'shared'
+            elif ('shared' in args) and (str(args['shared']) == '0'):
+                shared = 'personal'
+        if (obj_type != 'profile') and admin:
+            if shared != 'global':
+                if ('shared' in args) and (str(args['shared']) == '1'):
+                    shared = 'shared'
+                elif ('shared' in args) and (str(args['shared']) == '0'):
+                    shared = 'personal'
+        if (obj_type != 'profile') and (not admin):
+            if ('shared' in args) and (str(args['shared']) == '1'):
+                shared = 'shared'
+            elif ('shared' in args) and (str(args['shared']) == '0'):
+                shared = 'personal'
+
+        original_label_value = dict([[args['label_id'], None]])
+        #sdb.delete_attributes(AWS_SDB_LABELS_DOMAIN, con_obj_id, original_label_value)
         sdb.put_attributes(AWS_SDB_LABELS_DOMAIN, con_obj_id, [(args['label_id'], SHARE_DEL + shared, True),
                                                         (args['label_id'], NAME_DEL + name, True),
                                                         (args['label_id'], NICK_DEL + nick, True),
