@@ -190,57 +190,57 @@ def create_label(env, start_response, args):
     user = _validate_fb(env)
     if user is None:
         return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_SESSION)
-    if ('obj_id' in args) and ('parent' in args) and ('name' in args) and ('nick' in args) and ('rule' in args) and ('color' in args):
-        try:
-            obj_id = str(int(args['obj_id']))
-        except:
-            return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'obj_id is not valid.')
-        admin = _is_admin(obj_id, user)
-        if admin is None:
-            return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_PERMISSION, 'access to the object is denied or the object is not supported.')
-        obj_type = _detect_obj_type(obj_id, user)
-        if admin:
-            if obj_type == 'profile':
-                shared = 'personal'
-                if ('shared' in args) and (str(args['shared']) == '1'):
-                    shared = 'shared'
-            else:
-                shared = 'global'
-        elif ('personal' not in args) or (str(args['personal']) != '1'):
-            return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'the personal view should be selected.')
-        if ('personal' in args) and (str(args['personal']) == '1') and ((not admin) or (obj_type != 'profile')):
-            obj_id = str(obj_id) + ':' + str(user['uid'])
+    if ('obj_id' not in args) or ('parent' not in args) or ('name' not in args) or ('nick' not in args) or ('rule' not in args) or ('color' not in args):
+        return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER)
+    try:
+        obj_id = str(int(args['obj_id']))
+    except:
+        return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'obj_id is not valid.')
+    admin = _is_admin(obj_id, user)
+    if admin is None:
+        return json_error(env, start_response, ERROR_CODES.FACEBOOK_NO_PERMISSION, 'access to the object is denied or the object is not supported.')
+    obj_type, id = _detect_obj_type(obj_id, user)
+    if admin:
+        if obj_type == 'profile':
             shared = 'personal'
             if ('shared' in args) and (str(args['shared']) == '1'):
                 shared = 'shared'
-        sdb = Retry(SimpleDB, RETRY_LIMIT, ['select', 'put_attributes', 'get_attributes'], AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
-        #sdb = SimpleDBWRTY(AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, retry_limit = RETRY_LIMIT)
-        try:
-            if not str(args['parent']) == '0':
-                parent = sdb.get_attributes(AWS_SDB_LABELS_DOMAIN, obj_id, [args['parent']])
-                if not parent.has_key(args['parent']) or parent[args['parent']] is None:
-                    return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER,'parent label_id is not passed.')
-            label_id = hashlib.sha1(str(args['name']) + str(time.time())).hexdigest()
-            if admin and (shared == 'gloabl'):
-                owned = 'admin'
-            elif admin:
-                owned = 'owner'
-            else:
-                owned = user['uid']
-            sdb.put_attributes(AWS_SDB_LABELS_DOMAIN, obj_id, [(label_id, SHARE_DEL + shared, True), 
-                                                            (label_id, NAME_DEL + args['name'], True), 
-                                                            (label_id, NICK_DEL + args['nick'], True), 
-                                                            (label_id, PARENT_DEL + args['parent'], True), 
-                                                            (label_id, RULE_DEL + args['rule'], True),
-                                                            ('owned', owned, True),
-                                                            ('obj_id', obj_id.split(':')[0], True),
-                                                            (label_id, COL_DEL + args['color'], True)])
-        except:
-            raise
-            start_response('503 Service Unavailable',[])
-            return ['Temporarily not available']
-        return json_ok(env, start_response, label_id)
-    return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER)
+        else:
+            shared = 'global'
+    elif ('personal' not in args) or (str(args['personal']) != '1'):
+        return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER, 'the personal view should be selected.')
+    if ('personal' in args) and (str(args['personal']) == '1') and ((not admin) or (obj_type != 'profile')):
+        obj_id = str(obj_id) + ':' + str(user['uid'])
+        shared = 'personal'
+        if ('shared' in args) and (str(args['shared']) == '1'):
+            shared = 'shared'
+    sdb = Retry(SimpleDB, RETRY_LIMIT, ['select', 'put_attributes', 'get_attributes'], AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
+    #sdb = SimpleDBWRTY(AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, retry_limit = RETRY_LIMIT)
+    try:
+        if not str(args['parent']) == '0':
+            parent = sdb.get_attributes(AWS_SDB_LABELS_DOMAIN, obj_id, [args['parent']])
+            if not parent.has_key(args['parent']) or parent[args['parent']] is None:
+                return json_error(env, start_response, ERROR_CODES.BAD_PARAMTER,'parent label_id is not passed.')
+        label_id = hashlib.sha1(str(args['name']) + str(time.time())).hexdigest()
+        if admin and (shared == 'gloabl'):
+            owned = 'admin'
+        elif admin:
+            owned = 'owner'
+        else:
+            owned = user['uid']
+        sdb.put_attributes(AWS_SDB_LABELS_DOMAIN, obj_id, [(label_id, SHARE_DEL + shared, True), 
+                                                        (label_id, NAME_DEL + args['name'], True), 
+                                                        (label_id, NICK_DEL + args['nick'], True), 
+                                                        (label_id, PARENT_DEL + args['parent'], True), 
+                                                        (label_id, RULE_DEL + args['rule'], True),
+                                                        ('owned', owned, True),
+                                                        ('obj_id', obj_id.split(':')[0], True),
+                                                        (label_id, COL_DEL + args['color'], True)])
+    except:
+        raise
+        start_response('503 Service Unavailable',[])
+        return ['Temporarily not available']
+    return json_ok(env, start_response, label_id)
 
 def _decode_label(lb):
     for j in lb:
