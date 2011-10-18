@@ -516,8 +516,8 @@ Version: 0.1; Sept 19th 2011
                             var comment_details = document.createElement('div');
                             set_style(comment_details, {float:'right', width : '90%'});
                             var full_name = document.createElement('a');
-                            full_name.href="http://www.facebook.com/profile.php?id=" + data.fromid;
-                            full_name.target = "_blank";
+                            full_name.href="/" + data.fromid + '/XXX_VIEW_ID_XXX';
+                            full_name.target = "_top";
                             add_class(full_name, 'full_name');
                             full_name.innerHTML = user_list[data.fromid];
                             comment_details.appendChild(full_name);
@@ -1070,8 +1070,8 @@ Version: 0.1; Sept 19th 2011
                             var div = document.createElement('div');
                             
                             var full_name = document.createElement('a');
-                            full_name.href="http://www.facebook.com/profile.php?id=" + data.actor_id;
-                            full_name.target = "_blank";
+                            full_name.href="/" + data.actor_id + '/XXX_VIEW_ID_XXX';
+                            full_name.target = "_top";
                             add_class(full_name, 'full_name');
                             full_name.innerHTML = user_list[data.actor_id];
                             div.appendChild(full_name);
