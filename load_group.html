@@ -780,12 +780,19 @@ Version: 0.1; Sept 19th 2011
                                 //labels = {'dangool': {color: '#ffffcc', text: 'attach', rules : [{opt: 'or', id : 4}]}, dsfdsfd: {color : '#ffccff', text : 'try', rules: [{opt: 'or', id : 3, params: [':)))', true]}]}}
                                 labels = window.labeltags;
                                 posts = labelize(posts.value, labels);
+                                if (args.post_id){
+                                comments = comments.value;
+                                posts[0].comments = {count : comments.length, comment_list:[]}
+                                for (var i = 0; i < comments.length; i++){
+                                posts[0].comments.comment_list.push({fromid: comments[i].fromid, time: comments[i].time, text : comments[i].text, likes : comments[i].likes, user_likes : comments[i].user_likes, id: comments[i].id})
+                                }
+                                }
                                 args.onload(posts, users.value, to_time, from_time);
                                 };
                             
                             if (args.post_id){
-                                var posts = FB.Data.query('SELECT source_id, post_id, message,updated_time,created_time,actor_id,action_links,attachment,comments,likes,tagged_ids FROM stream WHERE post_id="{0}"', args.post_id);
-                                var comments = FB.Data.query('SELECT fromid from comment where post_id in (select post_id from {0})', posts);
+                                var posts = FB.Data.query('SELECT source_id, post_id, message,updated_time,created_time,actor_id,action_links,attachment,likes,tagged_ids FROM stream WHERE post_id="{0}"', args.post_id);
+                                var comments = FB.Data.query('SELECT id,fromid,time,text,likes,user_likes from comment where post_id in (select post_id from {0})', posts);
                                 var users = FB.Data.query('SELECT uid, name FROM user WHERE uid in (select actor_id from {0}) OR uid in (select fromid from {1})', posts, comments);
                                 wait_on = [posts, comments, users]
                                 FB.Data.waitOn([posts, comments, users], onready);
