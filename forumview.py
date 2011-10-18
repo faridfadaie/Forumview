@@ -12,7 +12,7 @@ allowed_functions = ['update_label', 'script', 'css','set_exception', 'get_excep
 page_names = ['load_group.html', 'home.html']
 page_contents = {}
 LISTEN_IP = '0.0.0.0'
-LISTEN_PORT = 10000
+LISTEN_PORT = 20000
 RETRY_LIMIT = 3
 PROTOCOL = 'http'
 DYN_LOADING = True
@@ -149,12 +149,30 @@ def view_obj(env, start_response, params):
         user['access_token'] = response["access_token"]
     else:
         user = _validate_fb(env)
+    view_obj_kind, fb_uid = _detect_obj_type(params['list'][0], user)
+    if view_obj_kind == 'profile':
+        graph = facebook.GraphAPI(user["access_token"])
+        can_post = graph.fql('select can_post from user where uid=%s' %(fb_uid))
+        if can_post[0]['can_post']:
+            can_post = ''
+        else:
+            can_post = 'none'
+    elif view_obj_kind == 'page':
+        graph = facebook.GraphAPI(user["access_token"])
+        can_post = graph.fql('select can_post from page where page_id=%s' %(fb_uid))
+        if can_post[0]['can_post']:
+            can_post = ''
+        else:
+            can_post = 'none'
+    else:
+        can_post = ''
     if user is None:
         if len(params['list']) == 0:
             start_response('200 OK', [])
             return [page_contents['home.html']]
         return redirect(env, start_response, 'https://graph.facebook.com/oauth/authorize?client_id=246575252046549&redirect_uri=http%3A%2F%2F'+env['HTTP_HOST'].split(':')[0]+'%3A'+str(LISTEN_PORT)+'%2F'+'%2F'.join(params['list'])+'&scope=publish_stream%2Cread_stream%2Cuser_groups')
     ret = page_contents['load_group.html']
+    ret = ret.replace('XXX_CAN_POST_XXX', can_post)
     if len(params['list']) == 0:
         ret = ret.replace('XXX_ADMIN_XXX', 'true')
         ret = ret.replace('XXX_KIND_XXX', 'home')

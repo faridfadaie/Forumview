@@ -763,8 +763,12 @@ Version: 0.1; Sept 19th 2011
                                             s = s == ''? (p[i].actor_id) : (s + ',' + p[i].actor_id);
                                             }
                                         var users = FB.Data.query('SELECT uid, name FROM user WHERE uid in ({0})', s);
-                                        FB.Data.waitOn([users], function(){
+                                        var pages = FB.Data.query('SELECT page_id, name FROM page WHERE page_id in ({0})', s);
+                                        FB.Data.waitOn([users, pages], function(){
                                             posts.value = p;
+for (var i = 0; i < pages.value.length; i++){
+users.value.push({name: pages.value[i].name, uid: pages.value[i].page_id})
+                                }
                                             ondone(posts, users)
                                             })
                                         }
@@ -787,21 +791,26 @@ Version: 0.1; Sept 19th 2011
                                 posts[0].comments.comment_list.push({fromid: comments[i].fromid, time: comments[i].time, text : comments[i].text, likes : comments[i].likes, user_likes : comments[i].user_likes, id: comments[i].id})
                                 }
                                 }
+if (pages)
+                                for (var i = 0; i < pages.value.length; i++){
+users.value.push({name: pages.value[i].name, uid: pages.value[i].page_id})
+                                }
                                 args.onload(posts, users.value, to_time, from_time);
                                 };
-                            
+                            pages = null;
                             if (args.post_id){
                                 var posts = FB.Data.query('SELECT source_id, post_id, message,updated_time,created_time,actor_id,action_links,attachment,likes,tagged_ids FROM stream WHERE post_id="{0}"', args.post_id);
                                 var comments = FB.Data.query('SELECT id,fromid,time,text,likes,user_likes from comment where post_id in (select post_id from {0})', posts);
                                 var users = FB.Data.query('SELECT uid, name FROM user WHERE uid in (select actor_id from {0}) OR uid in (select fromid from {1})', posts, comments);
-                                wait_on = [posts, comments, users]
-                                FB.Data.waitOn([posts, comments, users], onready);
+                                var pages = FB.Data.query('SELECT page_id, name FROM page WHERE page_id in (select actor_id from {0})', posts);
+                                FB.Data.waitOn([posts, comments, users, pages], onready);
                                 }
                             else{
                                 if (args.posts_list){
                                     var posts = FB.Data.query('SELECT source_id, post_id, message,updated_time,created_time,actor_id,action_links,attachment,likes,tagged_ids FROM stream WHERE post_id IN ({0}) ORDER BY updated_time DESC',args.posts_list);
                                     var users = FB.Data.query('SELECT uid, name FROM user WHERE uid in (select actor_id from {0})', posts);
-                                    FB.Data.waitOn([posts, users], onready)
+                                    var pages = FB.Data.query('SELECT page_id, name FROM page WHERE page_id in (select actor_id from {0})', posts);
+                                    FB.Data.waitOn([posts, users, pages], onready)
                                     }
                                 else{
                                     var posts
@@ -2131,7 +2140,7 @@ Version: 0.1; Sept 19th 2011
                             </div>
                             
                             <div id="posts_container">
-                            <div style="padding-bottom:10px">
+                            <div style="padding-bottom:10px; display:XXX_CAN_POST_XXX">
                             <div style="border:1px solid #777777">
                             <div style="padding:5px" onclick="if (!this.clicked) {set_style(document.getElementById('post_message_area'),{color:'#000000',height:'48px'}); document.getElementById('post_message_area').value='';this.clicked=true}">
                             <div>
