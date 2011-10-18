@@ -545,7 +545,9 @@ Version: 0.1; Sept 19th 2011
                             like_it.href = "javascript:void(0)";
                             add_class(like_it, 'like_text');
                             like_container.appendChild(like_it);
-                            
+                           
+
+
                             var like_icon = document.createElement('span');
                             add_class(like_icon, 'like');
                             like_container.appendChild(like_icon);
@@ -559,11 +561,40 @@ Version: 0.1; Sept 19th 2011
                                 set_style(how_many_like, {display : 'none'});
                                 set_style(like_icon, {display : 'none'});
                                 }
+                                comment.like_counter = data.likes;
                             comment.how_many_like = how_many_like;
                             comment.like_icon = like_icon;
                             comment.like_it = like_it;
                             comment.appendChild(like_container);
-                            
+                            addEvent(like_it, 'click', function(){
+                                if (this.innerHTML.indexOf('Like') != -1){
+                                    FB.api('/' + comment.uid + '/likes', 'post', {}, function(response) {
+                                        if (!response || response.error) {
+                                            } else {
+                                            comment.like_it.innerHTML = 'Unlike';
+                                            set_style(comment.how_many_like, {display : ''});
+                                            set_style(comment.like_icon, {display : ''});
+                                            comment.like_counter = parseInt(comment.like_counter) + 1;
+                                            comment.how_many_like.innerHTML =  comment.like_counter + ' people';
+                                            }
+                                        });
+                                    return
+                                    }
+                                FB.api('/' + comment.uid + '/likes', 'delete', {}, function(response) {
+                                    if (!response || response.error) {
+                                        } else {
+                                        comment.like_counter = parseInt(comment.like_counter) - 1;
+                                        comment.how_many_like.innerHTML =  comment.like_counter + ' people';
+                                        if (comment.like_counter == 0){
+                                            set_style(comment.how_many_like, {display : 'none'});
+                                            set_style(comment.like_icon, {display : 'none'});
+                                            }
+                                        comment.like_it.innerHTML = 'Like';
+                                        }
+                                    });
+                                });
+
+
                             /*
                             var dislike_container = document.createElement('div');
                             set_style(dislike_container, {width: '100%', float: 'left', padding : '5px 0px 0px 38px'});
@@ -632,6 +663,7 @@ Version: 0.1; Sept 19th 2011
                                     set_style(comment.like_icon, {display : 'none'});
                                     return
                                     }
+                                    comment.like_counter = data.likes;
                                 comment.how_many_like.innerHTML = data.likes + ' people';
                                 set_style(comment.how_many_like, {display : ''});
                                 set_style(comment.like_icon, {display : ''});
